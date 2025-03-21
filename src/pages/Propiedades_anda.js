@@ -129,13 +129,13 @@ const PropertyDetails = () => {
                         {/* 🔹 Google Map */}
                         <Box className="property-map">
                             <iframe
-                                src={`https://www.google.com/maps?q=${property.Ubicacion}&output=embed`}
+                                src={`https://www.google.com/maps?q=${property.Latitud},${property.Longitud}&output=embed`}
                                 title="Google Map"
                                 className="google-map"
                             />
                         </Box>
                     </Grid>
-                    <Grid item xs={12} md={7} className="property-detail-info-right">
+                    <Grid item xs={12} md={7} className="property-detail-info">
 
                         <Grid className="property-detail-info" item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Contacto</Typography>
@@ -167,3 +167,192 @@ const PropertyDetails = () => {
 };
 
 export default PropertyDetails;
+
+
+.property - detail - container {
+    padding: 20px!important;
+
+}
+
+.MuiTypography - root {
+    font - family: "Avenir Medium", sans - serif!important;
+}
+
+.property - detail - all {
+    margin: 0 auto;
+    background - color: #FBF7EA;
+}
+
+.back - button {
+    background: none;
+    border: none;
+    font - size: 16px;
+    cursor: pointer;
+    color: #13272D!important;
+    font - family: "Avenir Light", sans - serif!important;
+    margin - top: 80px!important;
+    text - transform: lowercase;
+}
+
+/* 🔹 Ensures Header is a Flex Container */
+.property - detail - header {
+    display: flex!important;
+    flex - direction: row!important;
+    justify - content: space - between!important;
+    align - items: center!important;
+    gap: 40px;
+    margin: 40px!important;
+    justify - content: center!important;
+    text - align: center!important;
+}
+
+/* 🔹 Title Styling */
+.property - detail - title {
+    font - size: 2.7rem!important;
+    font - family: "Avenir Heavy", sans - serif!important;
+    color: #13272D;
+    margin - bottom: 20px!important;
+    max - width: 800px!important;
+    text - align: left;
+}
+
+.property - detail - subtitle {
+    font - size: 1.7rem!important;
+    font - family: "Avenir Heavy", sans - serif!important;
+    color: #13272D;
+    margin - bottom: 20px!important;
+    max - width: 800px!important;
+    text - align: left;
+}
+
+/* 🔹 Description */
+.property - detail - summary {
+    font - size: 1.2rem!important;
+    color: #13272D!important;
+    font - family: "Avenir", sans - serif!important;
+    margin - bottom: 10px!important;
+    max - width: 800px!important;
+    text - align: left!important;
+    justify - content: left!important;
+    align - items: left!important;
+}
+
+/* 🔹 Estado (Status) */
+.property - detail - status {
+    font - size: 1.2rem!important;
+    font - family: "Avenir Light", sans - serif!important;
+    font - weight: bold;
+    color: #13272D;
+    text - transform: uppercase;
+}
+
+/* 🔹 Price Styling */
+.property - detail - price {
+    font - size: 2rem!important;
+    color: #13272D;
+    margin - top: 5px!important;
+}
+
+/* 🔹 Right Side: Estado & Price */
+.property - detail - price - box {
+    display: flex;
+    flex - direction: column;
+    align - items: flex - end;
+    justify - content: center;
+    max - width: 250px!important;
+}
+
+.property - detail - info {
+    display: flex;
+    flex - direction: column!important;
+    align - items: flex - start!important;
+    justify - content: left!important;
+    margin - top: 20px;
+    color: #444;
+    font - size: 1.5rem;
+    color: #13272D!important;
+    font - family: "Avenir Medium", sans - serif!important;
+    max - width: 800px!important
+}
+
+.property - detail - description - container {
+    font - size: 1.2rem!important;
+    color: #13272D!important;
+    font - family: "Avenir", sans - serif!important;
+    margin - bottom: 10px!important;
+    max - width: 800px!important;
+    text - align: left!important;
+    justify - content: left!important;
+    align - items: left!important;
+}
+
+
+.expand - link {
+    font - size: 1rem;
+    color: #0F4C54;
+    text - decoration: underline;
+    cursor: pointer;
+    display: inline - block;
+    margin - top: 5px;
+}
+
+/* 🔹 Divider Styling */
+.property - detail - divider {
+    height: 50px!important;
+    width: 2px!important;
+    background - color: #13272D!important;
+    margin - top: 120px!important;
+    margin - left: 200px!important;
+    display: block!important;
+}
+
+.property - detail - gallery - contact {
+    display: flex!important;
+    flex - direction: column!important;
+    justify - content: space - between!important;
+    align - items: center!important;
+    gap: 40px;
+    margin: 40px!important;
+    justify - content: center!important;
+    text - align: center!important;
+}
+
+.property - main - image {
+    width: 100 %;
+    border - radius: 10px;
+    margin - top: 20px;
+}
+
+.property - gallery {
+    margin - top: 10px;
+}
+
+.property - thumbnail {
+    width: 100 %;
+    border - radius: 5px;
+    cursor: pointer;
+}
+
+.property - contact {
+    text - align: center;
+    margin: 20px 0;
+}
+
+.contact - button {
+    background - color: #0F4C54;
+    color: white;
+    font - size: 18px;
+    padding: 10px 20px;
+    border - radius: 5px;
+    cursor: pointer;
+}
+
+.property - map {
+    margin - top: 20px;
+}
+
+.google - map {
+    width: 100 %;
+    height: 300px;
+    border: none;
+}
