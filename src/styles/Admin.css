@@ -1,0 +1,119 @@
+/* Admin Page */
+.admin-main-container {
+    background-color: #FBF7EA !important;
+    color: #13272D;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Section Titles */
+.admin-title {
+    color: #FBF7EA;
+    font-family: "Avenir Heavy", sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-subtitle {
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+    color: #FBF7EA;
+    font-size: 1.5rem;
+    font-family: "Avenir Medium", sans-serif;
+}
+
+/* Form Fields */
+/* .MuiTextField-root,
+.MuiFormControl-root {
+    background-color: #FBF7EA;
+    border-radius: 6px;
+} */
+
+/* Buttons */
+/* .MuiButton-containedPrimary {
+    background-color: #007bff !important;
+    color: white;
+    font-weight: bold;
+    text-transform: none;
+    border-radius: 30px;
+    padding: 10px 24px;
+} */
+
+/* .MuiButton-containedPrimary:hover {
+    background-color: #0056b3 !important;
+} */
+
+/* Uploader */
+.image-uploader {
+    border: 2px dashed #13272D;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-align: center;
+    transition: background-color 0.3s ease;
+    min-height: 400px;
+
+}
+
+.image-uploader:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.image-uploader-icon {
+    color: #C3AF94;
+}
+
+.image-uploader-preview img {
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Grid */
+.property-card .MuiCard-root {
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #FBF7EA;
+}
+
+.property-card .MuiCardContent-root {
+    background-color: #FBF7EA;
+    color: #13272D;
+}
+
+/* Edit/Delete buttons */
+.property-card .MuiButton-root {
+    text-transform: none;
+    font-weight: bold;
+}
+
+/* 🔹 Button */
+.admin-button {
+    background: #13272D !important;
+    border: 2px solid #13272D !important;
+    color: #FBF7EA !important;
+    font-size: 1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    border-radius: 70px !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    width: 30%;
+    display: block !important;
+    margin: 2rem auto 0 auto !important;
+    /* 👉 centrado horizontal */
+}
+
+.admin-button:hover {
+    border: 2px solid #13272D !important;
+    background: rgba(251, 247, 234, 0.3) !important;
+    color: #13272D !important;
+}
+
+/* ✅ Responsive Tweaks */
+@media (max-width: 768px) {
+    .admin-button {
+        align-items: center !important;
+        min-width: 300px !important;
+        justify-content: space-around !important;
+    }
+}

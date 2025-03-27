@@ -1,0 +1,330 @@
+/* 🔹 General Styling */
+.homestaging-container {
+    width: 100% !important;
+    min-height: 70dvh !important;
+    /* Change height to min-height for better responsiveness */
+    background-color: #13272D;
+
+    /* ✅ Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+    box-sizing: border-box;
+}
+
+/* 🔹 Section Wrapper */
+.homestaging-section {
+    width: 90% !important;
+    max-width: 850px !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 7%, 0;
+
+    /* ✅ Full Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 🔹 Titles & Subtitle */
+.homestaging-title {
+    font-size: 44px !important;
+    font-family: "Avenir", sans-serif !important;
+    color: #C3AF94 !important;
+    margin-bottom: 2% !important;
+    text-align: center !important;
+    animation: fadeInUp 0.1s ease-in-out forwards;
+
+}
+
+.homestaging-title-text {
+
+    font-size: clamp(2rem, 15vw, 6rem) !important;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-family: "Avenir Medium", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    word-spacing: 10dvh;
+    text-align: center;
+
+}
+
+.homestaging-subtitle {
+    flex: 1;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    /* Altura mínima para alinear verticalmente */
+    position: relative;
+}
+
+/* 🔹 Text Description */
+.homestaging-description {
+    font-size: 22px !important;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #C3AF94 !important;
+    text-align: center !important;
+    /* ✅ Center the text */
+    margin: 0 auto 20px auto !important;
+    max-width: 750px !important;
+    animation: fadeInUp .3s ease-in-out forwards;
+}
+
+.testimonios-section {
+    width: 100% !important;
+    min-height: 70dvh !important;
+    /* Change height to min-height for better responsiveness */
+    background-color: #13272D;
+
+    /* ✅ Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+    box-sizing: border-box;
+
+    height: 70dvh;
+}
+
+.homestaging-pics-section {
+    width: 100%;
+    text-align: center;
+    background-color: #C3AF94;
+    padding: 4rem 2rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+}
+
+
+/* ✅ Title */
+.homestaging-pics-title {
+    font-size: 2.2rem !important;
+    margin-bottom: 5px;
+    font-family: "Avenir", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    font-weight: bold;
+
+}
+
+.homestaging-pics-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    width: 100%;
+    padding-bottom: 3rem;
+}
+
+.homestaging-pics-container img {
+    max-width: 100%;
+    width: 48%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+}
+
+.before-after-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* ✅ Responsive Fixes */
+
+
+
+
+@media (max-width: 768px) {
+    .homestaging-title {
+        font-size: 32px !important;
+        /* Reduce for tablets */
+    }
+
+    .homestaging-subtitle {
+        font-size: 20px !important;
+    }
+
+    .homestaging-description {
+        font-size: 16px !important;
+        text-align: left !important;
+    }
+
+    .homestaging-pics-container img {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .homestaging-title {
+        font-size: 28px !important;
+        /* Reduce for mobile */
+    }
+
+    .homestaging-subtitle {
+        font-size: 18px !important;
+    }
+
+    .homestaging-description {
+        font-size: 14px !important;
+    }
+}
+
+.stats-container {
+    background-color: rgba(221, 212, 192, 0.1) !important;
+    color: #D8C7A3 !important;
+    border-radius: 24px !important;
+    border: 1px solid #D8C7A3 !important;
+    padding: 2rem !important;
+    padding-bottom: 5rem !important;
+    text-align: center !important;
+    max-width: 85% !important;
+    margin: auto !important;
+    margin-bottom: 3rem !important;
+    /* ✅ centra horizontal */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 70dvh !important;
+}
+
+.with-divider::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 0;
+    width: 1px;
+    height: 350px;
+    margin-top: 80px !important;
+    background-color: #D8C7A3;
+
+}
+
+@media (min-width: 768px) {
+    .stats-container {
+        padding: 4rem !important;
+        margin-top: 4rem !important;
+        margin-bottom: 4rem !important;
+    }
+}
+
+.stats-title {
+    margin-bottom: 2rem !important;
+    font-family: "Avenir", sans-serif !important;
+}
+
+.stats-divider {
+    border-color: #D8C7A3 !important;
+    margin-bottom: 3rem !important;
+    opacity: 1 !important;
+    width: 100% !important;
+}
+
+.stats-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap !important;
+    gap: 2rem;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100%;
+    margin-top: 5rem !important;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .stats-row.row {
+        flex-direction: row;
+        gap: 0;
+        justify-content: flex-start;
+    }
+
+}
+
+.stat-block {
+    flex: 1;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.stat-value {
+    margin-bottom: 1rem !important;
+    font-size: 4.5rem !important;
+    font-family: "Avenir Heavy", sans-serif !important;
+}
+
+.stat-description {
+    font-family: "Avenir Light", sans-serif !important;
+    font-size: 1.5rem !important;
+}
+
+
+/* 🔹 Divisor vertical solo en desktop */
+@media (min-width: 1025px) {
+    .stats-row {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+
+    .stat-block {
+        width: auto !important;
+    }
+
+    .with-divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        width: 1px;
+        height: 180px;
+        background-color: #D8C7A3;
+    }
+
+    .with-divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -1px;
+        /* Alineado justo al borde interior */
+        height: 180px;
+        width: 1px;
+        background-color: #D8C7A3;
+    }
+}
+
+/* 🔹 iPad y Mobile: columnas verticales */
+@media (max-width: 1024px) {
+    .stats-row {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .stat-block {
+        width: 100% !important;
+        max-width: 600px !important;
+    }
+
+    .with-divider::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    .with-divider {
+        border-right: none !important;
+    }
+}

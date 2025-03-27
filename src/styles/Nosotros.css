@@ -1,0 +1,130 @@
+/* 🔹 General Styling */
+.nosotros-container {
+    width: 100% !important;
+    min-height: 70dvh !important;
+    /* Change height to min-height for better responsiveness */
+    background-color: #13272D;
+
+    /* ✅ Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+    box-sizing: border-box;
+}
+
+/* 🔹 Section Wrapper */
+.nosotros-section {
+    width: 90% !important;
+    max-width: 850px !important;
+    text-align: center !important;
+    padding: 7%, 0;
+    height: 70dvh;
+
+    /* ✅ Full Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 🔹 Titles & Subtitle */
+.nosotros-title {
+    font-size: 44px !important;
+    font-family: "Avenir", sans-serif !important;
+    color: #C3AF94 !important;
+    margin-bottom: 2% !important;
+    text-align: center !important;
+    animation: fadeInUp 0.1s ease-in-out forwards;
+
+}
+
+.nosotros-title-text {
+
+    font-size: clamp(2rem, 15vw, 6rem) !important;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-family: "Avenir Medium", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    word-spacing: 10dvh;
+    text-align: center;
+
+}
+
+.nosotros-subtitle {
+    font-size: 24px !important;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #C3AF94 !important;
+    text-align: center !important;
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 10% !important;
+    animation: fadeInUp .2s ease-in-out forwards;
+}
+
+/* 🔹 Text Description */
+.nosotros-description {
+    font-size: 18px !important;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #C3AF94 !important;
+    text-align: left !important;
+    /* ✅ Center the text */
+    margin: 0 auto 20px auto !important;
+    max-width: 750px !important;
+    animation: fadeInUp .3s ease-in-out forwards;
+}
+
+/* TESTIMONIOSS >>>>>> */
+
+.testimonios-section {
+    width: 100% !important;
+    min-height: 70dvh !important;
+    /* Change height to min-height for better responsiveness */
+    background-color: #13272D;
+
+    /* ✅ Centering Fix */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+    box-sizing: border-box;
+
+    height: 70dvh;
+}
+
+
+
+/* ✅ Responsive Fixes */
+@media (max-width: 768px) {
+    .nosotros-title {
+        font-size: 32px !important;
+        /* Reduce for tablets */
+    }
+
+    .nosotros-subtitle {
+        font-size: 20px !important;
+    }
+
+    .nosotros-description {
+        font-size: 16px !important;
+        text-align: left !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .nosotros-title {
+        font-size: 28px !important;
+        /* Reduce for mobile */
+    }
+
+    .nosotros-subtitle {
+        font-size: 18px !important;
+    }
+
+    .nosotros-description {
+        font-size: 14px !important;
+    }
+}

@@ -1,0 +1,357 @@
+/* General Styles */
+body {
+    font-family: 'Avenir', sans-serif;
+    background-color: #13272D;
+    color: #FBF7EA;
+    margin: 0;
+    padding: 0;
+}
+
+/* Title Section */
+.title-section {
+    background-color: #FBF7EA;
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-text {
+    font-size: clamp(2rem, 15vw, 6rem) !important;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-family: "Avenir Medium", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    word-spacing: 10dvh;
+    text-align: center;
+}
+
+
+
+/* Filter Section */
+.filter-container {
+    background-color: rgba(221, 212, 192, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #C3AF94;
+    /* max-width: 1200px; */
+    margin: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* align-items: flex-end !important; */
+    width: 95%;
+}
+
+.filter-grid {
+    display: flex !important;
+    flex-direction: row;
+    /* grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); */
+    justify-content: space-around;
+    gap: 25px !important;
+    width: 100% !important;
+    align-items: center;
+    font-size: 16px;
+    color: #FBF7EA;
+
+}
+
+.filter-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: left;
+    font-family: "Avenir Medium", sans-serif !important;
+    font-size: 1rem !important;
+    color: #FBF7EA !important;
+}
+
+.filter-column {
+    margin: 15px;
+    width: 200px !important;
+}
+
+.filter-column-params {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.filter-select,
+.sort-select {
+    border: none !important;
+    border-bottom: 1px solid #C3AF94 !important;
+    background-color: transparent;
+    color: #C3AF94;
+    font-family: 'Avenir', sans-serif;
+    max-width: 200px !important;
+    padding: 10px;
+    outline: none !important;
+    box-shadow: none !important;
+    appearance: none !important;
+
+}
+
+.menu-item-selected {
+    background-color: #C3AF94 !important;
+    color: white !important;
+}
+
+.menu-item:hover {
+    background-color: #C1C3BB !important;
+}
+
+.filter-select:focus,
+.sort-select:focus {
+    outline: none !important;
+    border: none !important;
+    border-bottom: 1px solid #C3AF94 !important;
+}
+
+.filter-select:hover,
+.sort-select:hover {
+    outline: none !important;
+    border: none !important;
+    border-bottom: 1px solid #C3AF94 !important;
+}
+
+.filter-select .MuiSelect-select,
+.sort-select .MuiSelect-select {
+    color: #C3AF94 !important;
+    font-family: 'Avenir', sans-serif !important;
+    padding: 10px;
+}
+
+.filter-select .MuiSvgIcon-root,
+.sort-select .MuiSvgIcon-root {
+    display: none !important;
+}
+
+.filter-select .MuiOutlinedInput-notchedOutline,
+.sort-select .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+}
+
+.filter-select::after,
+.sort-select::after {
+    content: '\f078';
+    /* FontAwesome down arrow */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #FBF7EA;
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+}
+
+.price-slider {
+    color: #C3AF94 !important;
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* ✅ Send Button */
+/* ✅ Fix CTA Button (Rounded & Smaller Width) */
+.search-button {
+    background: #C3AF94 !important;
+    color: white !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    font-family: "Avenir", sans-serif !important;
+    padding: 10px 30px !important;
+    border-radius: 30px !important;
+    /* ✅ Rounder shape */
+    text-transform: none !important;
+    transition: all 0.3s ease-in-out !important;
+    border: 2px solid #C3AF94 !important;
+    width: 200px !important;
+    /* ✅ Smaller width */
+}
+
+.search-button:hover {
+    background: transparent !important;
+    color: white !important;
+    border: 2px solid #C3AF94 !important;
+    box-shadow: none !important;
+}
+
+/* ✅ Ensure button stays the same on focus */
+.search-button:focus {
+    background: #C3AF94 !important;
+    color: white !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .filter-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-button-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .filter-grid {
+        flex-direction: column;
+    }
+
+    .filter-title,
+    .filter-select {
+        text-align: center;
+    }
+
+    .filter-select,
+    .sort-select {
+        width: 100% !important;
+        /* Make full width */
+    }
+
+    .filter-column-params {
+        justify-content: center;
+    }
+}
+
+/* Property List */
+.property-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+    padding: 20px;
+    justify-content: center;
+}
+
+@media (min-width: 1200px) {
+    .property-list {
+        margin: 0 auto;
+        max-width: 1400px;
+        /* Add margin on larger screens */
+    }
+
+}
+
+.property-card {
+    background-color: #FBF7EA !important;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid #FBF7EA !important;
+    padding: 5px;
+    transition: transform 0.2s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 450px;
+    width: 300px;
+}
+
+.property-card:hover {
+    transform: scale(1.02);
+}
+
+.property-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.property-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+    /* Pushes icons to bottom */
+    flex-grow: 1;
+    /* Allows it to stretch */
+    min-height: 150px;
+    /* Ensure content doesn't collapse */
+
+}
+
+.property-status {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    top: 5px;
+    right: 5px;
+    border-radius: 5px;
+}
+
+
+
+.property-title {
+    font-size: 18px !important;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #444;
+    margin-bottom: 15px !important;
+}
+
+.property-details {
+    padding-bottom: 2% !important;
+}
+
+.property-barrio {
+    font-size: 16px !important;
+    color: #444;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: "Avenir Light", sans-serif !important;
+
+}
+
+.property-location {
+    font-size: 14px;
+    color: #444;
+}
+
+.property-price {
+    font-size: 25px !important;
+    font-weight: bold;
+    padding-top: 10px;
+    color: #444;
+}
+
+.desarrollo-entrega {
+    font-size: 14px !important;
+    color: #444;
+    padding-top: 10px;
+    font-family: "Avenir Light", sans-serif !important;
+}
+
+.property-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #444;
+    margin-top: auto;
+    /* Forces it to stick to the bottom */
+    padding-bottom: 10px;
+    /* Ensures spacing */
+    /* Forces it to the bottom */
+}
+
+.property-icons span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

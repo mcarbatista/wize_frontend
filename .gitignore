@@ -1,1 +1,6 @@
+.vercel
 node_modules
+.cache
+build
+.DS_Store
+*.pack

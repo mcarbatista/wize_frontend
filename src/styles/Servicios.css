@@ -1,0 +1,275 @@
+/* 🔹 General Container */
+.services-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 🔹 Title */
+.servicios-title-text {
+    font-size: clamp(2rem, 15vw, 6rem) !important;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-family: "Avenir Medium", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    word-spacing: 10dvh;
+    text-align: center;
+}
+
+/* 🔹 Section Wrapper */
+.service-section {
+    width: 100% !important;
+    padding: 80px 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+/* 🔹 Alternating Grid Layout */
+.service-grid {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    width: 90% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+}
+
+.row-normal {
+    flex-direction: row !important;
+}
+
+.row-reverse {
+    flex-direction: row-reverse !important;
+}
+
+/* 🔹 Parallax Container */
+.parallax-container {
+    height: 500px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100%;
+}
+
+.parallax-image {
+    width: 100% !important;
+    height: 100% !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    transition: background-size 0.5s ease-in-out;
+}
+
+/* 🔹 Content Section */
+.content-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    text-align: left !important;
+}
+
+.row-reverse .content-container {
+    align-items: flex-end !important;
+    text-align: right !important;
+}
+
+/* 🔹 Card Content */
+.service-card {
+    background-color: #FBF7EA !important;
+    padding: 60px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    border-radius: 0 !important;
+}
+
+.row-reverse .service-card {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.row-normal .service-card {
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* 🔹 Typography */
+.service-title {
+    font-size: 55px !important;
+    font-family: "Avenir Heavy", sans-serif !important;
+    color: #13272D !important;
+    margin-bottom: 20px !important;
+}
+
+.service-subtitle {
+    font-size: 24px !important;
+    font-family: "Avenir Heavy", sans-serif !important;
+    color: #444 !important;
+    margin-bottom: 20px !important;
+}
+
+.service-description {
+    font-size: 22px !important;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #444 !important;
+    margin-bottom: 33px !important;
+    width: 100% !important;
+}
+
+/* 🔹 Button */
+.service-button {
+    background: #13272D !important;
+    border: 2px solid #13272D !important;
+    color: #FBF7EA !important;
+    font-size: 1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    border-radius: 70px !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    width: 30%;
+}
+
+.service-button:hover {
+    border: 2px solid #13272D !important;
+    background: rgba(251, 247, 234, 0.3) !important;
+    color: #13272D !important;
+}
+
+/* 🔹 Responsive */
+@media (max-width: 1024px) {
+    .service-grid {
+        flex-direction: column !important;
+    }
+
+    .parallax-container {
+        height: 400px !important;
+        background-attachment: scroll !important;
+    }
+
+    .content-container,
+    .service-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .service-description {
+        width: 100% !important;
+    }
+
+    .service-button {
+        width: 60% !important;
+    }
+
+    .parallax-image {
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-position: center center !important;
+        background-attachment: scroll !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .parallax-container {
+        height: 300px !important;
+    }
+
+    .service-card {
+        padding: 30px !important;
+    }
+
+    .service-title {
+        font-size: 40px !important;
+    }
+
+    .service-subtitle {
+        font-size: 20px !important;
+    }
+
+    .service-description {
+        font-size: 18px !important;
+    }
+
+    .service-button {
+        width: 80% !important;
+    }
+}
+
+/* 🔹 Service Grid Proporciones en Desktop */
+@media (min-width: 1025px) {
+    @media (min-width: 1025px) {
+        .service-grid {
+            display: flex !important;
+            height: 600px;
+        }
+
+        .row-normal {
+            flex-direction: row !important;
+        }
+
+        .row-reverse {
+            flex-direction: row-reverse !important;
+        }
+
+        .parallax-container {
+            flex: 1 !important;
+            height: 100% !important;
+            max-height: 600px !important;
+            max-width: 400px !important;
+        }
+
+        .content-container {
+            flex: 2 !important;
+            height: 100% !important;
+            max-height: 600px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+
+        .service-card {
+            height: 100% !important;
+            max-height: 600px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+    }
+
+
+    .parallax-container {
+        flex: 1 !important;
+        /* 1 parte */
+        height: 100% !important;
+        max-height: 600px !important;
+    }
+
+    .content-container {
+        flex: 2 !important;
+        /* 2 partes */
+        height: 100% !important;
+        max-height: 600px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    .service-card {
+        height: 100% !important;
+        max-height: 600px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+}

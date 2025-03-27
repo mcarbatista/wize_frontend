@@ -1,0 +1,766 @@
+/* Remove all page borders */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+}
+
+/* VIDEO SECTION >>>>>>>>>>*/
+
+/* Full-Screen Video Section */
+.video-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    /* Centers content horizontally */
+    align-items: center;
+    /* Centers content vertically */
+}
+
+/* Fix Video Centering */
+.video-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+/* Adjustments for Mobile */
+@media (max-width: 768px) {
+    .video-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+}
+
+/* Video Text Container - Ensures consistency */
+.video-text-container {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    text-align: center !important;
+    display: flex;
+    flex-direction: column;
+    /* Ensures both text elements stack properly */
+    align-items: flex-start;
+    /* Ensures left alignment */
+}
+
+/* Fix for Small Devices */
+@media (max-width: 768px) {
+    .video-text-container {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        align-items: center;
+        /* Center both texts */
+        width: 90%;
+        max-width: 600px;
+    }
+}
+
+/* Video Text */
+.video-text,
+.video-subtext {
+    color: white;
+    font-family: "Avenir", sans-serif;
+    /* Inherit from parent container */
+    display: flex;
+    text-align: left;
+    justify-content: left;
+    align-items: left;
+    min-width: 280px;
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+/* Adjust text sizes for responsiveness */
+.video-text {
+    font-size: 5rem;
+    font-weight: bold;
+    font-size: 45px;
+    animation: fadeInUp 1s ease-in-out forwards;
+    font-size: clamp(2rem, 10vw, 5rem) !important;
+}
+
+.video-subtext {
+    padding-top: 30px;
+    margin-top: 20px;
+    animation: fadeInUp 2s ease-in-out forwards;
+    font-size: clamp(1rem, 5vw, 1.2rem) !important;
+}
+
+/* Fade-in Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* GALLERY SECTION >>>>>>>>>>*/
+
+
+/* ✅ Gallery Section Background & Title */
+.gallery-section {
+    position: relative;
+    background-color: #13272D;
+    /* Background color */
+    padding: 1%;
+    text-align: center;
+}
+
+.gallery-title {
+    font-size: 2.5rem;
+    font-family: "Avenir", sans-serif;
+    color: #C3AF94;
+    margin-bottom: 30px;
+    padding: 5%;
+}
+
+
+
+/* ✅ Fade-In-Out Effect for Gallery Items */
+.fade-effect {
+    opacity: 0;
+    animation: fadeInOut 5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ✅ Keep Arrows Fixed */
+.custom-prev,
+.custom-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #C3AF94 !important;
+    background: rgba(0, 0, 0, 0.5);
+
+    /* Semi-transparent background */
+    border-radius: 10% !important;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1000;
+
+
+    /* Ensures arrows stay on top*/
+}
+
+.custom-prev {
+    left: 20px !important;
+    /* Moves arrow further left */
+}
+
+/* ✅ Fix Right Arrow to the Edge of the Gallery */
+.custom-next {
+    right: 20px !important;
+    /* Moves arrow further right */
+}
+
+/* Arrow buttons */
+.slick-prev:before,
+.slick-next:before {
+    color: white;
+    /* Change arrow color */
+    font-size: 30px;
+    /* Change arrow size */
+    opacity: 1;
+    /* Ensure it's visible */
+}
+
+.slick-next {
+    right: -5px;
+}
+
+.slick-prev {
+    left: -5px;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* ✅ Initially Hide Overlay Content */
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    /* Fully transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-family: "Avenir", sans-serif;
+    /* padding: 10px; */
+    opacity: 0;
+    /* Hide by default */
+    transition: opacity 0.5s ease-in-out, background 0.6s ease-in-out;
+}
+
+/* ✅ Hide Text Initially */
+.card-title {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.gallery-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    /* margin: 15px; */
+    /* Adjust spacing between cards */
+    /* padding: 3%; */
+    max-width: 450px !important;
+    margin: 5px !important;
+    /* Reduce margin to minimize spacing */
+}
+
+/* ✅ Ensure Cards Don't Touch Each Other */
+.slick-slider {
+    margin: 0 15px !important;
+    max-width: 100% !important;
+    /* Adjust horizontal spacing */
+    position: relative !important;
+    /* Ensures arrows stay in place */
+    margin-bottom: 3% !important;
+}
+
+
+
+/* ✅ Prevent Cards from Shrinking */
+.slick-list {
+    margin: 0 -15px !important;
+    /* Compensate for margin so layout stays balanced */
+    overflow: visible !important;
+    /* Ensures arrows are still clickable */
+}
+
+/* ✅ Ensure the Slider Doesn't Add Extra Padding */
+.slick-slider {
+    position: relative;
+    /* Ensures arrows stay outside */
+}
+
+/* ✅ Show Overlay & Text on Hover */
+.gallery-card:hover .card-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+}
+
+.gallery-card:hover .card-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nuevos-desarrollos {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.nuevos-desarrollos-button {
+    background: rgba(251, 247, 234, 0) !important;
+    border: 2px solid #FBF7EA !important;
+    color: #FBF7EA !important;
+    font-size: 1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    padding: 5px 20px !important;
+    border-radius: 70px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    min-width: 30% !important;
+    margin-bottom: 2% !important;
+
+}
+
+.nuevos-desarrollos-button:hover {
+    border: 2px solid #FBF7EA !important;
+    background: rgba(251, 247, 234, 0.3) !important;
+    color: #FBF7EA !important;
+}
+
+
+/* WELCOME SECTION >>>>>>>>>>*/
+
+/* ✅ Full-Height Background Section */
+.welcome-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Full height */
+    background-image: url("../assets/holaHome.jpg");
+    /* Background Image */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    /* Increased padding for better spacing */
+}
+
+/* ✅ Centered Content Box */
+.welcome-content {
+    background: rgba(19, 39, 45, .9);
+    /* Softer semi-transparent background */
+    padding: 60px;
+    /* More padding */
+    border-radius: 10px;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+}
+
+/* ✅ Subtitle Styling */
+.welcome-subtitle {
+    font-size: 2.5rem;
+    font-family: "Avenir", sans-serif;
+    color: #C3AF94;
+    /* New font color */
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* ✅ Main Text Styling */
+.welcome-text {
+    font-size: 1.2rem;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #C3AF94;
+    /* Updated font color */
+    margin-bottom: 25px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+/* ✅ Fully Rounded CTA Button */
+.scroll-button {
+    background: #FBF7EA !important;
+    /* Ensure background applies */
+    /* Ensure border applies */
+    border: 1px solid #FBF7EA !important;
+    color: #0F4C54 !important;
+    /* Ensure text color applies */
+    font-size: 1.4rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    padding: 8px 30px !important;
+    border-radius: 70px !important;
+    /* Ensure it's ultra rounded */
+    cursor: pointer !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    /* Removes Material UI's uppercase transformation */
+}
+
+.scroll-button:hover {
+    border: 1px solid #FBF7EA !important;
+    background: transparent !important;
+    color: #FBF7EA !important;
+}
+
+
+
+
+/* Sección de COMPROMISO */
+/* ✅ Section Styling */
+.commitment-section {
+    background-color: #FBF7EA;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+/* ✅ Title & Subheader Styling */
+.commitment-title {
+    font-size: 3rem;
+    color: #13272D;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.commitment-subheader {
+    font-size: 1rem;
+    font-family: "Avenir Light", sans-serif !important;
+    color: #13272D;
+    margin: 0 auto;
+    /* Ensures it’s centered */
+    text-align: center !important;
+    /* Centers text */
+    /* font-weight: 50; */
+    line-height: 1.5;
+    margin: 5% !important;
+}
+
+/* ✅ Three-Column Layout */
+.commitment-container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    /* max-width: 100% !important; */
+    margin: 0 auto;
+    justify-content: space-evenly !important;
+    align-items: flex-start !important;
+    /* Ensures all columns have equal height */
+
+    padding: 0 16px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.commitment-container.MuiGrid-root {
+    max-width: 1200px !important;
+    width: 100% !important;
+}
+
+/* ✅ Column Styling */
+.commitment-column {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    /* Ensures icons, titles, and text are centered */
+    text-align: center;
+    flex: 1;
+    /* Ensures all columns take equal width */
+    max-width: 100% !important;
+    justify-content: center;
+
+}
+
+/* ✅ Align Icons to the Top */
+.commitment-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centers everything */
+    justify-content: flex-start;
+    /* Ensures icons stay at the top */
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+
+    /* Ensures consistent height */
+}
+
+
+
+/* ✅ Fix Icon Placement */
+.commitment-icon {
+    /* Matches the example */
+    height: 80px !important;
+    margin-bottom: 20px;
+}
+
+/* ✅ Subtitle Styling */
+.commitment-subtitle {
+    font-size: 1.8rem;
+    color: #13272D;
+    font-weight: bold;
+    margin-bottom: 30px !important;
+}
+
+.commitment-subtitle-text {
+    font-size: 1.2rem;
+    color: #13272D;
+    font-weight: bold;
+    margin-bottom: 30px !important;
+}
+
+/* ✅ Description & Paragraph Styling */
+.commitment-description {
+    font-size: 1.1rem;
+    color: #13272D;
+    max-width: 85%;
+    margin: 0 auto 10px;
+    line-height: 1.5;
+}
+
+.commitment-paragraph {
+    font-size: 1rem;
+    color: #13272D;
+    max-width: 85%;
+    opacity: 0.8;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* ✅ Responsive Tweaks */
+@media (max-width: 768px) {
+    .commitment-title {
+        font-size: 2.5rem;
+    }
+
+    .commitment-subheader {
+        font-size: 1.3rem;
+        max-width: 90%;
+    }
+
+    .commitment-subtitle {
+        font-size: 1.5rem;
+    }
+
+    /* .commitment-container .MuiGrid-container {
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+        justify-content: center;
+        text-align: center;
+        max-width: 75%;
+    } */
+
+    .commitment-column {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 100% !important;
+        padding: 0, 10%;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+
+    .commitment-content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .commitment-icon {
+        width: 70px;
+        margin-bottom: 15px;
+    }
+
+    .commitment-description,
+    .commitment-paragraph {
+        font-size: 1rem;
+        max-width: 95%;
+    }
+
+
+}
+
+
+/* HABLEMOS SECTION >>>>>>>>>>*/
+
+/* ✅ Full-Height Background Section */
+.hablemos-section {
+    background-image: url("../assets/hablemos.png");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Adjust height to match the background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Increased padding for better spacing */
+
+}
+
+.hablemos-subtitle {
+    font-size: 50px !important;
+    font-family: "Avenir Heavy", sans-serif !important;
+    color: white !important;
+    font-size: 75px !important;
+    margin-bottom: 5% !important;
+    margin-top: 15% !important;
+    max-width: 450px;
+}
+
+
+.hablemos-button {
+    background: rgba(251, 247, 234, 0) !important;
+    border: 2px solid #FBF7EA !important;
+    color: #FBF7EA !important;
+    font-size: 1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    padding: 5px 20px !important;
+    border-radius: 70px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    margin-bottom: 10% !important;
+
+}
+
+.hablemos-button:hover {
+    border: 2px solid #FBF7EA !important;
+    background: rgba(251, 247, 234, 0.3) !important;
+    color: #FBF7EA !important;
+}
+
+
+/* TESTIMONIOS SECTION >>>>>>>>>>*/
+
+/* ✅ Full-Width Slider Section */
+.slider-section {
+    width: 100%;
+    text-align: center;
+    background-color: #C3AF94;
+    padding-top: 5%;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+}
+
+/* ✅ Individual Slide */
+.slide {
+    max-width: 70%;
+    text-align: center;
+    color: #13272D;
+    margin: auto;
+}
+
+/* ✅ Title */
+.slide-title {
+    font-size: 2.2rem !important;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-family: "Avenir", sans-serif;
+    padding: 5%;
+    color: #13272D;
+    font-weight: bold;
+
+}
+
+/* ✅ Text */
+.slide-text {
+    font-size: 1.2rem !important;
+    max-width: 700px;
+    font-family: "Avenir Light", sans-serif !important;
+    text-align: center !important;
+    padding: 3%;
+    margin: auto !important;
+}
+
+.slide-who {
+    font-size: 1rem !important;
+    font-family: "Avenir Book", sans-serif !important;
+    text-align: center !important;
+    padding: 5%;
+    margin: 0, 10px;
+}
+
+/* ✅ Dots Customization */
+.slick-dots {
+    font-size: 14px !important;
+    bottom: 0px !important;
+    color: #C3AF94 !important;
+    opacity: 0.7 !important;
+    margin-top: 40px !important;
+    text-align: center !important;
+}
+
+.slick-dots li button:before {
+    font-size: 14px !important;
+    color: white !important;
+    opacity: 0.6;
+}
+
+.slick-dots li.slick-active button:before {
+    font-size: 14px !important;
+    color: white !important;
+    opacity: 1 !important;
+}
+
+
+/* ✅ Custom Arrows testimonios*/
+.custom-arrow {
+    position: absolute !important;
+    top: 20% !important;
+    z-index: 1000 !important;
+    font-size: 2.5rem;
+    color: white !important;
+    opacity: 0.8;
+    position: absolute !important;
+    transform: translateY(-50%) !important;
+    font-size: 2.5rem !important;
+    margin: 10px !important;
+    width: 50px !important;
+    height: 50px !important;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out !important;
+}
+
+.custom-arrow:hover {
+    opacity: 0.5 !important;
+    /* transform: scale(1.1) !important; */
+}
+
+.next {
+    right: 30px !important;
+}
+
+.prev {
+    left: 30px !important;
+}
+
+/* ✅ Mobile Adjustments */
+@media (max-width: 768px) {
+    .slide-title {
+        font-size: 2.5rem;
+    }
+
+    .slide-text {
+        font-size: 1.2rem;
+    }
+
+    .slide-button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    .slide-overlay {
+        width: 85%;
+        padding: 30px;
+    }
+
+    .next {
+        right: 0px !important;
+    }
+
+    .prev {
+        left: 0px !important;
+    }
+
+}
