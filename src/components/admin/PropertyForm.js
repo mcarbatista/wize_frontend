@@ -62,6 +62,9 @@ const PropertyForm = ({
                     }
                 });
             }
+            handleChange({
+                target: { name: "Galeria", value: selected.Galeria || [] }
+            });
         } else {
             setFilteredGaleria([]);
         }
@@ -112,7 +115,7 @@ const PropertyForm = ({
                 ))}
 
                 {/* Imágenes del desarrollo */}
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Typography variant="subtitle1" sx={{ mb: 1 }}>Imágenes del desarrollo</Typography>
                     <Box display="flex" gap={2} flexWrap="wrap">
                         {(filteredGaleria || []).map((img, index) => (
@@ -127,7 +130,7 @@ const PropertyForm = ({
                             </Box>
                         ))}
                     </Box>
-                </Grid>
+                </Grid> */}
 
                 {/* Galería de propiedad */}
                 <Grid item xs={12}>

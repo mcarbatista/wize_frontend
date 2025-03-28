@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import BASE_URL from "../api/config";
+import PlanoSlider from "../components/PlanoSlider";
+import ImageGallery from "../components/ImageGallery";
 
 
 const PropertyDetails = () => {
@@ -77,68 +79,86 @@ const PropertyDetails = () => {
         <Box className="property-detail-all">
 
             <Box className="property-detail-container ">
-                <Button className="back-button" onClick={() => window.history.back()}>← Atrás</Button>
-                {/* 🔹 Property Header Section */}
+                <Button className="back-button" onClick={() => window.history.back()}>
+                    ← Atrás
+                </Button>
                 <Box className="property-detail-header-start">
-                    <Grid container spacing={3} alignItems="center">
-                        {/* 🔹 Title & Summary */}
-                        <Grid item xs={12} md={7} className="property-detail-info-start">
-                            <Typography variant="h3" className="property-detail-title">
-                                {property.Titulo}
-                            </Typography>
-                            <Typography className="property-detail-summary">{property.Resumen}</Typography>
+                    <Grid container spacing={3} alignItems="center" sx={{
+                        margin: '0 auto',
+                        width: '85%',
+                    }}>
+                        <Grid item xs={12} md={7}>
+                            <Box className="property-detail-info-start">
+                                <Typography variant="h3" className="property-detail-title">
+                                    {property.Titulo || 'Sin título'}
+                                </Typography>
+                                <Typography className="property-detail-summary">
+                                    {property.Resumen}
+                                </Typography>
+                            </Box>
                         </Grid>
 
-                        {/* 🔹 Divider */}
-                        <Divider orientation="vertical" flexItem className="property-detail-divider" />
+                        <Grid item xs={12} md={4} sx={{ ml: 'auto', pr: 3 }}>
+                            <Grid container alignItems="center" justifyContent="flex-end">
+                                {/* Divider */}
+                                <Grid item>
+                                    <Divider orientation="vertical" flexItem className="property-detail-divider" />
+                                </Grid>
 
-                        {/* 🔹 Status & Price */}
-                        <Box item xs={12} md={4} className="property-detail-price-box">
-                            <Typography className="property-detail-status">{property.Estado}</Typography>
-                            <Typography className="property-detail-price">$ {property.Precio.toLocaleString()}</Typography>
-                        </Box>
+                                {/* Estado + Precio */}
+                                <Grid item>
+                                    <Box className="property-detail-price-box">
+                                        <Typography className="property-detail-status">{property.Estado}</Typography>
+                                        <Typography className="property-detail-price">
+                                            ${property.Precio?.toLocaleString()}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+
                     </Grid>
                 </Box>
             </Box>
 
 
-            <Box className="property-detail-gallery-contact ">
-                {/* 🔹 Main Image */}
-                <img src={property.Imagen} alt={property.Titulo} className="property-main-image" />
-                {/* 🔹 Gallery */}
-                <Grid container spacing={2} className="property-gallery">
-                    {property.imagenes?.map((img, index) => (
-                        // <Grid item xs={4} sm={2} key={index}>
-                        //     <img src={img} alt={`Propiedad ${index}`} className="property-thumbnail" />
-                        // </Grid>
-                        <Slider {...thumbnailSliderSettings} ref={(slider) => setThumbSlider(slider)} className="property-thumbnails">
-                            {property.Galeria?.map((img, index) => (
-                                <Box key={index} className="property-thumbnail-container">
-                                    <img src={img.url} alt={`Thumbnail ${index}`} className="property-thumbnail" />
-                                </Box>
-                            ))}
-                        </Slider>
+            <Box className="property-detail-gallery-contact">
+                {property.Galeria?.length > 0 && (
+                    <ImageGallery images={property.Galeria} />
+                )}
 
-
-
-                    ))}
-                </Grid>
-                <Grid container
+                <Grid
+                    container
                     spacing={3}
-                    className="property-detail-header"
+                    className="property-detail-header-button"
                     sx={{
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "space-between",
                         alignItems: "center",
                         width: "100%",
-                        flexWrap: "nowrap"
+                        flexWrap: "nowrap",
                     }}
                 >
-                    {/* 🔹 Contact Section */}
-                    <Box className="property-contact">
-                        <Button className="contact-button">Contacto</Button>
-                    </Box>
+                    <Grid item sx={{ mt: 0 }}>  {/* 🔽 reduce top margin */}
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                const el = document.getElementById("footer");
+                                if (el) el.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="contact-button"
+                            sx={{
+                                display: { xs: "none", sm: "flex" },
+                            }}
+                        >
+                            Contacto
+                        </Button>
+                    </Grid>
+
+
+
                 </Grid>
             </Box>
 
@@ -149,28 +169,32 @@ const PropertyDetails = () => {
                         <Grid className="property-detail-info" item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Ubicación</Typography>
                             {/* <Typography className="property-detail-info">{property.Ubicacion}</Typography> */}
-                            <Typography className="property-detail-summary">Avenida a la Playa & Don Quijote de la Mancha, Ciudad de la Costa Canelones Department, Uruguay</Typography>
+                            <Typography className="property-detail-summary">{property.Ubicacion}</Typography>
                         </Grid>
                         <Grid className="property-detail-info" item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Descripción</Typography>
                             {/* <Typography className="property-detail-info">{property.Descripcion}</Typography> */}
                             {property && (
                                 <DescriptionWithExpand className="property-detail-summary"
-                                    shortText={getShortText(property.Descripcion, 150)} // Set desired length
+                                    shortText={getShortText(property.Descripcion_Expandir, 150)} // Set desired length
                                     fullText={property.Descripcion} // Full text from DB
                                 />
                             )}
-                            <Typography className="property-detail-subtitle" variant="h6">Plano</Typography>
-                            {/* <Typography className="property-detail-info">{property.Plano}</Typography> */}
+                            <Box className="property-map-wrapper">
+                                <PlanoSlider planos={property.Plano} />
+
+
+                                {/* 🔹 Google Map */}
+                                <Box className="property-map">
+                                    <iframe
+                                        src={`https://www.google.com/maps?q=${property.Ubicacion}&output=embed`}
+                                        title="Google Map"
+                                        className="google-map"
+                                    />
+                                </Box>
+                            </Box>
                         </Grid>
-                        {/* 🔹 Google Map */}
-                        <Box className="property-map">
-                            <iframe
-                                src={`https://www.google.com/maps?q=${property.Ubicacion}&output=embed`}
-                                title="Google Map"
-                                className="google-map"
-                            />
-                        </Box>
+
                     </Grid>
                     <Grid item xs={12} md={7} className="property-detail-info-right">
 
@@ -183,15 +207,15 @@ const PropertyDetails = () => {
                         <Grid className="property-detail-info" item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Detalles</Typography>
                             <Typography className="property-detail-summary">{property.Detalles}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Tipo</Typography>
+                            <Typography className="property-detail-subtitle" variant="h6">Tipo</Typography>
                             <Typography className="property-detail-summary">{property.Tipo}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Tamaño</Typography>
+                            <Typography className="property-detail-subtitle" variant="h6">Tamaño</Typography>
                             <Typography className="property-detail-summary">{property.Tamano}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Dormitorios</Typography>
+                            <Typography className="property-detail-subtitle" variant="h6">Dormitorios</Typography>
                             <Typography className="property-detail-summary">{property.Dormitorios}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Baños</Typography>
+                            <Typography className="property-detail-subtitle" variant="h6">Baños</Typography>
                             <Typography className="property-detail-summary">{property.Banos}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Forma de pago</Typography>
+                            <Typography className="property-detail-subtitle" variant="h6">Forma de pago</Typography>
                             <Typography className="property-detail-summary">{property.Forma_de_Pago}</Typography>
                         </Grid>
                     </Grid>

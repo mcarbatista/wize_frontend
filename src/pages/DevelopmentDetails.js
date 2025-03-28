@@ -11,36 +11,23 @@ import {
     CardMedia,
     CardContent,
 } from "@mui/material";
+import DOMPurify from "dompurify";
 import "../styles/PropertyDetails.css";
 import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import BASE_URL from "../api/config";
-
+import ImageGallery from "../components/ImageGallery";
+import MarkdownTypography from "../components/Markdown";
 
 const DevelopmentDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [development, setDevelopment] = useState(null);
     const [relatedProperties, setRelatedProperties] = useState([]);
-    const [thumbSlider, setThumbSlider] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const getShortText = (text, length = 150) => {
-        if (!text) return "";
-        if (text.length <= length) return text;
-        return text.substring(0, text.lastIndexOf(" ", length)) + "...";
-    };
-
-    const thumbnailSliderSettings = {
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        focusOnSelect: true,
-        centerMode: true,
-        infinite: true,
-    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -51,13 +38,8 @@ const DevelopmentDetails = () => {
         }
 
         const fetchDevelopment = async () => {
-            console.log(`📢 Fetching development with ID: ${id}`);
-
             try {
-                const response = await axios.get(
-                    `${BASE_URL}/api/desarrollos/${id}`
-                );
-                console.log("✅ API Response:", response.data);
+                const response = await axios.get(`${BASE_URL}/api/desarrollos/${id}`);
                 setDevelopment(response.data.desarrollo);
                 setRelatedProperties(response.data.propiedades);
                 setError(null);
@@ -75,106 +57,126 @@ const DevelopmentDetails = () => {
     if (loading || !development) return <Typography>Cargando...</Typography>;
     if (error) return <Typography>Error: {error}</Typography>;
 
+    const safeDescripcion = DOMPurify.sanitize(development.Descripcion || "");
+    const safeDescripcionExpandir = DOMPurify.sanitize(development.Descripcion_Expandir || "");
+    const safeFormaDePago = DOMPurify.sanitize(development.Forma_de_Pago || "");
+
     return (
         <Box className="property-detail-all">
             <Box className="property-detail-container ">
                 <Button className="back-button" onClick={() => window.history.back()}>
                     ← Atrás
                 </Button>
-
                 <Box className="property-detail-header-start">
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid item xs={12} md={7} className="property-detail-info-start">
-                            <Typography variant="h3" className="property-detail-title">
-                                {development.Titulo}
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Resumen}
-                            </Typography>
+                    <Grid container spacing={3} alignItems="center" sx={{ margin: '0 auto', width: '85%' }}>
+                        <Grid item xs={12} md={7}>
+                            <Box className="property-detail-info-start">
+                                <Typography variant="h3" className="property-detail-title">
+                                    {development.Proyecto_Nombre || 'Sin título'}
+                                </Typography>
+                                <Typography className="property-detail-summary">
+                                    {development.Resumen}
+                                </Typography>
+                            </Box>
                         </Grid>
-
-                        <Divider orientation="vertical" flexItem className="property-detail-divider" />
-
-                        <Grid item xs={12} md={4} className="property-detail-price-box">
-                            <Typography className="property-detail-status">{development.Estado}</Typography>
-                            <Typography className="property-detail-price">
-                                {development.Precio?.toLocaleString()}
-                            </Typography>
+                        <Grid item xs={12} md={4} sx={{ ml: 'auto', pr: 3 }}>
+                            <Grid container alignItems="center" justifyContent="flex-end">
+                                <Grid item>
+                                    <Divider orientation="vertical" flexItem className="property-detail-divider" />
+                                </Grid>
+                                <Grid item>
+                                    <Box className="property-detail-price-box">
+                                        <Typography className="property-detail-status">{development.Estado}</Typography>
+                                        <Typography className="property-detail-price">Desde </Typography>
+                                        <Typography className="property-detail-price">
+                                            $ {development.Precio?.toLocaleString()}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Box>
             </Box>
 
             <Box className="property-detail-gallery-contact">
-                <img src={development.Imagen} alt={development.Titulo} className="property-main-image" />
+                {development.Galeria?.length > 0 && <ImageGallery images={development.Galeria} />}
 
-                <Grid container spacing={2} className="property-gallery">
-                    <Slider
-                        {...thumbnailSliderSettings}
-                        ref={(slider) => setThumbSlider(slider)}
-                        className="property-thumbnails"
-                    >
-                        {development.Galeria?.map((img, index) => (
-                            <Box key={index} className="property-thumbnail-container">
-                                <img src={img.url} alt={`Thumbnail ${index}`} className="property-thumbnail" />
-                            </Box>
-                        ))}
-                    </Slider>
-                </Grid>
-
-                <Grid container spacing={3} className="property-detail-header"
-                    sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
-                        flexWrap: "nowrap",
-                    }}
-                >
-                    <Box className="property-contact">
-                        <Button className="contact-button">Contacto</Button>
-                    </Box>
+                <Grid container spacing={3} className="property-detail-header-button" sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%", flexWrap: "nowrap" }}>
+                    <Grid item sx={{ mt: 0 }}>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                const el = document.getElementById("footer");
+                                if (el) el.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="contact-button"
+                            sx={{ display: { xs: "none", sm: "flex" } }}
+                        >
+                            Contacto
+                        </Button>
+                    </Grid>
                 </Grid>
             </Box>
 
             <Box className="property-detail-container ">
                 <Box className="property-detail-header">
                     <Grid container spacing={3} className="property-detail-info">
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className="property-detail-info">
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Ubicación
                             </Typography>
                             <Typography className="property-detail-summary">
-                                Avenida a la Playa & Don Quijote de la Mancha, Ciudad de la Costa Canelones Department, Uruguay
+                                {development.Ubicacion}
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} className="property-detail-info">
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Descripción
                             </Typography>
                             <DescriptionWithExpand
                                 className="property-detail-summary"
-                                shortText={getShortText(development.Descripcion, 150)}
-                                fullText={development.Descripcion}
+                                shortText={safeDescripcion}
+                                extraText={safeDescripcionExpandir}
+                                useHtml
                             />
-
-                            <Typography className="property-detail-subtitle" variant="h6">
-                                Plano
-                            </Typography>
                         </Grid>
 
-                        <Box className="property-map">
+                        <Grid item className="property-map">
                             <iframe
                                 src={`https://www.google.com/maps?q=${development.Ubicacion}&output=embed`}
                                 title="Google Map"
                                 className="google-map"
                             />
-                        </Box>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} className="property-detail-info">
+                            <Typography className="property-detail-subtitle" variant="h6">
+                                Propiedades en este desarrollo
+                            </Typography>
+                            <Box className="horizontal-scroll-container">
+                                {relatedProperties.map((prop) => {
+                                    const imageUrl = prop.Imagen || 'https://via.placeholder.com/280x400?text=Sin+imagen';
+                                    return (
+                                        <Card className="property-overlay-card">
+                                            <Link to={`/propiedades/${prop._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                                <div className="card-image" style={{ backgroundImage: `url(${imageUrl})` }}>
+                                                    <div className="card-overlay">
+                                                        <Typography className="card-title">{prop.Titulo}</Typography>
+                                                        <Typography className="card-price">${prop.Precio_Con_Formato}</Typography>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        </Card>
+
+                                    );
+                                })}
+                            </Box>
+                        </Grid>
                     </Grid>
 
-                    <Grid item xs={12} md={7} className="property-detail-info-right">
+                    <Grid item xs={12} md={2} className="property-detail-info-right">
                         <Grid item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Contacto
@@ -182,49 +184,28 @@ const DevelopmentDetails = () => {
                             <Typography className="property-detail-summary">{development.Email}</Typography>
                             <Typography className="property-detail-summary">{development.Celular}</Typography>
                         </Grid>
-
                         <Grid item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Detalles
                             </Typography>
                             <Typography className="property-detail-summary">{development.Detalles}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Tipo</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Tipo</Typography>
                             <Typography className="property-detail-summary">{development.Tipo}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Tamaño</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Tamaño</Typography>
                             <Typography className="property-detail-summary">{development.Tamano}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Dormitorios</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Dormitorios</Typography>
                             <Typography className="property-detail-summary">{development.Dormitorios}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Baños</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Baños</Typography>
                             <Typography className="property-detail-summary">{development.Banos}</Typography>
-                            <Typography className="property-detail-subti" variant="h6">Forma de pago</Typography>
-                            <Typography className="property-detail-summary">{development.Forma_de_Pago}</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Forma de pago</Typography>
+                            <Typography
+                                className="property-detail-summary"
+                                component="div"
+                                dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
+                            />
                         </Grid>
                     </Grid>
                 </Box>
-            </Box>
-
-            <Box className="related-properties-section">
-                <Typography variant="h5">Propiedades en este desarrollo</Typography>
-                <Grid container spacing={2} className="property-list">
-                    {relatedProperties.length > 0 ? (
-                        relatedProperties.map((prop) => (
-                            <Grid item xs={12} sm={6} md={4} key={prop._id}>
-                                <Card className="property-card">
-                                    <Link to={`/propiedades/${prop._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                        <CardMedia component="img" image={prop.Imagen} alt={prop.Titulo} />
-                                        <CardContent>
-                                            <Typography variant="h6">{prop.Titulo}</Typography>
-                                            <Typography>{prop.Barrio}</Typography>
-                                            <Typography>Desde {prop.Precio}</Typography>
-                                        </CardContent>
-                                    </Link>
-                                </Card>
-                            </Grid>
-                        ))
-                    ) : (
-                        <Typography>No hay propiedades asociadas a este desarrollo.</Typography>
-                    )}
-                </Grid>
             </Box>
         </Box>
     );

@@ -5,8 +5,6 @@
     left: 0;
     width: 100%;
     background-color: transparent;
-    /* ✅ Transparent initially */
-    transition: background-color 0.3s ease-in-out;
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
@@ -51,7 +49,7 @@
 
 .nav-link:hover,
 .nav-link.active {
-    color: #0F4C54;
+    color: #0F4C54 !important;
     /* ✅ Hover and active color */
 }
 

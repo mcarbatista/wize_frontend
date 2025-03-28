@@ -19,8 +19,7 @@ body {
 
 .title-text {
     font-size: clamp(2rem, 15vw, 6rem) !important;
-    margin-top: 15px;
-    margin-bottom: 5px;
+    margin-top: 150px !important;
     font-family: "Avenir Medium", sans-serif;
     padding: 5%;
     color: #13272D;
@@ -302,6 +301,7 @@ body {
     font-family: "Avenir Light", sans-serif !important;
     color: #444;
     margin-bottom: 15px !important;
+    min-height: 55px !important;
 }
 
 .property-details {
@@ -343,11 +343,8 @@ body {
     padding-top: 10px;
     font-size: 14px;
     color: #444;
-    margin-top: auto;
     /* Forces it to stick to the bottom */
-    padding-bottom: 10px;
-    /* Ensures spacing */
-    /* Forces it to the bottom */
+    margin-bottom: -20px !important;
 }
 
 .property-icons span {

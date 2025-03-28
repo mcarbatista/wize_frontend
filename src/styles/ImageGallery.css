@@ -1,0 +1,74 @@
+.gallery-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.main-image {
+    width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Slider centrado */
+.thumbnail-slider {
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.slick-slider {
+    max-width: 100%;
+    overflow: hidden;
+    margin: 0 auto !important;
+}
+
+.slick-list {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    margin-top: 1% !important;
+}
+
+.slick-track {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center;
+    gap: 0 !important;
+}
+
+.slick-slide {
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Miniaturas */
+.thumbnail-wrapper {
+    cursor: pointer;
+    padding: 2px;
+    margin: 0;
+    padding: 0;
+}
+
+.thumbnail-image {
+    width: 150px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.3s;
+}
+
+.thumbnail-image:hover {
+    transform: scale(1.05);
+}
+
+.slick-prev,
+.slick-next {
+    z-index: 10 !important;
+    opacity: 1 !important;
+    color: #333 !important;
+    /* más oscuro */
+}

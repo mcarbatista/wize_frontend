@@ -14,7 +14,7 @@ const Desarrollos = () => {
     const [neighborhoodFilter, setNeighborhoodFilter] = useState([]);
     const [statusFilter, setStatusFilter] = useState([]);
     const [cityFilter, setCityFilter] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 3000000]);
+    // const [priceRange, setPriceRange] = useState([0, 30000000]);
 
     // Dynamic filter options
     const [statusOptions, setStatusOptions] = useState([]);
@@ -48,7 +48,7 @@ const Desarrollos = () => {
             setCityOptions(uniqueCities);
             setNeighborhoodOptions(uniqueNeighborhoods);
 
-            console.log("🎯 Price range:", priceRange);
+            // console.log("🎯 Price range:", priceRange);
 
             let filteredData = desarrollos;
 
@@ -64,9 +64,9 @@ const Desarrollos = () => {
             if (cityFilter.length > 0) {
                 filteredData = filteredData.filter((desarrollo) => cityFilter.includes(desarrollo.Ciudad));
             }
-            filteredData = filteredData.filter(
-                (desarrollo) => desarrollo.Precio >= priceRange[0] && desarrollo.Precio <= priceRange[1]
-            );
+            // filteredData = filteredData.filter(
+            //     (desarrollo) => desarrollo.Precio >= priceRange[0] && desarrollo.Precio <= priceRange[1]
+            // );
 
             // Apply Sorting
             filteredData.sort((a, b) => {
@@ -156,7 +156,7 @@ const Desarrollos = () => {
                                 <CardMedia component="img" image={desarrollo.Imagen} alt={desarrollo.Title} />
                                 <CardContent>
                                     <Typography className="property-status">{desarrollo.Estado}</Typography>
-                                    <Typography className="property-price">Desde {desarrollo.Precio_Con_Formato}</Typography>
+                                    <Typography className="property-price">Desde ${desarrollo.Precio_Con_Formato}</Typography>
                                     <Typography className="property-title" variant="h6">{desarrollo.Proyecto_Nombre}</Typography>
                                     <Typography className="property-barrio" variant="h6">{desarrollo.Barrio} </Typography>
                                     <Typography className="desarrollo-entrega">{desarrollo.Entrega}</Typography>

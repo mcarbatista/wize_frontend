@@ -1,29 +1,39 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom"; // ✅ Only Routes & Route
+import { Routes, Route, useLocation } from "react-router-dom"; // <-- add useLocation
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Inicio from "./pages/Inicio";
 import Desarrollos from "./pages/Desarrollos";
 import Propiedades from "./pages/Propiedades";
 import PropertyDetails from "./pages/PropertyDetails";
-import DevelopmentDetails from "./pages/DevelopmentDetails"; // 🛠️ Asegurate de que la ruta sea correcta
+import DevelopmentDetails from "./pages/DevelopmentDetails";
 import Servicios from "./pages/Servicios";
 import Nosotros from "./pages/Nosotros";
 import NotFound from "./pages/NotFound";
 import AdminPropiedades from "./pages/AdminPropiedades";
 import AdminDesarrollos from "./pages/AdminDesarrollos";
 import AdminSelector from "./pages/AdminSelector";
-
-import HomeStaging from "./pages/HomeStaging"; // o desde donde esté ubicado
-
-
+import HomeStaging from "./pages/HomeStaging";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import './App.css';
 
 function App() {
+    // 1) Grab the current URL location
+    const location = useLocation();
+
+    // 2) List any paths where you want to hide the header
+    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades"];
+
+    // 3) Check if we are on a path where the header should be hidden
+    const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
+
     return (
         <div className="app-container">
-            <Header />
+            {/* 4) Only show <Header> if we're NOT on /admin/desarrollos */}
+            {!shouldHideHeader && <Header />}
+
             <main className="main-content">
                 <Routes>
                     <Route path="/" element={<Inicio />} />
@@ -41,6 +51,7 @@ function App() {
                     <Route path="/admin/propiedades" element={<AdminPropiedades />} />
                 </Routes>
             </main>
+
             <Footer />
         </div>
     );

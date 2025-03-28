@@ -13,27 +13,27 @@ const centerDefault = {
     lng: -56.1645
 };
 
-const MapSelector = ({ ubicacion, setUbicacion, label = "Ubicación", error, helperText }) => {
+const MapSelector = ({ mapa, setMapa, label = "Mapa", error, helperText }) => {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: "AIzaSyCU-nYLKnmyOdfSmjkhszlfQs4myPxoGqE" // 🔁 Reemplazá por tu clave real
     });
 
     // 🧠 Convertir string a objeto lat/lng
-    const parsedUbicacion = useMemo(() => {
-        if (!ubicacion || typeof ubicacion !== "string") return centerDefault;
-        const [latStr, lngStr] = ubicacion.split(",");
+    const parsedMapa = useMemo(() => {
+        if (!mapa || typeof mapa !== "string") return centerDefault;
+        const [latStr, lngStr] = mapa.split(",");
         const lat = parseFloat(latStr);
         const lng = parseFloat(lngStr);
         if (isNaN(lat) || isNaN(lng)) return centerDefault;
         return { lat, lng };
-    }, [ubicacion]);
+    }, [mapa]);
 
-    // 📍 Guardar la ubicación como string
+    // 📍 Guardar el mapa como string
     const handleMapClick = useCallback((e) => {
         const lat = e.latLng.lat();
         const lng = e.latLng.lng();
-        setUbicacion(`${lat},${lng}`);
-    }, [setUbicacion]);
+        setMapa(`${lat},${lng}`);
+    }, [setMapa]);
 
     if (!isLoaded) return <p>Cargando mapa...</p>;
 
@@ -46,11 +46,11 @@ const MapSelector = ({ ubicacion, setUbicacion, label = "Ubicación", error, hel
             )}
             <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={parsedUbicacion}
+                center={parsedMapa}
                 zoom={14}
                 onClick={handleMapClick}
             >
-                {ubicacion && <Marker position={parsedUbicacion} />}
+                {mapa && <Marker position={parsedMapa} />}
             </GoogleMap>
             {helperText && (
                 <Typography variant="caption" color={error ? "error" : "text.secondary"}>
