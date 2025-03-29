@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/login`, { email, password });
+      const res = await axios.post(`https://wize-frontend.vercel.app/api/auth/login`, { email, password });
       localStorage.setItem("token", res.data.token);
       // Redirect to the admin panel
       navigate("/admin");
