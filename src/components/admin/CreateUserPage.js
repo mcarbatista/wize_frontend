@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 import BASE_URL from "../../api/config";
 
 const roles = ['admin', 'agente'];
@@ -16,6 +17,37 @@ const CreateUserPage = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // 1. Check if we have a token in localStorage
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        // 2. Decode the token to see if it’s expired or if user has the correct role
+        try {
+            const decoded = jwtDecode(token);
+            // Check if token is expired
+            if (decoded.exp * 1000 < Date.now()) {
+                localStorage.removeItem('token');
+                navigate('/login');
+                return;
+            }
+
+            // (Optional) Check user role if your backend requires an admin for user creation
+            // if (decoded.role !== 'admin') {
+            //   setError('You do not have permission to create new users');
+            //   navigate('/admin'); // or wherever you want to send non-admin users
+            // }
+
+        } catch (err) {
+            console.error('Error decoding token:', err);
+            localStorage.removeItem('token');
+            navigate('/login');
+        }
+    }, [navigate]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -23,12 +55,21 @@ const CreateUserPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post(`${BASE_URL}/api/auth/register`,
+            console.log("Token in localStorage:", localStorage.getItem("token"));
+
+            if (!token) {
+                setError('Missing token. Please log in again.');
+                return;
+            }
+
+            const res = await axios.post(
+                `${BASE_URL}/api/auth/register`,
                 { nombre, email, password, role },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
+
             setSuccess('User created successfully!');
             // Optionally, reset form fields
             setNombre('');
@@ -38,7 +79,7 @@ const CreateUserPage = () => {
             // Or navigate somewhere else
             // navigate('/admin/desarrollos');
         } catch (err) {
-            console.error(err);
+            console.error('Error creating user:', err);
             setError(err.response?.data?.error || 'Error creating user');
         }
     };
