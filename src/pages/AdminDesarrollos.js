@@ -22,7 +22,6 @@ import MapSelector from "../components/admin/MapSelector";
 import RichTextInput from "../components/admin/RichTextInput";
 import LoadingIndicator from "../components/admin/LoadingIndicator";
 
-// Define the required fields for this form.
 const requiredFields = [
     "Proyecto_Nombre",
     "Precio",
@@ -33,17 +32,20 @@ const requiredFields = [
     "Barrio",
     "Ubicacion",
     "Mapa",
-    "Email",
-    "Celular",
     "Entrega",
     "Forma_de_Pago",
     "Gastos_Ocupacion",
-    "Tipo"
+    "Tipo",
+    "Owner" // Now required
 ];
+
+const estadoOptions = ["Pre-Venta", "En Construcción", "A Estrenar"];
+const tipoOptions = ["Casa", "Apartamento", "Housing"];
 
 const AdminDesarrollos = () => {
     const navigate = useNavigate();
     const [desarrollos, setDesarrollos] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
     const [form, setForm] = useState({
         Proyecto_Nombre: "",
         Precio: "",
@@ -56,13 +58,12 @@ const AdminDesarrollos = () => {
         Ubicacion: "",
         Mapa: "",
         Imagen: "",
-        Email: "",
-        Celular: "",
         Entrega: "",
         Forma_de_Pago: "",
         Gastos_Ocupacion: "",
         Tipo: "",
-        Galeria: []
+        Galeria: [],
+        Owner: "" // Owner selection now required
     });
     const [errors, setErrors] = useState({});
     const [editId, setEditId] = useState(null);
@@ -89,7 +90,6 @@ const AdminDesarrollos = () => {
                 navigate("/login");
                 return;
             }
-            // Optionally validate on the server.
             axios
                 .get(`${BASE_URL}/api/admin/propiedades`, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -109,12 +109,12 @@ const AdminDesarrollos = () => {
         }
     }, [navigate]);
 
+    // Fetch desarrollos
     useEffect(() => {
         fetchDesarrollos();
     }, []);
 
     const fetchDesarrollos = async () => {
-        // Retrieve token for protected request.
         const token = localStorage.getItem("token");
         try {
             const res = await axios.get(`${BASE_URL}/api/desarrollos`, {
@@ -127,6 +127,19 @@ const AdminDesarrollos = () => {
             console.error("Error fetching desarrollos:", error);
         }
     };
+
+    // Fetch usuarios for Owner dropdown
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        axios
+            .get(`${BASE_URL}/api/auth/usuarios`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then((res) => {
+                setUsuarios(res.data);
+            })
+            .catch((err) => console.error("Error fetching usuarios:", err));
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -163,12 +176,10 @@ const AdminDesarrollos = () => {
                 ? form.Mapa
                 : `${form.Mapa.lat},${form.Mapa.lng}`;
 
-        // Retrieve token for all protected requests.
         const token = localStorage.getItem("token");
-
         setIsSaving(true);
         try {
-            // 1. Upload images to Cloudinary.
+            // Upload images to Cloudinary.
             const formData = new FormData();
             form.Galeria.forEach((img) => {
                 if (img.file) formData.append("imagenes", img.file);
@@ -196,6 +207,7 @@ const AdminDesarrollos = () => {
             const mainIndex = form.Galeria.findIndex((img) => img.isMain);
             const imagenPrincipal = galeriaFinal[mainIndex]?.url || galeriaFinal[0]?.url;
 
+            // Build payload
             const payload = {
                 Proyecto_Nombre: form.Proyecto_Nombre,
                 Precio: precioNum,
@@ -207,8 +219,6 @@ const AdminDesarrollos = () => {
                 Barrio: form.Barrio,
                 Ubicacion: form.Ubicacion,
                 Mapa: MapaFinal,
-                Email: form.Email,
-                Celular: form.Celular,
                 Entrega: form.Entrega,
                 Forma_de_Pago: form.Forma_de_Pago,
                 Gastos_Ocupacion: form.Gastos_Ocupacion,
@@ -216,6 +226,20 @@ const AdminDesarrollos = () => {
                 Imagen: imagenPrincipal,
                 Galeria: galeriaFinal
             };
+
+            // If an Owner is selected, look up the full owner data from usuarios.
+            if (form.Owner) {
+                const selectedOwner = usuarios.find(
+                    (user) => user.nombre === form.Owner
+                );
+                if (selectedOwner) {
+                    payload.Owner = selectedOwner.nombre;
+                    payload.Email = selectedOwner.email;
+                    payload.Celular = selectedOwner.celular;
+                } else {
+                    console.warn("No matching owner found for:", form.Owner);
+                }
+            }
 
             if (editId) {
                 await axios.put(`${BASE_URL}/api/desarrollos/${editId}`, payload, {
@@ -282,12 +306,11 @@ const AdminDesarrollos = () => {
             Ubicacion: dev.Ubicacion || "",
             Mapa: mapaParsed,
             Imagen: dev.Imagen || "",
-            Email: dev.Email || "",
-            Celular: dev.Celular || "",
             Entrega: dev.Entrega || "",
             Forma_de_Pago: dev.Forma_de_Pago || "",
             Gastos_Ocupacion: dev.Gastos_Ocupacion || "",
             Tipo: dev.Tipo || "",
+            Owner: dev.Owner || "",
             Galeria: dev.Galeria || []
         });
     };
@@ -315,13 +338,12 @@ const AdminDesarrollos = () => {
             Ubicacion: "",
             Mapa: "",
             Imagen: "",
-            Email: "",
-            Celular: "",
             Entrega: "",
             Forma_de_Pago: "",
             Gastos_Ocupacion: "",
             Tipo: "",
-            Galeria: []
+            Galeria: [],
+            Owner: ""
         });
         setErrors({});
         setEditId(null);
@@ -329,263 +351,274 @@ const AdminDesarrollos = () => {
     };
 
     return (
-        <Box className="admin-main-container" p={4}>
-            <Typography variant="h4" mb={4}>
+        <Box p={4}>
+
+            <Typography variant="h4" mb={4} className="admin-title">
                 Admin de Desarrollos
             </Typography>
 
-            <Button
+            <Button className="admin-button"
                 variant="outlined"
                 sx={{ mb: 3 }}
                 onClick={() => (window.location.href = "/admin")}
             >
                 ← Volver al Panel de Administración
             </Button>
-
-            <Box key={resetKey} component="form" onSubmit={handleSubmit} mb={4}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label={getLabel("Proyecto_Nombre", "Nombre del Proyecto")}
-                            name="Proyecto_Nombre"
-                            fullWidth
-                            value={form.Proyecto_Nombre}
-                            onChange={handleChange}
-                            error={!!errors.Proyecto_Nombre}
-                            helperText={errors.Proyecto_Nombre}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                        <TextField
-                            label={getLabel("Precio", "Precio")}
-                            name="Precio"
-                            fullWidth
-                            value={form.Precio}
-                            onChange={handleChange}
-                            error={!!errors.Precio}
-                            helperText={errors.Precio}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                        <FormControl fullWidth error={!!errors.Estado}>
-                            <InputLabel>{getLabel("Estado", "Estado")}</InputLabel>
-                            <Select
-                                name="Estado"
-                                value={form.Estado}
+            <Box className="admin-main-container" p={4} >
+                <Box key={resetKey} component="form" onSubmit={handleSubmit} mb={4}>
+                    <Grid container spacing={2}>
+                        {/* Row 1: Proyecto_Nombre, Precio, Estado */}
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label={getLabel("Proyecto_Nombre", "Nombre del Proyecto")}
+                                name="Proyecto_Nombre"
+                                fullWidth
+                                value={form.Proyecto_Nombre}
                                 onChange={handleChange}
-                                label={getLabel("Estado", "Estado")}
+                                error={!!errors.Proyecto_Nombre}
+                                helperText={errors.Proyecto_Nombre}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={3}>
+                            <TextField
+                                label={getLabel("Precio", "Precio")}
+                                name="Precio"
+                                fullWidth
+                                value={form.Precio}
+                                onChange={handleChange}
+                                error={!!errors.Precio}
+                                helperText={errors.Precio}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={3}>
+                            <FormControl fullWidth error={!!errors.Estado}>
+                                <InputLabel>{getLabel("Estado", "Estado")}</InputLabel>
+                                <Select
+                                    name="Estado"
+                                    value={form.Estado}
+                                    onChange={handleChange}
+                                    label={getLabel("Estado", "Estado")}
+                                >
+                                    {estadoOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.Estado && <FormHelperText>{errors.Estado}</FormHelperText>}
+                            </FormControl>
+                        </Grid>
+
+                        {/* Row 2: Resumen */}
+                        <Grid item xs={12}>
+                            <TextField
+                                label={getLabel("Resumen", "Resumen")}
+                                name="Resumen"
+                                fullWidth
+                                multiline
+                                value={form.Resumen}
+                                onChange={handleChange}
+                                error={!!errors.Resumen}
+                                helperText={errors.Resumen}
+                            />
+                        </Grid>
+
+                        {/* Row 3: Descripcion + Descripcion_Expandir */}
+                        <Grid item xs={12}>
+                            <RichTextInput
+                                label={getLabel("Descripcion", "Descripción")}
+                                name="Descripcion"
+                                value={form.Descripcion}
+                                onChange={(val) =>
+                                    handleChange({ target: { name: "Descripcion", value: val } })
+                                }
+                                error={errors.Descripcion}
+                                helperText={errors.Descripcion}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <RichTextInput
+                                label="Descripción a Expandir"
+                                name="Descripcion_Expandir"
+                                value={form.Descripcion_Expandir}
+                                onChange={(val) =>
+                                    handleChange({ target: { name: "Descripcion_Expandir", value: val } })
+                                }
+                                error={errors.Descripcion_Expandir}
+                                helperText={errors.Descripcion_Expandir}
+                            />
+                        </Grid>
+
+                        {/* Row 4: Ubicacion, Ciudad, Barrio */}
+                        <Grid item xs={6} sm={4}>
+                            <TextField
+                                label={getLabel("Ubicacion", "Ubicación")}
+                                name="Ubicacion"
+                                fullWidth
+                                value={form.Ubicacion}
+                                onChange={handleChange}
+                                error={!!errors.Ubicacion}
+                                helperText={errors.Ubicacion}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={4}>
+                            <TextField
+                                label={getLabel("Ciudad", "Ciudad")}
+                                name="Ciudad"
+                                fullWidth
+                                value={form.Ciudad}
+                                onChange={handleChange}
+                                error={!!errors.Ciudad}
+                                helperText={errors.Ciudad}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={4}>
+                            <TextField
+                                label={getLabel("Barrio", "Barrio")}
+                                name="Barrio"
+                                fullWidth
+                                value={form.Barrio}
+                                onChange={handleChange}
+                                error={!!errors.Barrio}
+                                helperText={errors.Barrio}
+                            />
+                        </Grid>
+
+                        {/* Row 5: Mapa */}
+                        <Grid item xs={12}>
+                            <MapSelector
+                                mapa={form.Mapa}
+                                label={getLabel("Mapa", "Mapa")}
+                                error={!!errors.Mapa}
+                                helperText={errors.Mapa}
+                                setMapa={(loc) =>
+                                    handleChange({ target: { name: "Mapa", value: loc } })
+                                }
+                            />
+                        </Grid>
+
+                        {/* Row 6: Owner and Entrega */}
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                select
+                                fullWidth
+                                label={getLabel("Owner", "Owner")}
+                                name="Owner"
+                                value={form.Owner}
+                                onChange={handleChange}
                             >
-                                {estadoOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
+                                {usuarios.map((user) => (
+                                    <MenuItem key={user._id} value={user.nombre}>
+                                        {user.nombre}
                                     </MenuItem>
                                 ))}
-                            </Select>
-                            {errors.Estado && <FormHelperText>{errors.Estado}</FormHelperText>}
-                        </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextField
-                            label={getLabel("Resumen", "Resumen")}
-                            name="Resumen"
-                            fullWidth
-                            multiline
-                            value={form.Resumen}
-                            onChange={handleChange}
-                            error={!!errors.Resumen}
-                            helperText={errors.Resumen}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <RichTextInput
-                            label={getLabel("Descripcion", "Descripción")}
-                            name="Descripcion"
-                            value={form.Descripcion}
-                            onChange={(val) =>
-                                handleChange({ target: { name: "Descripcion", value: val } })
-                            }
-                            error={errors.Descripcion}
-                            helperText={errors.Descripcion}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <RichTextInput
-                            label="Descripción a Expandir"
-                            name="Descripcion_Expandir"
-                            value={form.Descripcion_Expandir}
-                            onChange={(val) =>
-                                handleChange({ target: { name: "Descripcion_Expandir", value: val } })
-                            }
-                            error={errors.Descripcion_Expandir}
-                            helperText={errors.Descripcion_Expandir}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <TextField
-                            label={getLabel("Ubicacion", "Ubicación")}
-                            name="Ubicacion"
-                            fullWidth
-                            value={form.Ubicacion}
-                            onChange={handleChange}
-                            error={!!errors.Ubicacion}
-                            helperText={errors.Ubicacion}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <TextField
-                            label={getLabel("Ciudad", "Ciudad")}
-                            name="Ciudad"
-                            fullWidth
-                            value={form.Ciudad}
-                            onChange={handleChange}
-                            error={!!errors.Ciudad}
-                            helperText={errors.Ciudad}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={4}>
-                        <TextField
-                            label={getLabel("Barrio", "Barrio")}
-                            name="Barrio"
-                            fullWidth
-                            value={form.Barrio}
-                            onChange={handleChange}
-                            error={!!errors.Barrio}
-                            helperText={errors.Barrio}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MapSelector
-                            mapa={form.Mapa}
-                            label={getLabel("Mapa", "Mapa")}
-                            error={!!errors.Mapa}
-                            helperText={errors.Mapa}
-                            setMapa={(loc) =>
-                                handleChange({ target: { name: "Mapa", value: loc } })
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <TextField
-                            label={getLabel("Email", "Email")}
-                            name="Email"
-                            fullWidth
-                            value={form.Email}
-                            onChange={handleChange}
-                            error={!!errors.Email}
-                            helperText={errors.Email}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <TextField
-                            label={getLabel("Celular", "Celular")}
-                            name="Celular"
-                            fullWidth
-                            value={form.Celular}
-                            onChange={handleChange}
-                            error={!!errors.Celular}
-                            helperText={errors.Celular}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <TextField
-                            label={getLabel("Entrega", "Entrega")}
-                            name="Entrega"
-                            fullWidth
-                            value={form.Entrega}
-                            onChange={handleChange}
-                            error={!!errors.Entrega}
-                            helperText={errors.Entrega}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <RichTextInput
-                            label={getLabel("Forma_de_Pago", "Forma de Pago")}
-                            name="Forma_de_Pago"
-                            value={form.Forma_de_Pago}
-                            onChange={(val) =>
-                                handleChange({ target: { name: "Forma_de_Pago", value: val } })
-                            }
-                            error={errors.Forma_de_Pago}
-                            helperText={errors.Forma_de_Pago}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <TextField
-                            label={getLabel("Gastos_Ocupacion", "Gastos de Ocupación")}
-                            name="Gastos_Ocupacion"
-                            fullWidth
-                            value={form.Gastos_Ocupacion}
-                            onChange={handleChange}
-                            error={!!errors.Gastos_Ocupacion}
-                            helperText={errors.Gastos_Ocupacion}
-                        />
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                        <FormControl fullWidth error={!!errors.Tipo}>
-                            <InputLabel>{getLabel("Tipo", "Tipo")}</InputLabel>
-                            <Select
-                                name="Tipo"
-                                value={form.Tipo}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label={getLabel("Entrega", "Entrega")}
+                                name="Entrega"
+                                fullWidth
+                                value={form.Entrega}
                                 onChange={handleChange}
-                                label={getLabel("Tipo", "Tipo")}
-                            >
-                                {tipoOptions.map((option) => (
-                                    <MenuItem key={option} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            {errors.Tipo && <FormHelperText>{errors.Tipo}</FormHelperText>}
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <GaleriaEditor
-                            imagenes={form.Galeria}
-                            imagenPrincipal={form.Imagen}
-                            onChange={handleGaleriaChange}
-                            onMainSelect={handleImagenPrincipalChange}
-                        />
-                    </Grid>
-                </Grid>
+                                error={!!errors.Entrega}
+                                helperText={errors.Entrega}
+                            />
+                        </Grid>
 
-                <Button variant="contained" type="submit" sx={{ mt: 3 }}>
-                    {editId ? "Actualizar Desarrollo" : "Crear Desarrollo"}
-                </Button>
-                {/* Show loading indicator while saving */}
-                {isSaving && <LoadingIndicator />}
-                {editId && (
-                    <Button sx={{ mt: 3, ml: 2 }} onClick={resetForm}>
-                        Cancelar
+                        {/* Row 7: Forma_de_Pago (full width) */}
+                        <Grid item xs={12}>
+                            <RichTextInput
+                                label={getLabel("Forma_de_Pago", "Forma de Pago")}
+                                name="Forma_de_Pago"
+                                value={form.Forma_de_Pago}
+                                onChange={(val) =>
+                                    handleChange({ target: { name: "Forma_de_Pago", value: val } })
+                                }
+                                error={errors.Forma_de_Pago}
+                                helperText={errors.Forma_de_Pago}
+                            />
+                        </Grid>
+
+                        {/* Row 8: Gastos_Ocupacion + Tipo */}
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label={getLabel("Gastos_Ocupacion", "Gastos de Ocupación")}
+                                name="Gastos_Ocupacion"
+                                fullWidth
+                                value={form.Gastos_Ocupacion}
+                                onChange={handleChange}
+                                error={!!errors.Gastos_Ocupacion}
+                                helperText={errors.Gastos_Ocupacion}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth error={!!errors.Tipo}>
+                                <InputLabel>{getLabel("Tipo", "Tipo")}</InputLabel>
+                                <Select
+                                    name="Tipo"
+                                    value={form.Tipo}
+                                    onChange={handleChange}
+                                    label={getLabel("Tipo", "Tipo")}
+                                >
+                                    {tipoOptions.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.Tipo && <FormHelperText>{errors.Tipo}</FormHelperText>}
+                            </FormControl>
+                        </Grid>
+
+                        {/* Row 9: GaleriaEditor */}
+                        <Grid item xs={12}>
+                            <GaleriaEditor
+                                imagenes={form.Galeria}
+                                imagenPrincipal={form.Imagen}
+                                onChange={handleGaleriaChange}
+                                onMainSelect={handleImagenPrincipalChange}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <Button variant="contained" type="submit" sx={{ mt: 3 }}>
+                        {editId ? "Actualizar Desarrollo" : "Crear Desarrollo"}
                     </Button>
-                )}
+                    {isSaving && <LoadingIndicator />}
+                    {editId && (
+                        <Button sx={{ mt: 3, ml: 2 }} onClick={resetForm}>
+                            Cancelar
+                        </Button>
+                    )}
 
-                {successMessage && (
-                    <Box mt={2}>
-                        <Typography color="success.main">{successMessage}</Typography>
-                    </Box>
-                )}
+                    {successMessage && (
+                        <Box mt={2}>
+                            <Typography color="success.main">{successMessage}</Typography>
+                        </Box>
+                    )}
+                </Box>
+
+                <Typography variant="h5" mb={2}>
+                    Desarrollos Existentes
+                </Typography>
+                <Grid container spacing={2}>
+                    {desarrollos.map((dev) => (
+                        <Grid item xs={12} md={6} key={dev._id}>
+                            <Paper elevation={2} sx={{ p: 2 }}>
+                                <Typography variant="h6">{dev.Proyecto_Nombre}</Typography>
+                                <Typography variant="body2">{dev.Resumen}</Typography>
+                                <Button onClick={() => handleEdit(dev)} size="small">
+                                    Editar
+                                </Button>
+                                <Button onClick={() => handleDelete(dev._id)} size="small" color="error">
+                                    Eliminar
+                                </Button>
+                            </Paper>
+                        </Grid>
+                    ))}
+                </Grid>
             </Box>
-
-            <Typography variant="h5" mb={2}>
-                Desarrollos Existentes
-            </Typography>
-            <Grid container spacing={2}>
-                {desarrollos.map((dev) => (
-                    <Grid item xs={12} md={6} key={dev._id}>
-                        <Paper elevation={2} sx={{ p: 2 }}>
-                            <Typography variant="h6">{dev.Proyecto_Nombre}</Typography>
-                            <Typography variant="body2">{dev.Resumen}</Typography>
-                            <Button onClick={() => handleEdit(dev)} size="small">
-                                Editar
-                            </Button>
-                            <Button onClick={() => handleDelete(dev._id)} size="small" color="error">
-                                Eliminar
-                            </Button>
-                        </Paper>
-                    </Grid>
-                ))}
-            </Grid>
         </Box>
     );
 };

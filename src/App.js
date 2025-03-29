@@ -19,6 +19,7 @@ import "slick-carousel/slick/slick-theme.css";
 import PrivateRoute from './components/admin/PrivateRoute';
 import LoginPage from "./components/admin/LoginPage";
 import CreateUserPage from "./components/admin/CreateUserPage";
+import ChangePassword from "./components/admin/ChangePassword";
 import './App.css';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
     const location = useLocation();
 
     // 2) List any paths where you want to hide the header
-    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades"];
+    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades", "admin/create-user", "admin/change-password"];
 
     // 3) Check if we are on a path where the header should be hidden
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
@@ -44,6 +45,14 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <CreateUserPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/change-password"
+                        element={
+                            <PrivateRoute>
+                                <ChangePassword />
                             </PrivateRoute>
                         }
                     />

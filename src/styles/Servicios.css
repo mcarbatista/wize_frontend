@@ -93,7 +93,7 @@
 
 .row-reverse .service-card {
     align-items: flex-start;
-    text-align: right;
+    text-align: left;
 }
 
 .row-normal .service-card {

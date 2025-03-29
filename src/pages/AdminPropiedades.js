@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import PropertyForm from "../components/admin/PropertyForm";
-import LoadingIndicator from "../components/admin/LoadingIndicator"; // <-- New import
+import LoadingIndicator from "../components/admin/LoadingIndicator";
 import "../styles/Admin.css";
 import BASE_URL from "../api/config";
 
@@ -14,6 +14,7 @@ const AdminPropiedades = () => {
     const [token, setToken] = useState(null);
     const [propiedades, setPropiedades] = useState([]);
     const [desarrollos, setDesarrollos] = useState([]);
+    // Removed Email and Celular from form UI fields.
     const [form, setForm] = useState({
         Titulo: "",
         Descripcion: "",
@@ -35,19 +36,23 @@ const AdminPropiedades = () => {
         Forma_de_Pago: "",
         Gastos_Ocupacion: "",
         Owner: "",
-        Celular: "",
-        Email: "",
         Proyecto_Nombre: "",
         Imagen: "",
         ImagenPrincipal: "",
         DesarrolloId: "",
         Galeria: [],
         Plano: [],
+        // These will be updated from the selected owner:
+        Email: "",
+        Celular: ""
     });
     const [editId, setEditId] = useState(null);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
-    const [isSaving, setIsSaving] = useState(false); // <-- Track saving state
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Also store the list of usuarios (to fetch owner data)
+    const [usuarios, setUsuarios] = useState([]);
 
     // Check for token on mount
     useEffect(() => {
@@ -56,7 +61,6 @@ const AdminPropiedades = () => {
             navigate("/login");
         } else {
             setToken(storedToken);
-
             // Optional: validate token by calling a protected endpoint
             axios
                 .get(`${BASE_URL}/api/admin/propiedades`, {
@@ -74,12 +78,13 @@ const AdminPropiedades = () => {
         if (token) {
             fetchPropiedades();
             fetchDesarrollos();
+            fetchUsuarios();
         }
     }, [token]);
 
     const validateForm = () => {
         const newErrors = {};
-        const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId"];
+        const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
         requiredFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
         });
@@ -113,9 +118,37 @@ const AdminPropiedades = () => {
         }
     };
 
+    // Fetch usuarios for the Owner dropdown
+    const fetchUsuarios = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/api/auth/usuarios`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUsuarios(res.data);
+        } catch (err) {
+            console.error("Error fetching usuarios:", err);
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+        // If Owner changes, update Email and Celular based on the selected user.
+        if (name === "Owner") {
+            const selectedOwner = usuarios.find((user) => user.nombre === value);
+            if (selectedOwner) {
+                setForm((prev) => ({
+                    ...prev,
+                    Owner: value,
+                    Email: selectedOwner.email,
+                    Celular: selectedOwner.celular,
+                }));
+            } else {
+                setForm((prev) => ({ ...prev, Owner: value }));
+            }
+        } else {
+            setForm((prev) => ({ ...prev, [name]: value }));
+        }
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const handleImageChange = (Galeria) => {
@@ -132,9 +165,9 @@ const AdminPropiedades = () => {
             return;
         }
 
-        setIsSaving(true); // <-- Begin saving
+        setIsSaving(true);
         try {
-            // Upload Galeria
+            // Upload Galeria images
             const formDataImgs = new FormData();
             const folderGaleria = `wize/propiedades/fotos/${form.Proyecto_Nombre}`;
             formDataImgs.append("folder", folderGaleria);
@@ -157,10 +190,10 @@ const AdminPropiedades = () => {
                 position: index,
             }));
 
-            // If user didn't set an ImagenPrincipal, pick the first image from Galeria
+            // Pick ImagenPrincipal if not set.
             const ImagenPrincipal = form.ImagenPrincipal || imagenesFinal[0]?.url;
 
-            // Upload Plano
+            // Upload Plano images
             const planoFinal = [];
             for (let i = 0; i < form.Plano.length; i++) {
                 const img = form.Plano[i];
@@ -191,6 +224,7 @@ const AdminPropiedades = () => {
                 }
             }
 
+            // Build payload.
             const payload = {
                 Titulo: form.Titulo,
                 Descripcion: form.Descripcion,
@@ -207,15 +241,25 @@ const AdminPropiedades = () => {
                 Unidad: form.Unidad,
                 Forma_de_Pago: form.Forma_de_Pago,
                 Gastos_Ocupacion: form.Gastos_Ocupacion,
-                Owner: form.Owner,
-                Celular: form.Celular,
-                Email: form.Email,
+                Owner: form.Owner, // Final owner value from UI
                 Proyecto_Nombre: form.Proyecto_Nombre,
                 Imagen: ImagenPrincipal,
                 DesarrolloId: form.DesarrolloId,
                 Galeria: imagenesFinal,
                 Plano: planoFinal,
             };
+
+            // If an Owner is selected, the payload already has updated Email and Celular from handleChange.
+            if (form.Owner) {
+                // (Optional) Verify that Email and Celular are set.
+                if (!payload.Email || !payload.Celular) {
+                    const selectedOwner = usuarios.find((user) => user.nombre === form.Owner);
+                    if (selectedOwner) {
+                        payload.Email = selectedOwner.email;
+                        payload.Celular = selectedOwner.celular;
+                    }
+                }
+            }
 
             if (editId) {
                 await axios.put(`${BASE_URL}/api/propiedades/${editId}`, payload, {
@@ -240,7 +284,7 @@ const AdminPropiedades = () => {
             console.error("❌ Error al guardar propiedad:", err);
             alert("Hubo un error al guardar la propiedad. Ver consola.");
         } finally {
-            setIsSaving(false); // <-- End saving
+            setIsSaving(false);
         }
     };
 
@@ -266,14 +310,14 @@ const AdminPropiedades = () => {
             Forma_de_Pago: "",
             Gastos_Ocupacion: "",
             Owner: "",
-            Celular: "",
-            Email: "",
             Proyecto_Nombre: "",
             Imagen: "",
             ImagenPrincipal: "",
             DesarrolloId: "",
             Galeria: [],
             Plano: [],
+            Email: "",
+            Celular: ""
         });
         setErrors({});
         setEditId(null);
@@ -302,8 +346,8 @@ const AdminPropiedades = () => {
             Forma_de_Pago: prop.Forma_de_Pago || "",
             Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
             Owner: prop.Owner || "",
-            Celular: prop.Celular || "",
             Email: prop.Email || "",
+            Celular: prop.Celular || "",
             Proyecto_Nombre: prop.Proyecto_Nombre || "",
             Imagen: prop.Imagen || "",
             ImagenPrincipal: prop.Imagen || "",
@@ -328,13 +372,13 @@ const AdminPropiedades = () => {
 
     return (
         <Box p={4}>
-            <Typography variant="h4" mb={4}>
+            <Typography variant="h4" mb={4} className="admin-title">
                 Admin de Propiedades
             </Typography>
-            <Button
+            <Button className="admin-button"
                 variant="outlined"
                 sx={{ mb: 3 }}
-                onClick={() => window.location.href = "/admin"}
+                onClick={() => (window.location.href = "/admin")}
             >
                 ← Volver al Panel de Administración
             </Button>
@@ -368,9 +412,7 @@ const AdminPropiedades = () => {
                     />
                 </Grid>
             </Grid>
-            {/* Show loading indicator while saving */}
             {isSaving && <LoadingIndicator />}
-
 
             <Typography variant="h5" mt={5} mb={2}>
                 Propiedades Existentes

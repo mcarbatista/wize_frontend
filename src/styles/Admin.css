@@ -9,7 +9,7 @@
 /* Section Titles */
 .admin-title {
     color: #FBF7EA;
-    font-family: "Avenir Heavy", sans-serif;
+    font-family: "Avenir Heavy", sans-serif !important;
     font-size: 2.5rem;
     margin-bottom: 2rem;
 }
@@ -17,31 +17,10 @@
 .admin-subtitle {
     margin-top: 4rem;
     margin-bottom: 1rem;
-    color: #FBF7EA;
+    color: #13272D;
     font-size: 1.5rem;
     font-family: "Avenir Medium", sans-serif;
 }
-
-/* Form Fields */
-/* .MuiTextField-root,
-.MuiFormControl-root {
-    background-color: #FBF7EA;
-    border-radius: 6px;
-} */
-
-/* Buttons */
-/* .MuiButton-containedPrimary {
-    background-color: #007bff !important;
-    color: white;
-    font-weight: bold;
-    text-transform: none;
-    border-radius: 30px;
-    padding: 10px 24px;
-} */
-
-/* .MuiButton-containedPrimary:hover {
-    background-color: #0056b3 !important;
-} */
 
 /* Uploader */
 .image-uploader {
@@ -69,7 +48,7 @@
 }
 
 /* Card Grid */
-.property-card .MuiCard-root {
+/* .property-card .MuiCard-root {
     border-radius: 10px;
     overflow: hidden;
     background-color: #FBF7EA;
@@ -78,7 +57,7 @@
 .property-card .MuiCardContent-root {
     background-color: #FBF7EA;
     color: #13272D;
-}
+}  */
 
 /* Edit/Delete buttons */
 .property-card .MuiButton-root {
@@ -86,28 +65,68 @@
     font-weight: bold;
 }
 
-/* 🔹 Button */
+/* ✅ Contact Button */
+.admin-button-desarrollos {
+    background: #4D5B5C !important;
+    border: 2px solid #FBF7EA !important;
+    color: #FBF7EA !important;
+    font-size: 1.4rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    padding: 8px 30px !important;
+    border-radius: 70px !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+}
+
+.admin-button-propiedades {
+    background: #878F8C !important;
+    border: 2px solid #FBF7EA !important;
+    color: #FBF7EA !important;
+    font-size: 1.4rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    font-weight: bold !important;
+    padding: 8px 30px !important;
+    border-radius: 70px !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+}
+
 .admin-button {
-    background: #13272D !important;
-    border: 2px solid #13272D !important;
+    background: transparent !important;
+    border: 2px solid #FBF7EA !important;
     color: #FBF7EA !important;
     font-size: 1rem !important;
     font-family: "Avenir Light", sans-serif !important;
     font-weight: bold !important;
+    padding: 8px 30px !important;
     border-radius: 70px !important;
     transition: all 0.3s ease-in-out !important;
     text-transform: none !important;
-    width: 30%;
-    display: block !important;
-    margin: 2rem auto 0 auto !important;
-    /* 👉 centrado horizontal */
+    box-shadow: none !important;
 }
 
-.admin-button:hover {
-    border: 2px solid #13272D !important;
-    background: rgba(251, 247, 234, 0.3) !important;
-    color: #13272D !important;
+/* ✅ Ensure button stays the same on focus */
+.admin-button:focus {
+    border: 2px solid #FBF7EA !important;
+    color: #C3AF94 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
 }
+
+.admin-button:hover,
+.admin-button-desarrollos:hover,
+.admin-button-propiedades:hover {
+    color: #C3AF94 !important;
+    border: 2px solid #C3AF94 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+
 
 /* ✅ Responsive Tweaks */
 @media (max-width: 768px) {

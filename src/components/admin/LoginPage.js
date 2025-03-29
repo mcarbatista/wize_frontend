@@ -1,23 +1,41 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // state for toggling visibility
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`https://wize-backend.onrender.com/api/auth/login`, { email, password });
+      const res = await axios.post(
+        `https://wize-backend.onrender.com/api/auth/login`,
+        { email, password }
+      );
       localStorage.setItem("token", res.data.token);
       // Redirect to the admin panel
       navigate("/admin");
     } catch (err) {
-      console.error("error:", err)
+      console.error("error:", err);
       setError(err.response?.data?.error || "Login failed");
     }
   };
@@ -70,10 +88,19 @@ const LoginPage = () => {
               fullWidth
               margin="normal"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <Button

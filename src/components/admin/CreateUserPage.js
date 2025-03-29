@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
+import {
+    Container,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    MenuItem,
+    InputAdornment,
+    IconButton,
+} from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import BASE_URL from "../../api/config";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const roles = ['admin', 'agente'];
 
 const CreateUserPage = () => {
+    document.title = "Wize | Crear usuario";
     const [nombre, setNombre] = useState('');
+    const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('agente'); // default role
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -48,6 +62,10 @@ const CreateUserPage = () => {
         }
     }, [navigate]);
 
+    const handleTogglePassword = () => {
+        setShowPassword((prev) => !prev);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -55,7 +73,7 @@ const CreateUserPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            console.log("Token in localStorage:", localStorage.getItem("token"));
+            console.log("Token in localStorage:", token);
 
             if (!token) {
                 setError('Missing token. Please log in again.');
@@ -64,7 +82,7 @@ const CreateUserPage = () => {
 
             const res = await axios.post(
                 `${BASE_URL}/api/auth/register`,
-                { nombre, email, password, role },
+                { nombre, email, password, phone, role },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -74,6 +92,7 @@ const CreateUserPage = () => {
             // Optionally, reset form fields
             setNombre('');
             setEmail('');
+            setPhone('');
             setPassword('');
             setRole('agente');
             // Or navigate somewhere else
@@ -85,99 +104,126 @@ const CreateUserPage = () => {
     };
 
     return (
-        <Box
-            sx={{
-                minHeight: '100vh',
-                backgroundColor: '#f9f6ef',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            <Container maxWidth="sm">
-                <Box
-                    sx={{
-                        p: 4,
-                        borderRadius: 2,
-                        boxShadow: 3,
-                        backgroundColor: '#fff',
-                    }}
-                >
-                    <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 2 }}>
-                        Create New User
-                    </Typography>
+        <Box p={4}>
+            <Typography variant="h4" mb={4}>
+                Crear usuario
+            </Typography>
+            <Button className="admin-button"
+                variant="outlined"
+                sx={{ mb: 3 }}
+                onClick={() => (window.location.href = "/admin")}
+            >
+                ← Volver al Panel de Administración
+            </Button>
+            <Box
 
-                    {error && (
-                        <Typography color="error" sx={{ mb: 2 }}>
-                            {error}
-                        </Typography>
-                    )}
-                    {success && (
-                        <Typography color="primary" sx={{ mb: 2 }}>
-                            {success}
-                        </Typography>
-                    )}
+                sx={{
+                    minHeight: '100vh',
+                    backgroundColor: '#f9f6ef',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Container maxWidth="sm">
+                    <Box
+                        sx={{
+                            p: 4,
+                            borderRadius: 2,
+                            boxShadow: 3,
+                            backgroundColor: '#fff',
+                        }}
+                    >
 
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="Name"
-                            value={nombre}
-                            onChange={(e) => setNombre(e.target.value)}
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="Email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="Password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        {/* Role selection */}
-                        <TextField
-                            select
-                            fullWidth
-                            margin="normal"
-                            label="Role"
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
-                        >
-                            {roles.map((r) => (
-                                <MenuItem key={r} value={r}>
-                                    {r}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        {error && (
+                            <Typography color="error" sx={{ mb: 2 }}>
+                                {error}
+                            </Typography>
+                        )}
+                        {success && (
+                            <Typography color="primary" sx={{ mb: 2 }}>
+                                {success}
+                            </Typography>
+                        )}
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                            sx={{
-                                mt: 2,
-                                backgroundColor: '#1b4b47',
-                                '&:hover': {
-                                    backgroundColor: '#163e3c',
-                                },
-                            }}
-                        >
-                            Create User
-                        </Button>
-                    </form>
-                </Box>
-            </Container>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Nombre"
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                                required
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Teléfono"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                required
+                            />
+                            <TextField
+                                fullWidth
+                                margin="normal"
+                                label="Password"
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handleTogglePassword} edge="end">
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                            {/* Role selection */}
+                            <TextField
+                                select
+                                fullWidth
+                                margin="normal"
+                                label="Rol"
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                            >
+                                {roles.map((r) => (
+                                    <MenuItem key={r} value={r}>
+                                        {r}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                fullWidth
+                                sx={{
+                                    mt: 2,
+                                    backgroundColor: '#1b4b47',
+                                    '&:hover': {
+                                        backgroundColor: '#163e3c',
+                                    },
+                                }}
+                            >
+                                Create User
+                            </Button>
+                        </form>
+                    </Box>
+                </Container>
+            </Box>
         </Box>
     );
 };

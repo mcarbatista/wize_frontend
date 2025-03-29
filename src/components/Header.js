@@ -42,47 +42,50 @@ const Header = () => {
         >
             <Toolbar
                 sx={{
+                    // Center content up to a max width (optional)
+                    width: "100%",
+                    maxWidth: "1200px",
+                    mx: "auto",
+
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     position: "relative"
                 }}
             >
-                {/* ✅ Hamburger Icon (left on mobile) */}
+                {/* HAMBURGER ICON: Hidden above 1000px, shown below 1000px */}
                 <IconButton
                     edge="start"
                     color="inherit"
                     aria-label="menu"
                     onClick={handleDrawerToggle}
-                    className="hamburger-menu"
                     sx={{
-                        display: { xs: "block", sm: "none" },
+                        display: "none",
                         color: "#C3AF94",
-                        zIndex: 2
+                        zIndex: 2,
+                        "@media (max-width:1000px)": {
+                            display: "block"
+                        }
                     }}
                 >
                     <MenuIcon />
                 </IconButton>
 
-                {/* ✅ Centered Logo */}
+                {/* LOGO: Centered below 1000px by using absolute positioning */}
                 <Box
                     component={Link}
                     to="/"
                     sx={{
-                        position: {
-                            xs: "absolute",
-                            sm: "relative"
-                        },
-                        left: {
-                            xs: "50%",
-                            sm: "auto"
-                        },
-                        transform: {
-                            xs: "translateX(-50%)",
-                            sm: "none"
-                        },
                         textDecoration: "none",
-                        zIndex: 1
+                        position: "relative",
+                        zIndex: 1,
+
+                        // When under 1000px, position absolute in the center
+                        "@media (max-width:1000px)": {
+                            position: "absolute",
+                            left: "50%",
+                            transform: "translateX(-50%)"
+                        }
                     }}
                 >
                     <img
@@ -92,13 +95,17 @@ const Header = () => {
                     />
                 </Box>
 
-                {/* ✅ Nav Buttons (only on sm and up) */}
-                <Box className="nav-menu"
+                {/* NAV BUTTONS: Shown above 1000px, hidden below */}
+                <Box
                     sx={{
-                        // display: { xs: "none", sm: "flex" },
+                        display: "flex",
                         flexDirection: "row",
                         gap: 3,
-                        justifyContent: "center"
+                        justifyContent: "center",
+
+                        "@media (max-width:1000px)": {
+                            display: "none"
+                        }
                     }}
                 >
                     {["INICIO", "DESARROLLOS", "PROPIEDADES", "SERVICIOS", "NOSOTROS"].map(
@@ -106,7 +113,7 @@ const Header = () => {
                             <Button
                                 key={index}
                                 component={Link}
-                                to={`/${item.toUpperCase()}`}
+                                to={`/${item.toLowerCase()}`}
                                 sx={{
                                     fontFamily: "Avenir, sans-serif",
                                     fontSize: "14px",
@@ -123,22 +130,40 @@ const Header = () => {
                     )}
                 </Box>
 
-                {/* ✅ Contact Button (hidden on xs) */}
+                {/* CONTACTO BUTTON: Shown above 1000px, hidden below */}
                 <Button
                     variant="contained"
                     onClick={() => {
                         const el = document.getElementById("footer");
                         if (el) el.scrollIntoView({ behavior: "smooth" });
                     }}
+                    sx={{
+                        // Our custom styles
+                        background: "transparent",
+                        border: "2px solid #0F4C54",
+                        color: "#0F4C54",
+                        fontSize: "1.0rem",
+                        fontFamily: "Avenir Light, sans-serif",
+                        padding: "8px 30px",
+                        borderRadius: "30px",
+                        textTransform: "none",
+                        boxShadow: "none",
+                        "&:hover": {
+                            color: "#C3AF94",
+                            borderColor: "#C3AF94",
+                            boxShadow: "none"
+                        },
 
-                    className="contact-button"
-
-                    sx={{ display: { xs: "none", sm: "flex" } }}
+                        // Hide below 1000px
+                        "@media (max-width:1000px)": {
+                            display: "none"
+                        }
+                    }}
                 >
                     Contacto
                 </Button>
 
-                {/* ✅ Mobile Drawer (left side) */}
+                {/* MOBILE DRAWER: slides in from left when hamburger is clicked */}
                 <Drawer
                     anchor="left"
                     open={mobileOpen}
@@ -157,7 +182,7 @@ const Header = () => {
                             "PROPIEDADES",
                             "SERVICIOS",
                             "NOSOTROS",
-                            "Contacto"
+                            "CONTACTO"
                         ].map((item, index) => (
                             <ListItem
                                 button
@@ -180,7 +205,7 @@ const Header = () => {
                     </List>
                 </Drawer>
             </Toolbar>
-        </AppBar >
+        </AppBar>
     );
 };
 
