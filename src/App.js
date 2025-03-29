@@ -16,7 +16,9 @@ import AdminSelector from "./pages/AdminSelector";
 import HomeStaging from "./pages/HomeStaging";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import PrivateRoute from './components/admin/PrivateRoute';
+import LoginPage from "./components/admin/LoginPage";
+import CreateUserPage from "./components/admin/CreateUserPage";
 import './App.css';
 
 function App() {
@@ -31,11 +33,28 @@ function App() {
 
     return (
         <div className="app-container">
-            {/* 4) Only show <Header> if we're NOT on /admin/desarrollos */}
+            {/* 4) Only show <Header> if we're NOT on the specified admin routes */}
             {!shouldHideHeader && <Header />}
 
             <main className="main-content">
                 <Routes>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route
+                        path="/admin/create-user"
+                        element={
+                            <PrivateRoute>
+                                <CreateUserPage />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <PrivateRoute>
+                                <AdminSelector />
+                            </PrivateRoute>
+                        }
+                    />
                     <Route path="/" element={<Inicio />} />
                     <Route path="/inicio" element={<Inicio />} />
                     <Route path="/propiedades" element={<Propiedades />} />
@@ -46,9 +65,22 @@ function App() {
                     <Route path="/desarrollos" element={<Desarrollos />} />
                     <Route path="/nosotros" element={<Nosotros />} />
                     <Route path="/not-found" element={<NotFound />} />
-                    <Route path="/admin" element={<AdminSelector />} />
-                    <Route path="/admin/desarrollos" element={<AdminDesarrollos />} />
-                    <Route path="/admin/propiedades" element={<AdminPropiedades />} />
+                    <Route
+                        path="/admin/desarrollos"
+                        element={
+                            <PrivateRoute>
+                                <AdminDesarrollos />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/propiedades"
+                        element={
+                            <PrivateRoute>
+                                <AdminPropiedades />
+                            </PrivateRoute>
+                        }
+                    />
                 </Routes>
             </main>
 

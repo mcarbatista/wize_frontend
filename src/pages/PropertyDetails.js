@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Typography, Grid, Button, Divider } from "@mui/material";
+import DOMPurify from "dompurify";
 import "../styles/PropertyDetails.css";
 import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
@@ -74,6 +75,9 @@ const PropertyDetails = () => {
 
     if (loading || !property) return <Typography>Cargando...</Typography>;
     if (error) return <Typography>Error: {error}</Typography>;
+    const safeDescripcion = DOMPurify.sanitize(property.Descripcion || "");
+    const safeDescripcionExpandir = DOMPurify.sanitize(property.Descripcion_Expandir || "");
+    const safeFormaDePago = DOMPurify.sanitize(property.Forma_de_Pago || "");
 
     return (
         <Box className="property-detail-all">
@@ -83,10 +87,7 @@ const PropertyDetails = () => {
                     ← Atrás
                 </Button>
                 <Box className="property-detail-header-start">
-                    <Grid container spacing={3} alignItems="center" sx={{
-                        margin: '0 auto',
-                        width: '85%',
-                    }}>
+                    <Grid container spacing={3} alignItems="center" sx={{ margin: '0 auto', width: '85%', }}>
                         <Grid item xs={12} md={7}>
                             <Box className="property-detail-info-start">
                                 <Typography variant="h3" className="property-detail-title">
@@ -124,10 +125,10 @@ const PropertyDetails = () => {
 
 
             <Box className="property-detail-gallery-contact">
+                {/* {property.Galeria?.length > 0 && (<ImageGallery images={property.Galeria} />)} */}
                 {property.Galeria?.length > 0 && (
-                    <ImageGallery images={property.Galeria} />
+                    <ImageGallery mediaItems={property.Galeria} />
                 )}
-
                 <Grid
                     container
                     spacing={3}
@@ -149,9 +150,7 @@ const PropertyDetails = () => {
                                 if (el) el.scrollIntoView({ behavior: "smooth" });
                             }}
                             className="contact-button"
-                            sx={{
-                                display: { xs: "none", sm: "flex" },
-                            }}
+                            sx={{ display: { xs: "none", sm: "flex" }, }}
                         >
                             Contacto
                         </Button>
@@ -174,16 +173,16 @@ const PropertyDetails = () => {
                         <Grid className="property-detail-info" item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Descripción</Typography>
                             {/* <Typography className="property-detail-info">{property.Descripcion}</Typography> */}
-                            {property && (
-                                <DescriptionWithExpand className="property-detail-summary"
-                                    shortText={getShortText(property.Descripcion_Expandir, 150)} // Set desired length
-                                    fullText={property.Descripcion} // Full text from DB
-                                />
-                            )}
+                            <DescriptionWithExpand
+                                className="property-detail-summary"
+                                shortText={safeDescripcion}
+                                extraText={safeDescripcionExpandir}
+                                useHtml
+                            />
                             <Box className="property-map-wrapper">
-                                <PlanoSlider planos={property.Plano} />
-
-
+                                <Box className="property-map">
+                                    <PlanoSlider planos={property.Plano} />
+                                </Box>
                                 {/* 🔹 Google Map */}
                                 <Box className="property-map">
                                     <iframe
@@ -197,26 +196,30 @@ const PropertyDetails = () => {
 
                     </Grid>
                     <Grid item xs={12} md={7} className="property-detail-info-right">
-
-                        <Grid className="property-detail-info" item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Contacto</Typography>
-                            {/* <Typography className="property-detail-summary">{property.Contacto}</Typography> */}
                             <Typography className="property-detail-summary">{property.Email}</Typography>
                             <Typography className="property-detail-summary">{property.Celular}</Typography>
                         </Grid>
-                        <Grid className="property-detail-info" item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">Detalles</Typography>
                             <Typography className="property-detail-summary">{property.Detalles}</Typography>
-                            <Typography className="property-detail-subtitle" variant="h6">Tipo</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Tipo</Typography>
                             <Typography className="property-detail-summary">{property.Tipo}</Typography>
-                            <Typography className="property-detail-subtitle" variant="h6">Tamaño</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Tamaño</Typography>
                             <Typography className="property-detail-summary">{property.Tamano}</Typography>
-                            <Typography className="property-detail-subtitle" variant="h6">Dormitorios</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Dormitorios</Typography>
                             <Typography className="property-detail-summary">{property.Dormitorios}</Typography>
-                            <Typography className="property-detail-subtitle" variant="h6">Baños</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Baños</Typography>
                             <Typography className="property-detail-summary">{property.Banos}</Typography>
-                            <Typography className="property-detail-subtitle" variant="h6">Forma de pago</Typography>
-                            <Typography className="property-detail-summary">{property.Forma_de_Pago}</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">Forma de pago</Typography>
+                            <Typography
+                                className="property-detail-summary"
+                                component="div"
+                                dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
+                            />
+                            <Typography className="property-detail-small-subtitle" variant="h6">Gastos de ocupación</Typography>
+                            <Typography className="property-detail-summary">{property.Gastos_Ocupacion}</Typography>
                         </Grid>
                     </Grid>
 

@@ -28,6 +28,7 @@
     "axios": "^1.8.3",
     "dompurify": "^3.2.4",
     "emailjs-com": "^3.2.0",
+    "jwt-decode": "^4.0.0",
     "mongoose": "^8.13.0",
     "query-string": "^9.1.1",
     "react-beautiful-dnd": "^13.1.1",

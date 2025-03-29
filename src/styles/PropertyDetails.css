@@ -1,5 +1,5 @@
 .property-detail-container {
-    padding: 7%, 0 !important;
+    padding: 2% 0 !important;
 }
 
 .MuiTypography-root {
@@ -47,7 +47,7 @@
     align-items: flex-start !important;
     gap: 12%;
     margin: 40px !important;
-    text-align: center !important;
+    text-align: flex-start !important;
     padding-bottom: 3%;
 
 }
@@ -253,6 +253,7 @@
     /* Remove iframe border */
     border-radius: 5px !important;
     /* Optional rounded corners */
+    margin: 3% !important;
 }
 
 .property-details-list {
@@ -350,31 +351,60 @@
     background-position: center;
 }
 
-.card-overlay {
-    position: absolute;
-    /* position it at the bottom of .card-image */
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 0, 0, 0.6);
-    /* visible red overlay */
-    z-index: 10;
-    padding: 12px;
-    text-align: left;
-    min-height: 60px;
-    background-color: rgba(255, 0, 0, 0.6);
-    padding: 12px;
-    min-height: 60px;
-}
 
 .card-title {
-    font-size: 1.1rem;
+    font-size: 30px !important;
     font-weight: bold;
-    color: #fafafa;
+    color: red !important;
     /* white text */
+    margin-left: 50% !important;
+    z-index: 10 !important;
 }
 
 .card-price {
-    font-size: 1rem;
-    color: #fafafa;
+    font-size: 30px !important;
+    color: red !important;
+}
+
+.horizontal-scroll-container {
+    display: flex;
+    gap: 16px;
+    /* optional spacing between cards */
+    overflow-x: auto;
+    /* horizontal scroll */
+    padding: 8px;
+    /* optional padding */
+}
+
+.property-overlay-card {
+    /* If you’re relying on Material UI’s <Card> defaults, you can skip some of these, 
+       but if you need custom size or positioning, define them here. */
+    width: 280px;
+    height: 400px;
+    position: relative;
+    /* so the overlay can be absolutely positioned */
+    margin: 0;
+    /* or your own spacing */
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    /* so that the .card-overlay can sit on top */
+}
+
+.card-overlay {
+    position: absolute !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    color: #fff !important;
+    padding: 8px;
+    z-index: 999999 !important;
+    display: flex;
+    flex-direction: column;
 }

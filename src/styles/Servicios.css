@@ -92,7 +92,7 @@
 }
 
 .row-reverse .service-card {
-    align-items: flex-end;
+    align-items: flex-start;
     text-align: right;
 }
 

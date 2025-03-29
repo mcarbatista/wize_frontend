@@ -14,7 +14,7 @@
     display: flex;
     justify-content: flex-start;
     /* 🔽 alinea la imagen a la izquierda */
-    align-items: center;
+    align-items: flex-start;
     height: 300px !important;
     padding: 0;
     background-color: #f9f9f9;

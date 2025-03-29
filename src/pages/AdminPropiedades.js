@@ -1,12 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid, Paper, Button, TextField } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import PropertyForm from "../components/admin/PropertyForm";
 import "../styles/Admin.css";
 import BASE_URL from "../api/config";
 
 const AdminPropiedades = () => {
+    const navigate = useNavigate();
+
+    // Authorization: Check for a token on mount; if missing or invalid, redirect to login.
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        } else {
+            // Optional: Validate token by calling a protected endpoint.
+            axios
+                .get(`${BASE_URL}/api/admin/propiedades`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .catch((err) => {
+                    console.error("Authorization error:", err);
+                    navigate("/login");
+                });
+        }
+    }, [navigate]);
+
     const [propiedades, setPropiedades] = useState([]);
     const [desarrollos, setDesarrollos] = useState([]);
     const [form, setForm] = useState({
@@ -37,7 +58,7 @@ const AdminPropiedades = () => {
         ImagenPrincipal: "",
         DesarrolloId: "",
         Galeria: [],
-        Plano: []
+        Plano: [],
     });
     const [editId, setEditId] = useState(null);
     const [errors, setErrors] = useState({});
@@ -51,7 +72,7 @@ const AdminPropiedades = () => {
     const validateForm = () => {
         const newErrors = {};
         const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId"];
-        requiredFields.forEach(field => {
+        requiredFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
         });
         setErrors(newErrors);
@@ -74,7 +95,7 @@ const AdminPropiedades = () => {
     };
 
     const handleImageChange = (Galeria) => {
-        setForm(prev => ({ ...prev, Galeria }));
+        setForm((prev) => ({ ...prev, Galeria }));
     };
 
     const handleSubmit = async () => {
@@ -96,7 +117,7 @@ const AdminPropiedades = () => {
             });
 
             const galeriaRes = await axios.post(`${BASE_URL}/api/upload`, formDataImgs, {
-                headers: { "Content-Type": "multipart/form-data" }
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
             const imagenesFinal = [
@@ -104,7 +125,7 @@ const AdminPropiedades = () => {
                 ...(galeriaRes.data.galeria || [])
             ].map((img, index) => ({
                 ...img,
-                position: index
+                position: index,
             }));
 
             const ImagenPrincipal = form.ImagenPrincipal || imagenesFinal[0]?.url;
@@ -118,20 +139,20 @@ const AdminPropiedades = () => {
                     fd.append("imagenes", img.file);
 
                     const planoRes = await axios.post(`${BASE_URL}/api/upload`, fd, {
-                        headers: { "Content-Type": "multipart/form-data" }
+                        headers: { "Content-Type": "multipart/form-data" },
                     });
 
                     const uploaded = planoRes.data.galeria?.[0];
                     if (uploaded) {
                         planoFinal.push({
                             ...uploaded,
-                            position: i
+                            position: i,
                         });
                     }
                 } else {
                     planoFinal.push({
                         ...img,
-                        position: i
+                        position: i,
                     });
                 }
             }
@@ -159,7 +180,7 @@ const AdminPropiedades = () => {
                 Imagen: ImagenPrincipal,
                 DesarrolloId: form.DesarrolloId,
                 Galeria: imagenesFinal,
-                Plano: planoFinal
+                Plano: planoFinal,
             };
 
             console.log("📤 Payload final:", payload);
@@ -210,7 +231,7 @@ const AdminPropiedades = () => {
             ImagenPrincipal: "",
             DesarrolloId: "",
             Galeria: [],
-            Plano: []
+            Plano: [],
         });
         setErrors({});
         setEditId(null);
@@ -249,7 +270,6 @@ const AdminPropiedades = () => {
             Plano: prop.Plano || [],
         });
     };
-
 
     const handleDelete = async (id) => {
         await axios.delete(`${BASE_URL}/api/propiedades/${id}`);

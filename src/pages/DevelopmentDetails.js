@@ -18,8 +18,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import BASE_URL from "../api/config";
-import ImageGallery from "../components/ImageGallery";
+import ImageGallery from "../components/ImageGallery"; // Updated gallery with full-screen modal
 import MarkdownTypography from "../components/Markdown";
+import RelatedProperties from "../components/RelatedProperties";
 
 const DevelopmentDetails = () => {
     const { id } = useParams();
@@ -58,12 +59,17 @@ const DevelopmentDetails = () => {
     if (error) return <Typography>Error: {error}</Typography>;
 
     const safeDescripcion = DOMPurify.sanitize(development.Descripcion || "");
-    const safeDescripcionExpandir = DOMPurify.sanitize(development.Descripcion_Expandir || "");
-    const safeFormaDePago = DOMPurify.sanitize(development.Forma_de_Pago || "");
+    const safeDescripcionExpandir = DOMPurify.sanitize(
+        development.Descripcion_Expandir || ""
+    );
+    const safeFormaDePago = DOMPurify.sanitize(
+        development.Forma_de_Pago || ""
+    );
 
     return (
         <Box className="property-detail-all">
-            <Box className="property-detail-container ">
+            {/* Header Section */}
+            <Box className="property-detail-container">
                 <Button className="back-button" onClick={() => window.history.back()}>
                     ← Atrás
                 </Button>
@@ -99,9 +105,11 @@ const DevelopmentDetails = () => {
                 </Box>
             </Box>
 
+            {/* Gallery & Contact Section */}
             <Box className="property-detail-gallery-contact">
-                {development.Galeria?.length > 0 && <ImageGallery images={development.Galeria} />}
-
+                {development.Galeria?.length > 0 && (
+                    <ImageGallery mediaItems={development.Galeria} />
+                )}
                 <Grid container spacing={3} className="property-detail-header-button" sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%", flexWrap: "nowrap" }}>
                     <Grid item sx={{ mt: 0 }}>
                         <Button
@@ -119,7 +127,8 @@ const DevelopmentDetails = () => {
                 </Grid>
             </Box>
 
-            <Box className="property-detail-container ">
+            {/* Content Section */}
+            <Box className="property-detail-container">
                 <Box className="property-detail-header">
                     <Grid container spacing={3} className="property-detail-info">
                         <Grid item xs={12} sm={6} className="property-detail-info">
@@ -143,37 +152,23 @@ const DevelopmentDetails = () => {
                             />
                         </Grid>
 
-                        <Grid item className="property-map">
-                            <iframe
-                                src={`https://www.google.com/maps?q=${development.Ubicacion}&output=embed`}
-                                title="Google Map"
-                                className="google-map"
-                            />
-                        </Grid>
+                        <Box className="property-map-wrapper">
+                            {/* Google Map */}
+                            <Box className="property-map">
+                                <iframe
+                                    src={`https://www.google.com/maps?q=${development.Ubicacion}&output=embed`}
+                                    title="Google Map"
+                                    className="google-map"
+                                />
+                            </Box>
+                        </Box>
 
                         <Grid item xs={12} sm={6} className="property-detail-info">
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Propiedades en este desarrollo
                             </Typography>
-                            <Box className="horizontal-scroll-container">
-                                {relatedProperties.map((prop) => {
-                                    const imageUrl = prop.Imagen || 'https://via.placeholder.com/280x400?text=Sin+imagen';
-                                    return (
-                                        <Card className="property-overlay-card">
-                                            <Link to={`/propiedades/${prop._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                                <div className="card-image" style={{ backgroundImage: `url(${imageUrl})` }}>
-                                                    <div className="card-overlay">
-                                                        <Typography className="card-title">{prop.Titulo}</Typography>
-                                                        <Typography className="card-price">${prop.Precio_Con_Formato}</Typography>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        </Card>
-
-                                    );
-                                })}
-                            </Box>
                         </Grid>
+                        <RelatedProperties relatedProperties={relatedProperties} />
                     </Grid>
 
                     <Grid item xs={12} md={2} className="property-detail-info-right">
@@ -181,29 +176,47 @@ const DevelopmentDetails = () => {
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Contacto
                             </Typography>
-                            <Typography className="property-detail-summary">{development.Email}</Typography>
-                            <Typography className="property-detail-summary">{development.Celular}</Typography>
+                            <Typography className="property-detail-summary">
+                                {development.Email}
+                            </Typography>
+                            <Typography className="property-detail-summary">
+                                {development.Celular}
+                            </Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography className="property-detail-subtitle" variant="h6">
                                 Detalles
                             </Typography>
-                            <Typography className="property-detail-summary">{development.Detalles}</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">Tipo</Typography>
-                            <Typography className="property-detail-summary">{development.Tipo}</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">Tamaño</Typography>
-                            <Typography className="property-detail-summary">{development.Tamano}</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">Dormitorios</Typography>
-                            <Typography className="property-detail-summary">{development.Dormitorios}</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">Baños</Typography>
-                            <Typography className="property-detail-summary">{development.Banos}</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">Forma de pago</Typography>
+                            <Typography className="property-detail-summary">
+                                {development.Detalles}
+                            </Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">
+                                Tipo
+                            </Typography>
+                            <Typography className="property-detail-summary">
+                                {development.Tipo}
+                            </Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">
+                                Tamaño
+                            </Typography>
+                            <Typography className="property-detail-summary">
+                                {development.Tamano}
+                            </Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6">
+                                Forma de pago
+                            </Typography>
                             <Typography
                                 className="property-detail-summary"
                                 component="div"
                                 dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
                             />
                         </Grid>
+                        <Typography className="property-detail-small-subtitle" variant="h6">
+                            Gastos de ocupación
+                        </Typography>
+                        <Typography className="property-detail-summary">
+                            {development.Gastos_Ocupacion}
+                        </Typography>
                     </Grid>
                 </Box>
             </Box>
