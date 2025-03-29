@@ -17,6 +17,7 @@ const LoginPage = () => {
       // Redirect to the admin panel
       navigate("/admin");
     } catch (err) {
+      console.error("error:", err)
       setError(err.response?.data?.error || "Login failed");
     }
   };
