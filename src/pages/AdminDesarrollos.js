@@ -301,7 +301,100 @@ const AdminDesarrollos = () => {
 
             <Box key={resetKey} component="form" onSubmit={handleSubmit} mb={4}>
                 <Grid container spacing={2}>
-                    {/* ... render your form fields here ... */}
+
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Nombre del Proyecto" name="Proyecto_Nombre" fullWidth value={form.Proyecto_Nombre} onChange={handleChange} error={!!errors.Proyecto_Nombre} helperText={errors.Proyecto_Nombre} />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <TextField label="Precio" name="Precio" fullWidth value={form.Precio} onChange={handleChange} error={!!errors.Precio} helperText={errors.Precio} />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <FormControl fullWidth error={!!errors.Estado}>
+                            <InputLabel>Estado</InputLabel>
+                            <Select name="Estado" value={form.Estado} onChange={handleChange} label="Estado">
+                                {estadoOptions.map((option) => (
+                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            {errors.Estado && <FormHelperText>{errors.Estado}</FormHelperText>}
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12}><TextField label="Resumen" name="Resumen" fullWidth multiline value={form.Resumen} onChange={handleChange} error={!!errors.Resumen} helperText={errors.Resumen} /></Grid>
+                    <Grid item xs={12}><RichTextInput
+                        label="Descripción"
+                        name="Descripcion"
+                        value={form.Descripcion}
+                        onChange={(val) =>
+                            handleChange({ target: { name: "Descripcion", value: val } })
+                        }
+                        error={errors.Descripcion}
+                        helperText={errors.Descripcion}
+                    /></Grid>
+
+                    <Grid item xs={12}><RichTextInput
+                        label="Descripción a Expandir"
+                        name="Descripcion_Expandir"
+                        value={form.Descripcion_Expandir}
+                        onChange={(val) =>
+                            handleChange({ target: { name: "Descripcion_Expandir", value: val } })
+                        }
+                        error={errors.Descripcion_Expandir}
+                        helperText={errors.Descripcion_Expandir}
+                    /></Grid>
+                    <Grid item xs={6} sm={4}><TextField label="Ubicacion" name="Ubicacion" fullWidth value={form.Ubicacion} onChange={handleChange} error={!!errors.Ubicacion} helperText={errors.Ubicacion} /></Grid>
+
+                    <Grid item xs={6} sm={4}><TextField label="Ciudad" name="Ciudad" fullWidth value={form.Ciudad} onChange={handleChange} error={!!errors.Ciudad} helperText={errors.Ciudad} /></Grid>
+                    <Grid item xs={6} sm={4}><TextField label="Barrio" name="Barrio" fullWidth value={form.Barrio} onChange={handleChange} error={!!errors.Barrio} helperText={errors.Barrio} /></Grid>
+                    <Grid item xs={12}>
+                        <MapSelector
+                            mapa={form.Mapa}
+                            label="Mapa"
+                            error={!!errors.Mapa}
+                            helperText={errors.Mapa}
+                            setMapa={(loc) => handleChange({ target: { name: "Mapa", value: loc } })}
+                        />
+                    </Grid>
+
+
+                    <Grid item xs={6} sm={6}><TextField label="Email" name="Email" fullWidth value={form.Email} onChange={handleChange} error={!!errors.Email} helperText={errors.Email} />
+                    </Grid>
+                    <Grid item xs={6} sm={6}><TextField label="Celular" name="Celular" fullWidth value={form.Celular} onChange={handleChange} error={!!errors.Celular} helperText={errors.Celular} /></Grid>
+                    <Grid item xs={6} sm={6}><TextField label="Entrega" name="Entrega" fullWidth value={form.Entrega} onChange={handleChange} error={!!errors.Entrega} helperText={errors.Entrega} /></Grid>
+
+                    <Grid item xs={6} sm={6}>
+                        <RichTextInput
+                            label="Forma de Pago"
+                            name="Forma_de_Pago"
+                            value={form.Forma_de_Pago}
+                            onChange={(val) =>
+                                handleChange({ target: { name: "Forma_de_Pago", value: val } })
+                            }
+                            error={errors.Forma_de_Pago}
+                            helperText={errors.Forma_de_Pago}
+                        />
+                    </Grid>
+                    <Grid item xs={6} sm={6}><TextField label="Gastos de Ocupación" name="Gastos_Ocupacion" fullWidth value={form.Gastos_Ocupacion} onChange={handleChange} error={!!errors.Gastos_Ocupacion} helperText={errors.Gastos_Ocupacion} /></Grid>
+                    <Grid item xs={6} sm={3}>
+                        <FormControl fullWidth error={!!errors.Tipo}>
+                            <InputLabel>Tipo</InputLabel>
+                            <Select name="Tipo" value={form.Tipo} onChange={handleChange} label="Tipo">
+                                {tipoOptions.map((option) => (
+                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                            {errors.Tipo && <FormHelperText>{errors.Tipo}</FormHelperText>}
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <GaleriaEditor
+                            imagenes={form.Galeria}
+                            imagenPrincipal={form.Imagen}
+                            onChange={handleGaleriaChange}
+                            onMainSelect={handleImagenPrincipalChange}
+                        />
+                    </Grid>
                 </Grid>
 
                 <Button variant="contained" type="submit" sx={{ mt: 3 }}>
@@ -333,7 +426,7 @@ const AdminDesarrollos = () => {
                     </Grid>
                 ))}
             </Grid>
-        </Box>
+        </Box >
     );
 };
 

@@ -22,8 +22,7 @@ const CreateUserPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post(
-                '/api/auth/register',
+            const res = await axios.post(`${BASE_URL}/api/auth/register`,
                 { nombre, email, password, role },
                 {
                     headers: { Authorization: `Bearer ${token}` },
