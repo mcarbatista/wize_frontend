@@ -42,6 +42,8 @@ const DevelopmentDetails = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/api/desarrollos/${id}`);
                 setDevelopment(response.data.desarrollo);
+                // Dynamically update the browser tab title.
+                document.title = `Wize | ${response.data.desarrollo.Proyecto_Nombre || ""}`;
                 setRelatedProperties(response.data.propiedades);
                 setError(null);
             } catch (error) {
@@ -54,6 +56,7 @@ const DevelopmentDetails = () => {
 
         fetchDevelopment();
     }, [id, navigate]);
+
 
     if (loading || !development) return <Typography>Cargando...</Typography>;
     if (error) return <Typography>Error: {error}</Typography>;
@@ -196,15 +199,9 @@ const DevelopmentDetails = () => {
                             <Typography className="property-detail-summary">
                                 {development.Tipo}
                             </Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">
-                                Tamaño
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Tamano}
-                            </Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">
-                                Forma de pago
-                            </Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6"> Tamaño </Typography>
+                            <Typography className="property-detail-summary">{development.Tamano_m2} m²</Typography>
+                            <Typography className="property-detail-small-subtitle" variant="h6"> Forma de pago</Typography>
                             <Typography
                                 className="property-detail-summary"
                                 component="div"

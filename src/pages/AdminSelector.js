@@ -8,6 +8,7 @@ const AdminSelector = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        document.title = "Wize | Admin Panel";
         const token = localStorage.getItem("token");
         if (!token) {
             navigate("/login");

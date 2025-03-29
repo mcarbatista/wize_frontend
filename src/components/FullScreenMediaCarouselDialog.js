@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Dialog, IconButton, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems = [], initialIndex = 0 }) => {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -10,6 +12,16 @@ const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems = [], initial
     useEffect(() => {
         setCurrentIndex(initialIndex);
     }, [initialIndex]);
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                // Alternatively, if you have access to the slider instance:
+                // sliderRef.current?.slickGoTo(currentIndex, true);
+            }, 100); // slight delay can help ensure the dialog is fully visible
+        }
+    }, [open, currentIndex]);
 
     const sliderSettings = {
         dots: true,

@@ -7,6 +7,8 @@ const RelatedProperties = ({ relatedProperties = [] }) => {
         <Box
             sx={{
                 display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
                 gap: 2,            // spacing between cards
                 overflowX: 'auto', // horizontal scroll
                 p: 2,              // padding around the container

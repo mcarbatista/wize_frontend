@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box, MenuItem } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from "../../api/config";
 
-const roles = ['admin', 'agent'];
+const roles = ['admin', 'agente'];
 
 const CreateUserPage = () => {
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('agent'); // default role
+    const [role, setRole] = useState('agente'); // default role
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -33,7 +34,7 @@ const CreateUserPage = () => {
             setNombre('');
             setEmail('');
             setPassword('');
-            setRole('agent');
+            setRole('agente');
             // Or navigate somewhere else
             // navigate('/admin/desarrollos');
         } catch (err) {

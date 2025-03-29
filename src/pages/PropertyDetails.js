@@ -7,7 +7,7 @@ import "../styles/PropertyDetails.css";
 import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+
 import BASE_URL from "../api/config";
 import PlanoSlider from "../components/PlanoSlider";
 import ImageGallery from "../components/ImageGallery";
@@ -18,32 +18,9 @@ const PropertyDetails = () => {
     const navigate = useNavigate();
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [navSlider, setNavSlider] = useState(null);
-    const [thumbSlider, setThumbSlider] = useState(null);
     const [error, setError] = useState(null);
-    const getShortText = (text, length = 150) => {
-        if (text.length <= length) return text; // If text is short, return it as is
-        return text.substring(0, text.lastIndexOf(" ", length)) + "..."; // Prevent word cut-off
-    };
 
-    const mainSliderSettings = {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        fade: true,
-        asNavFor: thumbSlider,  // Connect with thumbnails
-        autoplay: true,         // Auto-play images
-        autoplaySpeed: 3000,    // Change every 3 seconds
-    };
 
-    const thumbnailSliderSettings = {
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        asNavFor: navSlider,  // Connect with main slider
-        focusOnSelect: true,  // Clicking a thumbnail changes the main image
-        centerMode: true,     // Keep thumbnails centered
-        infinite: true,       // Allows looping through images
-    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -58,9 +35,9 @@ const PropertyDetails = () => {
 
             try {
                 const response = await axios.get(`${BASE_URL}/api/propiedades/${id}`);
-
                 console.log("✅ API Response:", response.data);
                 setProperty(response.data);
+                document.title = `Wize | ${response.data.Titulo || ""}`;
                 setError(null);
             } catch (error) {
                 console.error("❌ Error fetching property:", error);
@@ -207,7 +184,7 @@ const PropertyDetails = () => {
                             <Typography className="property-detail-small-subtitle" variant="h6">Tipo</Typography>
                             <Typography className="property-detail-summary">{property.Tipo}</Typography>
                             <Typography className="property-detail-small-subtitle" variant="h6">Tamaño</Typography>
-                            <Typography className="property-detail-summary">{property.Tamano}</Typography>
+                            <Typography className="property-detail-summary">{property.Tamano_m2} m²</Typography>
                             <Typography className="property-detail-small-subtitle" variant="h6">Dormitorios</Typography>
                             <Typography className="property-detail-summary">{property.Dormitorios}</Typography>
                             <Typography className="property-detail-small-subtitle" variant="h6">Baños</Typography>

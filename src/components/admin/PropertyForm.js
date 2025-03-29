@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import GaleriaEditorPropiedad from "./GaleriaEditorPropiedad";
 
+// Define required fields based on AdminPropiedades.js configuration.
+const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId"];
+
 const PropertyForm = ({
     form,
     desarrollos,
@@ -26,7 +29,7 @@ const PropertyForm = ({
     const [filteredGaleria, setFilteredGaleria] = useState([]);
 
     useEffect(() => {
-        const selected = desarrollos.find(d => d._id === form.DesarrolloId);
+        const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
         if (selected) {
             setFilteredGaleria(selected.Galeria || []);
 
@@ -37,7 +40,7 @@ const PropertyForm = ({
                 "Barrio",
                 "Ubicacion",
                 "Estado"
-            ].forEach(field => {
+            ].forEach((field) => {
                 handleChange({
                     target: {
                         name: field,
@@ -68,12 +71,20 @@ const PropertyForm = ({
         } else {
             setFilteredGaleria([]);
         }
-    }, [form.DesarrolloId, desarrollos]);
+    }, [form.DesarrolloId, desarrollos, handleChange]);
 
+    // List of other fields to render.
     const fields = [
         "Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "Tipo", "Metraje",
         "Piso", "Unidad", "Owner", "Celular", "Email"
     ];
+
+    // Helper function to format labels (adding an asterisk for required fields)
+    const getLabel = (field) => {
+        const label =
+            field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+        return requiredFields.includes(field) ? `${label} *` : label;
+    };
 
     return (
         <Box className="admin-main-container" component="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
@@ -81,12 +92,14 @@ const PropertyForm = ({
                 {/* Desarrollo */}
                 <Grid item xs={12}>
                     <FormControl fullWidth error={!!errors.DesarrolloId}>
-                        <InputLabel>Seleccionar Desarrollo</InputLabel>
+                        <InputLabel>
+                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
+                        </InputLabel>
                         <Select
                             name="DesarrolloId"
                             value={form.DesarrolloId}
                             onChange={handleChange}
-                            label="Seleccionar Desarrollo"
+                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
                         >
                             {(desarrollos || []).map((dev) => (
                                 <MenuItem key={dev._id} value={dev._id}>
@@ -102,7 +115,7 @@ const PropertyForm = ({
                 {fields.map((field) => (
                     <Grid item xs={12} sm={6} key={field}>
                         <TextField
-                            label={field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                            label={getLabel(field)}
                             name={field}
                             value={form[field] || ""}
                             onChange={handleChange}
@@ -113,28 +126,10 @@ const PropertyForm = ({
                         />
                     </Grid>
                 ))}
-
-                {/* Imágenes del desarrollo */}
-                {/* <Grid item xs={12}>
-                    <Typography variant="subtitle1" sx={{ mb: 1 }}>Imágenes del desarrollo</Typography>
-                    <Box display="flex" gap={2} flexWrap="wrap">
-                        {(filteredGaleria || []).map((img, index) => (
-                            <Box key={index}>
-                                <img
-                                    src={img.url}
-                                    alt={img.alt || "imagen"}
-                                    width={100}
-                                    height={100}
-                                    style={{ objectFit: 'cover', borderRadius: 8 }}
-                                />
-                            </Box>
-                        ))}
-                    </Box>
-                </Grid> */}
-
-                {/* Galería de propiedad */}
                 <Grid item xs={12}>
-                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>Imágenes de la propiedad</Typography>
+                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
+                        Imágenes de la propiedad
+                    </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Galeria || []}
                         onChange={handleImageChange}
@@ -147,7 +142,9 @@ const PropertyForm = ({
 
                 {/* Planos */}
                 <Grid item xs={12}>
-                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>Planos</Typography>
+                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
+                        Planos
+                    </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Plano || []}
                         onChange={(imgs) => handleChange({ target: { name: "Plano", value: imgs } })}

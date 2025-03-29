@@ -22,6 +22,7 @@ const Desarrollos = () => {
     const [neighborhoodOptions, setNeighborhoodOptions] = useState([]);
 
     useEffect(() => {
+        document.title = "Wize | Desarrollos";
         fetchDesarrollos();
         window.scrollTo(0, 0);
     }, []);

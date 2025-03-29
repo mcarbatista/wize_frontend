@@ -169,15 +169,14 @@
     align-items: left !important;
 }
 
-
-.expand-link {
+/* .expand-link {
     font-size: 1rem;
     color: #0F4C54;
     text-decoration: underline;
     cursor: pointer;
     display: inline-block;
     margin-top: 5px;
-}
+} */
 
 /* 🔹 Divider Styling */
 .property-detail-divider {
@@ -200,10 +199,10 @@
     text-align: center !important;
 }
 
-.property-gallery {
+/* .property-gallery {
     margin-top: 10px;
     width: 70%;
-}
+} */
 
 
 .property-contact {
@@ -266,7 +265,7 @@
     justify-content: flex-start;
 }
 
-
+/* 
 .property-main-slider {
     width: 100%;
     height: 500px;
@@ -281,9 +280,9 @@
     display: block !important;
     margin: 0 auto !important;
 
-}
+} */
 
-
+/* 
 .slick-slide {
     display: flex !important;
     align-items: center;
@@ -295,116 +294,4 @@
 .slick-list,
 .slick-track {
     min-height: 100px !important;
-}
-
-.property-thumbnails {
-    margin-top: 10px;
-    width: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.property-thumbnail-container {
-    width: 100px;
-    height: 100px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.property-thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    transition: transform 0.3s;
-    cursor: pointer;
-}
-
-.property-thumbnail:hover {
-    transform: scale(1.05);
-}
-
-.property-overlay-card {
-    position: relative;
-    /* needed for absolute-position children */
-    width: 280px;
-    height: 400px;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.card-image {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    /* no need for display:flex if using absolute overlay */
-    position: relative;
-    /* or you can rely on .property-overlay-card's positioning */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    background-size: cover;
-    background-position: center;
-}
-
-
-.card-title {
-    font-size: 30px !important;
-    font-weight: bold;
-    color: red !important;
-    /* white text */
-    margin-left: 50% !important;
-    z-index: 10 !important;
-}
-
-.card-price {
-    font-size: 30px !important;
-    color: red !important;
-}
-
-.horizontal-scroll-container {
-    display: flex;
-    gap: 16px;
-    /* optional spacing between cards */
-    overflow-x: auto;
-    /* horizontal scroll */
-    padding: 8px;
-    /* optional padding */
-}
-
-.property-overlay-card {
-    /* If you’re relying on Material UI’s <Card> defaults, you can skip some of these, 
-       but if you need custom size or positioning, define them here. */
-    width: 280px;
-    height: 400px;
-    position: relative;
-    /* so the overlay can be absolutely positioned */
-    margin: 0;
-    /* or your own spacing */
-}
-
-.card-image {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    /* so that the .card-overlay can sit on top */
-}
-
-.card-overlay {
-    position: absolute !important;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5) !important;
-    color: #fff !important;
-    padding: 8px;
-    z-index: 999999 !important;
-    display: flex;
-    flex-direction: column;
-}
+} */
