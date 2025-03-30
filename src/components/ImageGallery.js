@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Slider from "react-slick";
+import { useTheme, useMediaQuery } from "@mui/material";
 import "../styles/ImageGallery.css";
 import FullScreenMediaCarouselDialog from "./FullScreenMediaCarouselDialog";
 import IconButton from "@mui/material/IconButton";
@@ -9,11 +10,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const ImageGallery = ({ mediaItems = [] }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const mainSliderRef = useRef(null);
 
-    const mainItem = mediaItems.length > 0 ? mediaItems[currentIndex] : {};
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMedium = useMediaQuery(theme.breakpoints.down("md"));
 
     // Thumbnail slider settings (no default arrows).
-    const sliderSettings = {
+    const thumbnailSliderSettings = {
         slidesToShow: 6,
         slidesToScroll: 1,
         arrows: false,
@@ -38,62 +42,98 @@ const ImageGallery = ({ mediaItems = [] }) => {
         ],
     };
 
-    const handleThumbnailClick = (idx) => {
-        setCurrentIndex(idx);
+    // Main slider settings: enables swipe and updates currentIndex on slide change.
+    const mainSliderSettings = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        swipe: true,
+        afterChange: (idx) => setCurrentIndex(idx),
     };
 
+    const handleThumbnailClick = (idx) => {
+        setCurrentIndex(idx);
+        mainSliderRef.current.slickGoTo(idx);
+    };
+
+    // Arrow button functions for the main slider
     const handleMainPrev = () => {
-        setCurrentIndex((prev) =>
-            prev > 0 ? prev - 1 : mediaItems.length - 1
-        );
+        mainSliderRef.current.slickPrev();
     };
 
     const handleMainNext = () => {
-        setCurrentIndex((prev) =>
-            prev < mediaItems.length - 1 ? prev + 1 : 0
-        );
+        mainSliderRef.current.slickNext();
     };
+
+    // Base arrow style with white color
+    const arrowStyle = {
+        position: "absolute",
+        top: "50%",
+        transform: "translateY(-50%)",
+        color: "#ffffff",
+        background: "none",
+        zIndex: 2,
+    };
+
+    // Adjust arrow positioning based on screen size:
+    const leftArrowStyle = {
+        ...arrowStyle,
+        left: isMobile ? "10px" : isMedium ? "35px" : "45px",
+    };
+
+    const rightArrowStyle = {
+        ...arrowStyle,
+        right: isMobile ? "10px" : isMedium ? "30px" : "45px",
+    };
+
+    const iconFontSize = isMobile ? "2rem" : isMedium ? "2.5rem" : "3rem";
 
     return (
         <div className="gallery-container">
             <div className="main-media-wrapper">
-                {mainItem.type === "video" ? (
-                    <video
-                        src={mainItem.url}
-                        autoPlay
-                        muted
-                        loop
-                        className="main-image"
-                        onClick={() => setDialogOpen(true)}
-                    />
-                ) : (
-                    <img
-                        src={mainItem.url}
-                        alt="Principal"
-                        className="main-image"
-                        onClick={() => setDialogOpen(true)}
-                    />
-                )}
+                <Slider ref={mainSliderRef} {...mainSliderSettings}>
+                    {mediaItems.map((item, idx) => (
+                        <div key={idx} onClick={() => setDialogOpen(true)}>
+                            {item.type === "video" ? (
+                                <video
+                                    src={item.url}
+                                    autoPlay
+                                    muted
+                                    loop
+                                    className="main-image"
+                                />
+                            ) : (
+                                <img
+                                    src={item.url}
+                                    alt="Principal"
+                                    className="main-image"
+                                />
+                            )}
+                        </div>
+                    ))}
+                </Slider>
 
                 {mediaItems.length > 1 && (
                     <>
                         <IconButton
                             onClick={handleMainPrev}
                             className="arrow-button left-arrow"
+                            sx={leftArrowStyle}
                         >
-                            <ArrowBackIosNewIcon style={{ fontSize: "3rem" }} />
+                            <ArrowBackIosNewIcon sx={{ fontSize: iconFontSize, color: "#ffffff" }} />
                         </IconButton>
                         <IconButton
                             onClick={handleMainNext}
                             className="arrow-button right-arrow"
+                            sx={rightArrowStyle}
                         >
-                            <ArrowForwardIosIcon style={{ fontSize: "3rem" }} />
+                            <ArrowForwardIosIcon sx={{ fontSize: iconFontSize, color: "#ffffff" }} />
                         </IconButton>
                     </>
                 )}
             </div>
 
-            <Slider {...sliderSettings} className="thumbnail-slider">
+            <Slider {...thumbnailSliderSettings} className="thumbnail-slider">
                 {mediaItems.map((item, idx) => (
                     <div
                         key={idx}
