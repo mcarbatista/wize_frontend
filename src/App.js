@@ -12,6 +12,7 @@ import Nosotros from "./pages/Nosotros";
 import NotFound from "./pages/NotFound";
 import AdminPropiedades from "./pages/AdminPropiedades";
 import AdminDesarrollos from "./pages/AdminDesarrollos";
+import EditDevelopment from "./pages/Admin/EditDevelopment";
 import AdminSelector from "./pages/AdminSelector";
 import HomeStaging from "./pages/HomeStaging";
 import "slick-carousel/slick/slick.css";
@@ -27,7 +28,7 @@ function App() {
     const location = useLocation();
 
     // 2) List any paths where you want to hide the header
-    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades", "admin/create-user", "admin/change-password"];
+    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades", "admin/create-user", "admin/change-password", "/admin/desarrollos/edit/{:id}"];
 
     // 3) Check if we are on a path where the header should be hidden
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
@@ -74,14 +75,8 @@ function App() {
                     <Route path="/desarrollos" element={<Desarrollos />} />
                     <Route path="/nosotros" element={<Nosotros />} />
                     <Route path="/not-found" element={<NotFound />} />
-                    <Route
-                        path="/admin/desarrollos"
-                        element={
-
-                            <AdminDesarrollos />
-
-                        }
-                    />
+                    <Route path="/admin/desarrollos" element={<AdminDesarrollos />} />
+                    <Route path="/admin/desarrollos/edit/:id" element={<EditDevelopment />} />
                     <Route
                         path="/admin/propiedades"
                         element={

@@ -9,46 +9,93 @@ import {
     Select,
     InputLabel,
     FormControl,
-    Card,
-    CardMedia,
-    CardContent,
     FormHelperText
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import "../styles/Admin.css";
-import "../styles/Properties.css";
-import BASE_URL from "../api/config";
-import GaleriaEditor from "../components/admin/GaleriaEditor";
-import MapSelector from "../components/admin/MapSelector";
-import RichTextInput from "../components/admin/RichTextInput";
-import LoadingIndicator from "../components/admin/LoadingIndicator";
+import "../../styles/Admin.css";
+import BASE_URL from "../../api/config";
+import MapSelector from "../../components/admin/MapSelector";
+import RichTextInput from "../../components/admin/RichTextInput";
+import LoadingIndicator from "../../components/admin/LoadingIndicator";
+import DeleteIcon from "@mui/icons-material/Delete";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-const requiredFields = [
-    "Proyecto_Nombre",
-    "Precio",
-    "Estado",
-    "Resumen",
-    "Descripcion",
-    "Ciudad",
-    "Barrio",
-    "Ubicacion",
-    "Mapa",
-    "Entrega",
-    "Forma_de_Pago",
-    "Gastos_Ocupacion",
-    "Tipo",
-    "Owner"
-];
+// Updated inline GaleriaEditor component.
+const GaleriaEditor = ({ imagenes, imagenPrincipal, onChange, onMainSelect }) => {
+    const handleRemove = (index) => {
+        const updated = [...imagenes];
+        updated.splice(index, 1);
+        onChange(updated);
+    };
+
+    const getPreviewUrl = (img) => {
+        if (img.file) {
+            return URL.createObjectURL(img.file);
+        } else if (img.url && img.url.startsWith("http")) {
+            return img.url;
+        }
+        return "";
+    };
+
+    return (
+        <Box display="flex" flexWrap="wrap" gap={2}>
+            {imagenes.map((img, index) => {
+                const previewUrl = getPreviewUrl(img);
+                return (
+                    <Box
+                        key={index}
+                        sx={{
+                            border: "1px solid #ccc",
+                            background: "white",
+                            borderRadius: 1,
+                            p: 1,
+                            textAlign: "center",
+                            width: 120
+                        }}
+                    >
+                        {previewUrl ? (
+                            <img
+                                src={previewUrl}
+                                alt={img.alt || "Image"}
+                                style={{ width: "100%", height: 100, objectFit: "cover" }}
+                            />
+                        ) : (
+                            <Typography variant="caption">No image</Typography>
+                        )}
+
+                        <Box mt={1} display="flex" justifyContent="center" alignItems="center" >
+                            <Button
+                                color="#0F4C54"
+                                size="small"
+                                onClick={() => handleRemove(index)}
+                            >
+                                <DeleteIcon fontSize="small" />
+                            </Button>
+                            <Button
+                                color="#0F4C54"
+                                size="small"
+                                onClick={() => onMainSelect(previewUrl)}
+                            >
+                                <StarBorderIcon fontSize="small" />
+                            </Button>
+                        </Box>
+                    </Box>
+                );
+            })}
+        </Box>
+    );
+};
+
 
 const estadoOptions = ["Pre-Venta", "En Construcción", "A Estrenar"];
 const tipoOptions = ["Casa", "Apartamento", "Housing"];
 
-const AdminDesarrollos = () => {
+const EditDevelopment = () => {
+    const { id } = useParams(); // The development ID to edit.
     const navigate = useNavigate();
-    const [desarrollos, setDesarrollos] = useState([]);
-    const [usuarios, setUsuarios] = useState([]);
+
     const [form, setForm] = useState({
         Proyecto_Nombre: "",
         Precio: "",
@@ -59,52 +106,58 @@ const AdminDesarrollos = () => {
         Ciudad: "",
         Barrio: "",
         Ubicacion: "",
-        Mapa: "",
+        Mapa: {},
         Imagen: "",
         Entrega: "",
         Forma_de_Pago: "",
         Gastos_Ocupacion: "",
         Tipo: "",
         Galeria: [],
-        Owner: ""
+        Owner: "" // This will hold the owner's ID.
     });
+
+    // Store the original development data.
+    const [originalDev, setOriginalDev] = useState(null);
     const [errors, setErrors] = useState({});
-    const [editId, setEditId] = useState(null);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [resetKey, setResetKey] = useState(Date.now());
+    const [usuarios, setUsuarios] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
-    // Helper to append an asterisk for required fields.
-    const getLabel = (field, defaultLabel) =>
-        requiredFields.includes(field) ? `${defaultLabel} *` : defaultLabel;
+    const requiredFields = [
+        "Proyecto_Nombre",
+        "Precio",
+        "Estado",
+        "Resumen",
+        "Descripcion",
+        "Ciudad",
+        "Barrio",
+        "Ubicacion",
+        "Mapa",
+        "Entrega",
+        "Forma_de_Pago",
+        "Gastos_Ocupacion",
+        "Tipo",
+        "Owner"
+    ];
 
-    // Authorization check: decode token and validate expiry.
+    // Check for token validity on mount.
     useEffect(() => {
-        document.title = "Wize | Admin Desarrollos";
+        document.title = "Wize | Editar Desarrollo";
         const token = localStorage.getItem("token");
         if (!token) {
+            console.error("No token found, redirecting to login.");
             navigate("/login");
             return;
         }
         try {
             const decoded = jwtDecode(token);
             if (decoded.exp * 1000 < Date.now()) {
+                console.error("Token expired, redirecting to login.");
                 localStorage.removeItem("token");
                 navigate("/login");
                 return;
             }
-            axios
-                .get(`${BASE_URL}/api/admin/propiedades`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                .catch((err) => {
-                    if (err.response && [401, 403].includes(err.response.status)) {
-                        localStorage.removeItem("token");
-                        navigate("/login");
-                    } else {
-                        console.error("Non-auth error on protected endpoint:", err);
-                    }
-                });
         } catch (err) {
             console.error("Token decode error:", err);
             localStorage.removeItem("token");
@@ -112,46 +165,107 @@ const AdminDesarrollos = () => {
         }
     }, [navigate]);
 
-    // Fetch desarrollos
-    useEffect(() => {
-        fetchDesarrollos();
-    }, []);
-
-    const fetchDesarrollos = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            const res = await axios.get(`${BASE_URL}/api/desarrollos`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setDesarrollos(res.data);
-        } catch (error) {
-            console.error("Error fetching desarrollos:", error);
-        }
-    };
-
-    // Fetch usuarios for Owner dropdown
+    // Fetch usuarios for the Owner dropdown.
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios
             .get(`${BASE_URL}/api/auth/usuarios`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
-            .then((res) => setUsuarios(res.data))
+            .then((res) => {
+                console.log("Fetched usuarios:", res.data);
+                setUsuarios(res.data);
+            })
             .catch((err) => console.error("Error fetching usuarios:", err));
     }, []);
 
+    // Fetch the development details by its ID.
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        console.log("Fetching development with id:", id);
+        axios
+            .get(`${BASE_URL}/api/desarrollos/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then((res) => {
+                console.log("Fetched development data:", res.data);
+                const dev = res.data;
+                // The actual development object is in dev.desarrollo
+                const development = dev.desarrollo;
+                let mapaParsed = {};
+                if (development.Mapa && typeof development.Mapa === "string") {
+                    const [latStr, lngStr] = development.Mapa.split(",");
+                    const lat = parseFloat(latStr);
+                    const lng = parseFloat(lngStr);
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        mapaParsed = { lat, lng };
+                    }
+                } else if (typeof development.Mapa === "object" && development.Mapa !== null) {
+                    mapaParsed = development.Mapa;
+                }
+                setForm({
+                    Proyecto_Nombre: development.Proyecto_Nombre || "",
+                    Precio: development.Precio || "",
+                    Estado: development.Estado || "",
+                    Resumen: development.Resumen || "",
+                    Descripcion: development.Descripcion || "",
+                    Descripcion_Expandir: development.Descripcion_Expandir || "",
+                    Ciudad: development.Ciudad || "",
+                    Barrio: development.Barrio || "",
+                    Ubicacion: development.Ubicacion || "",
+                    Mapa: mapaParsed,
+                    Imagen: development.Imagen || "",
+                    Entrega: development.Entrega || "",
+                    Forma_de_Pago: development.Forma_de_Pago || "",
+                    Gastos_Ocupacion: development.Gastos_Ocupacion || "",
+                    Tipo: development.Tipo || "",
+                    Galeria: development.Galeria || [],
+                    Owner: development.Owner || "" // Expecting owner ID here
+                });
+                setOriginalDev(development);
+                setIsLoading(false);
+            })
+            .catch((err) => {
+                console.error("Error fetching development:", err);
+                setIsLoading(false);
+            });
+    }, [id]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
-        setErrors({ ...errors, [name]: "" });
+        setForm((prev) => ({ ...prev, [name]: value }));
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+    };
+
+    const handleMapaChange = (loc) => {
+        setForm((prev) => ({ ...prev, Mapa: loc }));
+        setErrors((prev) => ({ ...prev, Mapa: "" }));
+    };
+
+    // Called when images are changed in the GaleriaEditor.
+    const handleGaleriaChange = (imagenes) => {
+        setForm((prev) => ({ ...prev, Galeria: imagenes }));
+    };
+
+    const handleImagenPrincipalChange = (url) => {
+        setForm((prev) => ({
+            ...prev,
+            Galeria: prev.Galeria.map((img) => ({
+                ...img,
+                isMain: img.url === url || img.preview === url
+            }))
+        }));
     };
 
     const validateForm = () => {
         const newErrors = {};
         requiredFields.forEach((field) => {
-            if (!form[field]) newErrors[field] = "Este campo es requerido";
+            if (
+                !form[field] ||
+                (typeof form[field] === "object" && Object.keys(form[field]).length === 0)
+            ) {
+                newErrors[field] = "Este campo es requerido";
+            }
         });
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -160,56 +274,62 @@ const AdminDesarrollos = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) {
-            alert(
-                "El formulario no pasó la validación. Por favor, rellene todos los campos requeridos."
-            );
+            alert("Por favor complete los campos requeridos.");
             return;
         }
-
         const precioNum = Number(form.Precio);
         if (isNaN(precioNum)) {
             alert("El precio debe ser un número válido.");
             return;
         }
-
-        const MapaFinal =
-            typeof form.Mapa === "string"
-                ? form.Mapa
-                : `${form.Mapa.lat},${form.Mapa.lng}`;
-
         const token = localStorage.getItem("token");
         setIsSaving(true);
         try {
-            // Upload images to Cloudinary.
+            // Upload new images (those with a .file) to Cloudinary.
             const formData = new FormData();
+            // Separate new uploads from existing images.
+            const existingImages = form.Galeria.filter((img) => !img.file);
             form.Galeria.forEach((img) => {
-                if (img.file) formData.append("imagenes", img.file);
+                if (img.file) {
+                    formData.append("imagenes", img.file);
+                }
             });
             const folder = `wize/desarrollos/fotos/${form.Proyecto_Nombre}`;
             formData.append("folder", folder);
-
             const uploadRes = await axios.post(`${BASE_URL}/api/upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`
                 }
             });
-
             if (!uploadRes.data.success || !uploadRes.data.galeria) {
-                alert("Error al subir imágenes a Cloudinary");
+                alert("Error al subir imágenes.");
+                setIsSaving(false);
                 return;
             }
-
-            const galeriaFinal = uploadRes.data.galeria.map((img, index) => ({
-                ...img,
+            // Process newly uploaded images.
+            const newUploads = uploadRes.data.galeria.map((uploaded, index) => ({
+                alt: uploaded.original_filename || "",
+                description: "",
+                url: uploaded.url,
                 position: index
             }));
+            // Merge existing images (which already have a valid URL) with new uploads.
+            const mergedGaleria = [
+                ...existingImages.map((img, index) => ({ ...img, position: index })),
+                ...newUploads.map((img, i) => ({
+                    ...img,
+                    position: existingImages.length + i
+                }))
+            ];
+            // Determine the main image.
+            let mainImg = mergedGaleria.find((img) => img.isMain);
+            if (!mainImg && mergedGaleria.length > 0) {
+                mainImg = mergedGaleria[0];
+            }
+            const imagenPrincipal = mainImg ? mainImg.url : "";
 
-            const mainIndex = form.Galeria.findIndex((img) => img.isMain);
-            const imagenPrincipal =
-                galeriaFinal[mainIndex]?.url || galeriaFinal[0]?.url;
-
-            // Build payload
+            // Build the payload.
             const payload = {
                 Proyecto_Nombre: form.Proyecto_Nombre,
                 Precio: precioNum,
@@ -220,132 +340,68 @@ const AdminDesarrollos = () => {
                 Ciudad: form.Ciudad,
                 Barrio: form.Barrio,
                 Ubicacion: form.Ubicacion,
-                Mapa: MapaFinal,
+                Mapa:
+                    typeof form.Mapa === "string"
+                        ? form.Mapa
+                        : `${form.Mapa.lat},${form.Mapa.lng}`,
                 Entrega: form.Entrega,
                 Forma_de_Pago: form.Forma_de_Pago,
                 Gastos_Ocupacion: form.Gastos_Ocupacion,
                 Tipo: form.Tipo,
                 Imagen: imagenPrincipal,
-                Galeria: galeriaFinal
+                Galeria: mergedGaleria
             };
 
-            // If an Owner is selected, look up the full owner data from usuarios.
+            // Handle Owner: use the selected owner’s ID (stored in form.Owner) to look up full user details.
             if (form.Owner) {
                 const selectedOwner = usuarios.find(
-                    (user) => user.nombre === form.Owner
+                    (user) => user._id === form.Owner
                 );
                 if (selectedOwner) {
                     payload.Owner = selectedOwner.nombre;
                     payload.Email = selectedOwner.email;
                     payload.Celular = selectedOwner.celular;
-                } else {
-                    console.warn("No matching owner found for:", form.Owner);
                 }
             }
 
-            if (editId) {
-                await axios.put(`${BASE_URL}/api/desarrollos/${editId}`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setSuccessMessage("Desarrollo actualizado con éxito.");
-            } else {
-                await axios.post(`${BASE_URL}/api/desarrollos`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setSuccessMessage("Desarrollo creado con éxito.");
-            }
-
-            fetchDesarrollos();
-            resetForm();
+            await axios.put(`${BASE_URL}/api/desarrollos/${id}`, payload, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setSuccessMessage("Desarrollo actualizado con éxito.");
             setTimeout(() => setSuccessMessage(""), 5000);
         } catch (err) {
-            console.error("❌ Error al guardar desarrollo:", err);
-            alert("Hubo un error al guardar el desarrollo. Ver consola.");
+            console.error("Error al actualizar desarrollo:", err);
+            alert("Error al actualizar desarrollo. Ver consola.");
         } finally {
             setIsSaving(false);
         }
     };
 
-    const handleGaleriaChange = (imagenes) => {
-        setForm((prev) => ({ ...prev, Galeria: imagenes }));
-    };
-
-    const handleImagenPrincipalChange = (url) => {
-        setForm((prev) => ({
-            ...prev,
-            Galeria: prev.Galeria.map((img) => ({
-                ...img,
-                isMain: img.preview === url || img.url === url
-            }))
-        }));
-    };
-
-    // Navigate to EditDevelopment.js
-    const handleEdit = (dev) => {
-        navigate(`/admin/desarrollos/edit/${dev._id}`);
-    };
-
-    const handleDelete = async (id) => {
-        const token = localStorage.getItem("token");
-        await axios.delete(`${BASE_URL}/api/desarrollos/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        fetchDesarrollos();
-    };
-
-    const resetForm = () => {
-        setForm({
-            Proyecto_Nombre: "",
-            Precio: "",
-            Estado: "",
-            Resumen: "",
-            Descripcion: "",
-            Descripcion_Expandir: "",
-            Ciudad: "",
-            Barrio: "",
-            Ubicacion: "",
-            Mapa: "",
-            Imagen: "",
-            Entrega: "",
-            Forma_de_Pago: "",
-            Gastos_Ocupacion: "",
-            Tipo: "",
-            Galeria: [],
-            Owner: ""
-        });
-        setErrors({});
-        setEditId(null);
-        setResetKey(Date.now());
-    };
+    if (isLoading) {
+        return <LoadingIndicator />;
+    }
 
     return (
         <Box p={4}>
             <Typography variant="h4" mb={4} className="admin-title">
-                Admin de Desarrollos
+                Editar Desarrollo
             </Typography>
-
             <Button
                 className="admin-button"
                 variant="outlined"
                 sx={{ mb: 3 }}
-                onClick={() => (window.location.href = "/admin")}
+                onClick={() => navigate("/admin/desarrollos")}
             >
-                ← Volver al Panel de Administración
+                ← Volver a Desarrollos
             </Button>
             <Box className="admin-main-container" p={4}>
                 <Box component="form" onSubmit={handleSubmit} mb={4}>
                     <Grid container spacing={2}>
-                        {/* Row 1: Proyecto_Nombre, Precio, Estado */}
+                        {/* Proyecto_Nombre */}
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label={getLabel("Proyecto_Nombre", "Nombre del Proyecto")}
                                 name="Proyecto_Nombre"
+                                label="Nombre del Proyecto"
                                 fullWidth
                                 value={form.Proyecto_Nombre}
                                 onChange={handleChange}
@@ -353,10 +409,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Proyecto_Nombre}
                             />
                         </Grid>
+                        {/* Precio */}
                         <Grid item xs={6} sm={3}>
                             <TextField
-                                label={getLabel("Precio", "Precio")}
                                 name="Precio"
+                                label="Precio"
                                 fullWidth
                                 value={form.Precio}
                                 onChange={handleChange}
@@ -364,14 +421,15 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Precio}
                             />
                         </Grid>
+                        {/* Estado */}
                         <Grid item xs={6} sm={3}>
                             <FormControl fullWidth error={!!errors.Estado}>
-                                <InputLabel>{getLabel("Estado", "Estado")}</InputLabel>
+                                <InputLabel>Estado</InputLabel>
                                 <Select
                                     name="Estado"
                                     value={form.Estado}
                                     onChange={handleChange}
-                                    label={getLabel("Estado", "Estado")}
+                                    label="Estado"
                                 >
                                     {estadoOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
@@ -379,15 +437,16 @@ const AdminDesarrollos = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {errors.Estado && <FormHelperText>{errors.Estado}</FormHelperText>}
+                                {errors.Estado && (
+                                    <FormHelperText>{errors.Estado}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-
-                        {/* Row 2: Resumen */}
+                        {/* Resumen */}
                         <Grid item xs={12}>
                             <TextField
-                                label={getLabel("Resumen", "Resumen")}
                                 name="Resumen"
+                                label="Resumen"
                                 fullWidth
                                 multiline
                                 value={form.Resumen}
@@ -396,12 +455,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Resumen}
                             />
                         </Grid>
-
-                        {/* Row 3: Descripcion + Descripcion_Expandir */}
+                        {/* Descripcion */}
                         <Grid item xs={12}>
                             <RichTextInput
-                                label={getLabel("Descripcion", "Descripción")}
                                 name="Descripcion"
+                                label="Descripción"
                                 value={form.Descripcion}
                                 onChange={(val) =>
                                     handleChange({ target: { name: "Descripcion", value: val } })
@@ -410,26 +468,24 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Descripcion}
                             />
                         </Grid>
+                        {/* Descripcion_Expandir */}
                         <Grid item xs={12}>
                             <RichTextInput
-                                label="Descripción a Expandir"
                                 name="Descripcion_Expandir"
+                                label="Descripción a Expandir"
                                 value={form.Descripcion_Expandir}
                                 onChange={(val) =>
-                                    handleChange({
-                                        target: { name: "Descripcion_Expandir", value: val }
-                                    })
+                                    handleChange({ target: { name: "Descripcion_Expandir", value: val } })
                                 }
                                 error={errors.Descripcion_Expandir}
                                 helperText={errors.Descripcion_Expandir}
                             />
                         </Grid>
-
-                        {/* Row 4: Ubicacion, Ciudad, Barrio */}
+                        {/* Ubicacion */}
                         <Grid item xs={6} sm={4}>
                             <TextField
-                                label={getLabel("Ubicacion", "Ubicación")}
                                 name="Ubicacion"
+                                label="Ubicación"
                                 fullWidth
                                 value={form.Ubicacion}
                                 onChange={handleChange}
@@ -437,10 +493,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Ubicacion}
                             />
                         </Grid>
+                        {/* Ciudad */}
                         <Grid item xs={6} sm={4}>
                             <TextField
-                                label={getLabel("Ciudad", "Ciudad")}
                                 name="Ciudad"
+                                label="Ciudad"
                                 fullWidth
                                 value={form.Ciudad}
                                 onChange={handleChange}
@@ -448,10 +505,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Ciudad}
                             />
                         </Grid>
+                        {/* Barrio */}
                         <Grid item xs={6} sm={4}>
                             <TextField
-                                label={getLabel("Barrio", "Barrio")}
                                 name="Barrio"
+                                label="Barrio"
                                 fullWidth
                                 value={form.Barrio}
                                 onChange={handleChange}
@@ -459,41 +517,38 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Barrio}
                             />
                         </Grid>
-
-                        {/* Row 5: Mapa */}
+                        {/* Mapa */}
                         <Grid item xs={12}>
                             <MapSelector
                                 mapa={form.Mapa}
-                                label={getLabel("Mapa", "Mapa")}
+                                label="Mapa"
                                 error={!!errors.Mapa}
                                 helperText={errors.Mapa}
-                                setMapa={(loc) =>
-                                    handleChange({ target: { name: "Mapa", value: loc } })
-                                }
+                                setMapa={handleMapaChange}
                             />
                         </Grid>
-
-                        {/* Row 6: Owner and Entrega */}
+                        {/* Owner */}
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 select
-                                fullWidth
-                                label={getLabel("Owner", "Owner")}
                                 name="Owner"
+                                label="Owner"
+                                fullWidth
                                 value={form.Owner}
                                 onChange={handleChange}
                             >
                                 {usuarios.map((user) => (
-                                    <MenuItem key={user._id} value={user.nombre}>
+                                    <MenuItem key={user._id} value={user._id}>
                                         {user.nombre}
                                     </MenuItem>
                                 ))}
                             </TextField>
                         </Grid>
+                        {/* Entrega */}
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label={getLabel("Entrega", "Entrega")}
                                 name="Entrega"
+                                label="Entrega"
                                 fullWidth
                                 value={form.Entrega}
                                 onChange={handleChange}
@@ -501,12 +556,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Entrega}
                             />
                         </Grid>
-
-                        {/* Row 7: Forma_de_Pago (full width) */}
+                        {/* Forma_de_Pago */}
                         <Grid item xs={12}>
                             <RichTextInput
-                                label={getLabel("Forma_de_Pago", "Forma de Pago")}
                                 name="Forma_de_Pago"
+                                label="Forma de Pago"
                                 value={form.Forma_de_Pago}
                                 onChange={(val) =>
                                     handleChange({ target: { name: "Forma_de_Pago", value: val } })
@@ -515,12 +569,11 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Forma_de_Pago}
                             />
                         </Grid>
-
-                        {/* Row 8: Gastos_Ocupacion + Tipo */}
+                        {/* Gastos_Ocupacion */}
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label={getLabel("Gastos_Ocupacion", "Gastos de Ocupación")}
                                 name="Gastos_Ocupacion"
+                                label="Gastos de Ocupación"
                                 fullWidth
                                 value={form.Gastos_Ocupacion}
                                 onChange={handleChange}
@@ -528,14 +581,15 @@ const AdminDesarrollos = () => {
                                 helperText={errors.Gastos_Ocupacion}
                             />
                         </Grid>
+                        {/* Tipo */}
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.Tipo}>
-                                <InputLabel>{getLabel("Tipo", "Tipo")}</InputLabel>
+                                <InputLabel>Tipo</InputLabel>
                                 <Select
                                     name="Tipo"
                                     value={form.Tipo}
                                     onChange={handleChange}
-                                    label={getLabel("Tipo", "Tipo")}
+                                    label="Tipo"
                                 >
                                     {tipoOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
@@ -543,11 +597,12 @@ const AdminDesarrollos = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {errors.Tipo && <FormHelperText>{errors.Tipo}</FormHelperText>}
+                                {errors.Tipo && (
+                                    <FormHelperText>{errors.Tipo}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-
-                        {/* Row 9: GaleriaEditor */}
+                        {/* GaleriaEditor */}
                         <Grid item xs={12}>
                             <GaleriaEditor
                                 imagenes={form.Galeria}
@@ -559,65 +614,18 @@ const AdminDesarrollos = () => {
                     </Grid>
 
                     <Button variant="contained" type="submit" sx={{ mt: 3 }}>
-                        {editId ? "Actualizar Desarrollo" : "Crear Desarrollo"}
+                        Actualizar Desarrollo
                     </Button>
                     {isSaving && <LoadingIndicator />}
-                    {editId && (
-                        <Button sx={{ mt: 3, ml: 2 }} onClick={resetForm}>
-                            Cancelar
-                        </Button>
-                    )}
-
                     {successMessage && (
                         <Box mt={2}>
                             <Typography color="success.main">{successMessage}</Typography>
                         </Box>
                     )}
                 </Box>
-
-                <Typography variant="h5" mb={2}>
-                    Desarrollos Existentes
-                </Typography>
-                <Box container spacing={2} sx={{
-                    display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 3
-                }}>
-                    {desarrollos.map((dev) => (
-                        <Grid item xs={12} md={6} key={dev._id}>
-                            <Card className="property-card-edit">
-                                {/* 
-                  Put CardMedia by itself (no children) if component="img"
-                */}
-                                <CardMedia
-                                    component="img"
-                                    image={dev.Imagen}
-                                    alt={dev.Proyecto_Nombre}
-                                    sx={{ height: 200, objectFit: "cover" }}
-                                />
-                                <CardContent>
-                                    <Typography className="property-status">{dev.Estado}</Typography>
-                                    <Typography className="property-price">Desde ${dev.Precio_Con_Formato}</Typography>
-                                    <Typography className="property-title-desarrollos" variant="h6">{dev.Proyecto_Nombre}</Typography>
-                                    <Typography className="property-barrio" variant="h6">{dev.Barrio} </Typography>
-                                    <Typography className="desarrollo-entrega">{dev.Entrega}</Typography>
-                                    <Button onClick={() => handleEdit(dev)} size="small" className="admin-button-edit">
-                                        Editar
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(dev._id)}
-                                        size="small"
-                                        color="error"
-                                        className="admin-button-edit"
-                                    >
-                                        Eliminar
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Box>
             </Box>
         </Box>
     );
 };
 
-export default AdminDesarrollos;
+export default EditDevelopment;

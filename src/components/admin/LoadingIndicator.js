@@ -12,7 +12,7 @@ const LoadingIndicator = () => {
         >
             <CircularProgress />
             <Typography variant="body2" mt={1}>
-                Guardando...
+                Cargando...
             </Typography>
         </Box>
     );

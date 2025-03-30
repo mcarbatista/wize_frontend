@@ -184,7 +184,7 @@ const Desarrollos = () => {
                                 <CardContent>
                                     <Typography className="property-status">{desarrollo.Estado}</Typography>
                                     <Typography className="property-price">Desde ${desarrollo.Precio_Con_Formato}</Typography>
-                                    <Typography className="property-title" variant="h6">{desarrollo.Proyecto_Nombre}</Typography>
+                                    <Typography className="property-title-desarrollos" variant="h6">{desarrollo.Proyecto_Nombre}</Typography>
                                     <Typography className="property-barrio" variant="h6">{desarrollo.Barrio} </Typography>
                                     <Typography className="desarrollo-entrega">{desarrollo.Entrega}</Typography>
                                 </CardContent>
