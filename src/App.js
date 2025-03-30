@@ -59,9 +59,9 @@ function App() {
                     <Route
                         path="/admin"
                         element={
-                            <PrivateRoute>
-                                <AdminSelector />
-                            </PrivateRoute>
+
+                            <AdminSelector />
+
                         }
                     />
                     <Route path="/" element={<Inicio />} />
@@ -77,17 +77,17 @@ function App() {
                     <Route
                         path="/admin/desarrollos"
                         element={
-                            <PrivateRoute>
-                                <AdminDesarrollos />
-                            </PrivateRoute>
+
+                            <AdminDesarrollos />
+
                         }
                     />
                     <Route
                         path="/admin/propiedades"
                         element={
-                            <PrivateRoute>
-                                <AdminPropiedades />
-                            </PrivateRoute>
+
+                            <AdminPropiedades />
+
                         }
                     />
                 </Routes>
