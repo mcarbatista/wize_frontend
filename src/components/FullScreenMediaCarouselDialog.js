@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
+import { useTheme, useMediaQuery } from "@mui/material";
 import Slider from "react-slick";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -15,6 +16,9 @@ const FullScreenMediaCarouselDialog = ({
     setCurrentIndex,
 }) => {
     const sliderRef = useRef(null);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMedium = useMediaQuery(theme.breakpoints.down("md"));
 
     // Slider settings: no default arrows.
     const sliderSettings = {
@@ -28,90 +32,99 @@ const FullScreenMediaCarouselDialog = ({
         },
     };
 
-    const handlePrev = () => {
-        sliderRef.current.slickPrev();
+    // Memoize navigation functions
+    const handlePrev = useCallback(() => {
+        sliderRef.current?.slickPrev();
+    }, []);
+
+    const handleNext = useCallback(() => {
+        sliderRef.current?.slickNext();
+    }, []);
+
+    // Base arrow style
+    const arrowStyle = {
+        position: "absolute",
+        top: "50%",
+        transform: "translateY(-50%)",
+        color: "#ffffff",
+        background: "none",
+        zIndex: 2,
     };
 
-    const handleNext = () => {
-        sliderRef.current.slickNext();
+    // Adjust arrow positioning based on screen size:
+    const leftArrowStyle = {
+        ...arrowStyle,
+        left: isMobile ? "10px" : isMedium ? "35px" : "55px",
+        top: isMobile ? "18%" : isMedium ? "27%" : "50%",
+    };
+
+    const rightArrowStyle = {
+        ...arrowStyle,
+        right: isMobile ? "10px" : isMedium ? "35px" : "55px",
+        top: isMobile ? "18%" : isMedium ? "27%" : "50%",
+    };
+
+    const iconFontSize = isMobile ? "2rem" : isMedium ? "2.5rem" : "3rem";
+
+    // Dynamic close button style based on device type
+    const closeButtonStyle = {
+        position: "absolute",
+        top: isMobile ? "3%" : isMedium ? "7%" : "10%",
+        right: isMobile ? "5%" : isMedium ? "7%" : "7%",
+        zIndex: 1000,
     };
 
     const mediaStyle = {
         width: "100%",
         height: "100%",
-        objectFit: "contain"
+        objectFit: "contain",
     };
 
     return (
         <Dialog fullScreen open={open} onClose={onClose}>
             <div className="fullscreen-container">
-                {/* Slider container with padding and fixed height */}
-                <div
-                    className="fullscreen-slider-wrapper"
-                    style={{
-                        position: "relative",
-                        padding: "5%",
-                        boxSizing: "border-box",
-                        maxWidth: "1200px",
-                        margin: "0 auto",
-                        height: "calc(100vh - 10%)", // 5% padding top and bottom
-                    }}
-                >
+                <div className="fullscreen-slider-wrapper">
                     {/* Close Button */}
-                    <IconButton onClick={onClose} className="fullscreen-close-button">
-                        <CloseIcon style={{ fontSize: "3rem", color: "#0F4C54" }} />
+                    <IconButton
+                        onClick={onClose}
+                        aria-label="Close carousel"
+                        className="fullscreen-close-button"
+                        sx={closeButtonStyle}
+                    >
+                        <CloseIcon sx={{ fontSize: iconFontSize, color: "#ffffff" }} />
                     </IconButton>
 
                     <Slider ref={sliderRef} {...sliderSettings} className="media-element">
                         {mediaItems.map((item, idx) => (
                             <div key={idx}>
                                 {item.type === "video" ? (
-                                    <video
-                                        src={item.url}
-                                        autoPlay
-                                        muted
-                                        loop
-                                        style={mediaStyle}
-                                    />
+                                    <video src={item.url} autoPlay muted loop style={mediaStyle} />
                                 ) : (
                                     <img
                                         src={item.url}
-                                        alt={item.alt || `Media ${idx}`}
+                                        alt={item.alt || `Media ${idx + 1}`}
                                         style={mediaStyle}
                                     />
                                 )}
                             </div>
                         ))}
                     </Slider>
+
                     {mediaItems.length > 1 && (
                         <>
                             <IconButton
                                 onClick={handlePrev}
-                                style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: 20,
-                                    transform: "translateY(-50%)",
-                                    color: "#0F4C54",
-                                    background: "none",
-                                }}
-                                className="fs-arrow-button fs-left-arrow"
+                                aria-label="Previous media"
+                                sx={leftArrowStyle}
                             >
-                                <ArrowBackIosNewIcon style={{ fontSize: "3rem" }} />
+                                <ArrowBackIosNewIcon sx={{ fontSize: iconFontSize }} />
                             </IconButton>
                             <IconButton
                                 onClick={handleNext}
-                                style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    right: 20,
-                                    transform: "translateY(-50%)",
-                                    color: "#0F4C54",
-                                    background: "none",
-                                }}
-                                className="fs-arrow-button fs-right-arrow"
+                                aria-label="Next media"
+                                sx={rightArrowStyle}
                             >
-                                <ArrowForwardIosIcon style={{ fontSize: "3rem" }} />
+                                <ArrowForwardIosIcon sx={{ fontSize: iconFontSize }} />
                             </IconButton>
                         </>
                     )}

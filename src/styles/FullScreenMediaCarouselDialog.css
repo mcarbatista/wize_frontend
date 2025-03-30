@@ -1,6 +1,6 @@
 .fullscreen-container {
     position: relative;
-    background: #FBF7EA;
+    background: #fbf7ea;
 }
 
 .fullscreen-slider-wrapper {
@@ -9,81 +9,19 @@
     box-sizing: border-box;
     max-width: 1200px;
     margin: 0 auto;
-    height: calc(100vh - 10%);
-    /* 5% padding top and bottom */
+    height: calc(100vh - 10%) !important;
 }
 
 .fullscreen-close-button {
     position: absolute !important;
-    top: 5%;
-    right: 0%;
     z-index: 1000;
-    color: #0F4C54;
+    color: #fff !important;
     background: none;
-}
-
-.close-icon {
-    font-size: 3rem;
-    color: #0F4C54;
 }
 
 .media-element {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Adjust the radius as needed */
+    width: 100% !important;
+    height: 100% !important;
 }
 
-.fs-arrow-button {
-    position: absolute !important;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #0F4C54;
-    background: none;
-    z-index: 2;
-}
-
-.arrow-icon {
-    font-size: 3rem;
-}
-
-.fs-left-arrow {
-    left: -15% !important;
-    /* Adjust to your preference */
-}
-
-.fs-right-arrow {
-    right: -15% !important;
-    /* Adjust to your preference */
-}
-
-
-/* For medium screens (max-width: 1199px) */
-@media (max-width: 1199px) {
-    .fs-left-arrow {
-        left: -10% !important;
-    }
-
-    .fs-right-arrow {
-        right: -10% !important;
-    }
-
-    .arrow-icon {
-        font-size: 2.5rem;
-    }
-}
-
-/* For small screens (max-width: 767px) */
-@media (max-width: 767px) {
-    .fs-left-arrow {
-        left: -5% !important;
-    }
-
-    .fs-right-arrow {
-        right: -5% !important;
-    }
-
-    .arrow-icon {
-        font-size: 2rem;
-    }
-}
+/* Optional: you can keep additional arrow styles here if needed */
