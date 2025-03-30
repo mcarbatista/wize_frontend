@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
-    Grid, Card, CardMedia, CardContent, Typography, Select, MenuItem, Box, Slider
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    Typography,
+    Select,
+    MenuItem,
+    Box,
+    Button,
+    Collapse,
+    Slider
 } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaBed, FaBath, FaRulerCombined } from "react-icons/fa";
 import "../styles/Properties.css";
 import BASE_URL from "../api/config";
 
-
 const Propiedades = () => {
-
     document.title = `Wize | Lista de Propiedades`;
 
     const [propiedades, setPropiedades] = useState([]);
@@ -31,12 +40,19 @@ const Propiedades = () => {
     const [neighborhoodOptions, setNeighborhoodOptions] = useState([]);
     const [TipoOptions, setTipoOptions] = useState([]);
 
+    // For collapsing filter container on small devices
+    const isSmallDevice = useMediaQuery("(max-width:600px)");
+    const [expanded, setExpanded] = useState(!isSmallDevice);
+
     useEffect(() => {
         fetchPropiedades();
         window.scrollTo(0, 0);
     }, []);
 
-    //[sortOrder, neighborhoodFilter, statusFilter, cityFilter, bedroomFilter, bathroomFilter, priceRange]
+    useEffect(() => {
+        setExpanded(!isSmallDevice);
+    }, [isSmallDevice]);
+
     const fetchPropiedades = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/propiedades`);
@@ -115,10 +131,19 @@ const Propiedades = () => {
             </Box>
 
             <Box className="filter-container">
-                <Box container spacing={3} className="filter-grid">
-                    <Box item xs={12} sm={12} md={9} className="filter-column-params" >
+                {isSmallDevice && (
+                    <Button
+                        variant="contained"
+                        onClick={() => setExpanded(!expanded)}
+                        className="filter-toggle-button"
+                        sx={{ mb: 2 }}
+                    >
+                        {expanded ? "Ocultar Filtros ↑" : "Mostrar Filtros ↓"}
+                    </Button>
+                )}
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <Box container spacing={3} className="filter-grid">
                         {[
-                            // { label: "Estado", value: statusFilter, setValue: setStatusFilter, options: statusOptions },
                             { label: "Estado", value: statusFilter, setValue: setStatusFilter, options: statusOptions },
                             { label: "Tipo", value: TipoFilter, setValue: setTipoFilter, options: TipoOptions },
                             { label: "Dormitorios", value: bedroomFilter, setValue: setBedroomFilter, options: bedroomOptions },
@@ -132,9 +157,10 @@ const Propiedades = () => {
                                     multiple
                                     fullWidth
                                     value={value}
-                                    onChange={(e) => setValue(typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value)}
-                                    className='filter-select'
-                                    // {value.includes(option) ? "menu-item-selected" : "menu-item"}'
+                                    onChange={(e) =>
+                                        setValue(typeof e.target.value === "string" ? e.target.value.split(",") : e.target.value)
+                                    }
+                                    className="filter-select"
                                     renderValue={(selected) => selected.join(", ")}
                                 >
                                     {options.length > 0 ? (
@@ -144,9 +170,8 @@ const Propiedades = () => {
                                     )}
                                 </Select>
                             </Box>
-
                         ))}
-                        {/* 🔹 Search Button */}
+                        {/* 🔹 Ordenar por Precio */}
                         <Box item xs={12} sm={12} md={3} className="filter-column">
                             <Box sx={{ width: "100%" }}>
                                 <Typography className="filter-title">Ordenar por Precio</Typography>
@@ -157,16 +182,13 @@ const Propiedades = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box className="filter-column"> <button
-                        onClick={fetchPropiedades}
-                        className="search-button"
-                    >
-                        Buscar Propiedades
-                    </button>
+                    <Box className="filter-column" sx={{ mt: 2 }}>
+                        <button onClick={fetchPropiedades} className="search-button">
+                            Buscar Propiedades
+                        </button>
                     </Box>
-                </Box>
+                </Collapse>
             </Box>
-
 
             <Box className="property-list">
                 {propiedades.length === 0 ? (
@@ -179,13 +201,18 @@ const Propiedades = () => {
                                 <CardContent className="property-details">
                                     <Typography className="property-status">{propiedad.Estado}</Typography>
                                     <Typography className="property-price">{propiedad.Precio_Con_Formato}</Typography>
-                                    <Typography className="property-barrio" variant="h6">{propiedad.Barrio} </Typography>
+                                    <Typography className="property-barrio" variant="h6">{propiedad.Barrio}</Typography>
                                     <Typography className="property-title" variant="h6">{propiedad.Titulo}</Typography>
-
                                     <div className="property-icons">
-                                        <span><FaBed /> {propiedad.Dormitorios}</span>
-                                        <span><FaBath /> {propiedad.Banos}</span>
-                                        <span><FaRulerCombined /> {propiedad.Tamano_m2} m²</span>
+                                        <span>
+                                            <FaBed /> {propiedad.Dormitorios}
+                                        </span>
+                                        <span>
+                                            <FaBath /> {propiedad.Banos}
+                                        </span>
+                                        <span>
+                                            <FaRulerCombined /> {propiedad.Tamano_m2} m²
+                                        </span>
                                     </div>
                                 </CardContent>
                             </Link>

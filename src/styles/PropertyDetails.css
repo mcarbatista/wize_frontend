@@ -7,6 +7,13 @@
     /* adjust as needed */
 }
 
+/* For small devices */
+@media (max-width: 600px) {
+    .dev-details-page {
+        padding: 0 5%;
+    }
+}
+
 /* Top bar (Back button, etc.) */
 .dev-details-topbar {
     display: flex;

@@ -10,7 +10,7 @@ const Nosotros = () => {
     const [showText, setShowText] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => setShowText(true), 2000); // Show text after 2 seconds
+        setTimeout(() => setShowText(true), 1000); // Show text after 2 seconds
         window.scrollTo(0, 0);
     }, []);
 
@@ -36,7 +36,7 @@ const Nosotros = () => {
     return (
         <Box>
             {/* 🔹 Page Title */}
-            <Box className="title-section">
+            <Box className="nosotros-title-section">
                 <Typography className="nosotros-title-text">Nosotros</Typography>
             </Box>
 

@@ -171,7 +171,8 @@ const Header = () => {
                     sx={{
                         "& .MuiDrawer-paper": {
                             width: "250px",
-                            backgroundColor: "#FBF7EA"
+                            backgroundColor: "#FBF7EA",
+                            opacity: "0.8",
                         }
                     }}
                 >

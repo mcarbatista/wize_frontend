@@ -18,11 +18,8 @@ const HomeStaging = () => {
     return (
         <Box>
             {/* 🔹 Page Title */}
-            <Box className="title-section">
-                <Typography
-                    variant="h2"
-                    data-aos="fade-up"
-                    className="homestaging-title-text">Home Staging</Typography>
+            <Box className="homestaging-title-section">
+                <Typography className="nosotros-title-text">Home Staging</Typography>
             </Box>
 
             <Box className="homestaging-container">

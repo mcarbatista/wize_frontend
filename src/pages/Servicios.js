@@ -15,7 +15,7 @@ const services = [
         subtitle: "Inversión inteligente, crecimiento seguro y rentable.",
         description:
             "Ofrecemos soluciones personalizadas para ayudar a nuestros clientes a alcanzar sus objetivos financieros. Invertir con nosotros es asegurar tu futuro con oportunidades inmobiliarias rentables y sostenibles.",
-        button: { label: "Ver Proyectos", href: "#desarrollos" },
+        button: { label: "Ver Proyectos", href: "/desarrollos" },
         backgroundColor: "#13272D",
     },
     {
@@ -24,7 +24,7 @@ const services = [
         subtitle: "¡Tu hogar soñado te espera!",
         description:
             "Descubrí la alegría de encontrar la vivienda perfecta para ti. Ya sea que busques comprar o alquilar, nuestro equipo está aquí para guiarte en cada paso, hagamos realidad tu ideal de vida!",
-        button: { label: "Ver Propiedades", href: "#propiedades" },
+        button: { label: "Ver Propiedades", href: "/propiedades" },
         backgroundColor: "#0F4C54",
     },
     {

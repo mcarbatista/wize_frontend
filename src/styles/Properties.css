@@ -44,6 +44,8 @@ body {
     width: 95%;
 }
 
+
+
 .filter-grid {
     display: flex !important;
     flex-direction: row;
@@ -219,6 +221,19 @@ body {
     .filter-column-params {
         justify-content: center;
     }
+
+    .title-section {
+        height: 25vh;
+    }
+
+    .title-text {
+        margin-top: 50px !important;
+    }
+
+    .property-card {
+        width: 100% !important;
+    }
+
 }
 
 /* Property List */
@@ -249,7 +264,6 @@ body {
     border: 1px solid #FBF7EA !important;
     padding: 5px;
     transition: transform 0.2s ease-in-out;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -351,4 +365,28 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+/* 🔹 Button */
+.filter-toggle-button {
+    background: transparent !important;
+    color: #FBF7EA !important;
+    font-size: 1.5rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    border-radius: 70px !important;
+    text-transform: none !important;
+    width: 80%;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+
+.filter-toggle-button:hover,
+.filter-toggle-button:focus,
+.filter-toggle-button:active {
+    background: transparent !important;
+    color: #FBF7EA !important;
+    box-shadow: none !important;
+    transition: none !important;
 }

@@ -34,6 +34,16 @@
     animation: fadeInUp 0.1s ease-in-out forwards;
 }
 
+/* Title Section */
+.nosotros-title-section {
+    background-color: #FBF7EA;
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .nosotros-title-text {
     font-size: clamp(2rem, 15vw, 6rem) !important;
     margin-top: 150px !important;
@@ -92,6 +102,14 @@
     .nosotros-description {
         font-size: 16px !important;
         text-align: center !important;
+    }
+
+    .nosotros-title-section {
+        height: 25vh;
+    }
+
+    .nosotros-title-text {
+        margin-top: 50px !important;
     }
 }
 
