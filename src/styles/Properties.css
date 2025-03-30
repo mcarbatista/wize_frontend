@@ -298,10 +298,9 @@ body {
 
 .property-title {
     font-size: 18px !important;
-    font-family: "Avenir Light", sans-serif !important;
+    font-family: "Avenir Medium", sans-serif !important;
     color: #444;
-    margin-bottom: 15px !important;
-    min-height: 55px !important;
+    min-height: 45px !important;
 }
 
 .property-details {
@@ -309,7 +308,7 @@ body {
 }
 
 .property-barrio {
-    font-size: 16px !important;
+    font-size: 18px !important;
     color: #444;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -326,6 +325,7 @@ body {
     font-size: 25px !important;
     font-weight: bold;
     padding-top: 10px;
+    margin-bottom: 10px !important;
     color: #444;
 }
 

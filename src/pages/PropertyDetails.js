@@ -122,15 +122,7 @@ const PropertyDetails = () => {
                 <Grid container spacing={4}>
                     {/* LEFT COLUMN */}
                     <Grid item xs={12} md={9}>
-                        {/* Ubicación */}
-                        <Box mb={3}>
-                            <Typography variant="h6" className="dev-subtitle">
-                                Ubicación
-                            </Typography>
-                            <Typography className="dev-summary">
-                                {property.Ubicacion}
-                            </Typography>
-                        </Box>
+
 
                         {/* Descripción */}
                         <Box mb={3}>
@@ -145,6 +137,24 @@ const PropertyDetails = () => {
                             />
                         </Box>
 
+
+                        {/* Ubicación */}
+                        <Box mb={3}>
+                            <Typography variant="h6" className="dev-subtitle">
+                                Ubicación
+                            </Typography>
+                            <Typography className="dev-summary">
+                                {property.Ubicacion}
+                            </Typography>
+                        </Box>
+                        {/* MAP */}
+                        <Box className="dev-map-wrapper">
+                            <iframe
+                                src={`https://www.google.com/maps?q=${property.Ubicacion}&output=embed`}
+                                title="Google Map"
+                                className="dev-map"
+                            />
+                        </Box>
                         {/* Plano Section */}
                         {property.Plano && property.Plano.length > 0 && (
                             <Box mb={3}>
@@ -164,15 +174,6 @@ const PropertyDetails = () => {
                                 ))}
                             </Box>
                         )}
-
-                        {/* MAP */}
-                        <Box className="dev-map-wrapper">
-                            <iframe
-                                src={`https://www.google.com/maps?q=${property.Ubicacion}&output=embed`}
-                                title="Google Map"
-                                className="dev-map"
-                            />
-                        </Box>
                     </Grid>
 
                     {/* RIGHT COLUMN */}
@@ -255,39 +256,46 @@ const PropertyDetails = () => {
                                     Detalles
                                 </Typography>
                                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                                    <Box sx={{ flex: "1 0 25%" }}>
-                                        <Typography className="dev-small-subtitle">Tipo</Typography>
-                                        <Typography className="dev-summary">{property.Tipo}</Typography>
-                                    </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
+
+                                    <Box sx={{ flex: "1 0 33%" }}>
                                         <Typography className="dev-small-subtitle">Dormitorios</Typography>
                                         <Typography className="dev-summary">{property.Dormitorios}</Typography>
                                     </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
+                                    <Box sx={{ flex: "1 0 33%" }}>
                                         <Typography className="dev-small-subtitle">Baños</Typography>
                                         <Typography className="dev-summary">{property.Banos}</Typography>
                                     </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
+                                    <Box sx={{ flex: "1 0 33%" }}>
+                                        <Typography className="dev-small-subtitle">Tipo</Typography>
+                                        <Typography className="dev-summary">{property.Tipo}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 33%" }}>
                                         <Typography className="dev-small-subtitle">Estado</Typography>
                                         <Typography className="dev-summary">{property.Estado}</Typography>
                                     </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
+                                    <Box sx={{ flex: "1 0 33%" }}>
                                         <Typography className="dev-small-subtitle">Tamaño</Typography>
                                         <Typography className="dev-summary">{property.Tamano_m2} m²</Typography>
                                     </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
-                                        <Typography className="dev-small-subtitle">Gastos</Typography>
-                                        <Typography className="dev-summary">
-                                            {property.Gastos_Ocupacion}
-                                        </Typography>
+                                    <Box sx={{ flex: "1 0 100%" }}>
+                                        <Typography className="dev-small-subtitle">Fecha de construcción</Typography>
+                                        <Typography className="dev-summary">{property.Entrega} m²</Typography>
                                     </Box>
-                                    <Box sx={{ flex: "1 0 25%" }}>
+
+
+                                    <Box sx={{ flex: "1 0 33%" }}>
                                         <Typography className="dev-small-subtitle">Forma de pago</Typography>
                                         <Typography
                                             className="dev-summary"
                                             component="div"
                                             dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
                                         />
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 100%" }}>
+                                        <Typography className="dev-small-subtitle">Gastos</Typography>
+                                        <Typography className="dev-summary">
+                                            {property.Gastos_Ocupacion}
+                                        </Typography>
                                     </Box>
                                 </Box>
                             </Box>

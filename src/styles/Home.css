@@ -214,26 +214,7 @@
 }
 
 
-/* ✅ Initially Hide Overlay Content */
-.card-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0);
-    /* Fully transparent */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    font-family: "Avenir", sans-serif;
-    /* padding: 10px; */
-    opacity: 0;
-    /* Hide by default */
-    transition: opacity 0.5s ease-in-out, background 0.6s ease-in-out;
-}
+
 
 /* ✅ Hide Text Initially */
 .card-title {
@@ -242,17 +223,7 @@
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.gallery-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    /* margin: 15px; */
-    /* Adjust spacing between cards */
-    /* padding: 3%; */
-    max-width: 450px !important;
-    margin: 5px !important;
-    /* Reduce margin to minimize spacing */
-}
+
 
 /* ✅ Ensure Cards Don't Touch Each Other */
 .slick-slider {
@@ -310,7 +281,7 @@
     transition: all 0.3s ease-in-out !important;
     text-transform: none !important;
     min-width: 30% !important;
-    margin-bottom: 2% !important;
+    margin: 5% !important;
 
 }
 
@@ -764,4 +735,48 @@
         left: 0px !important;
     }
 
+}
+
+.gallery-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    /* margin: 15px; */
+    /* Adjust spacing between cards */
+    /* padding: 3%; */
+    max-width: 450px !important;
+    margin: 5px !important;
+    /* Reduce margin to minimize spacing */
+}
+
+/* ✅ Initially Hide Overlay Content */
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    /* Fully transparent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-family: "Avenir", sans-serif;
+    /* padding: 10px; */
+    opacity: 0;
+    /* Hide by default */
+    transition: opacity 0.5s ease-in-out, background 0.6s ease-in-out;
+}
+
+/* ✅ Show Overlay & Text on Hover */
+.gallery-card:hover .card-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+}
+
+.gallery-card:hover .card-title {
+    opacity: 1;
+    transform: translateY(0);
 }

@@ -16,6 +16,7 @@ import iconInverti from "../assets/icono_inverti.svg";
 import iconVende from "../assets/icono_vende.svg";
 import iconCompra from "../assets/icono_compra.svg";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import GallerySlider from "../components/GalerySlider";
 
 const Home = () => {
     const [showText, setShowText] = useState(false);
@@ -25,7 +26,7 @@ const Home = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Auto-scroll settings for the gallery
+    // Auto-scroll settings for the gallery (used by other slider if needed)
     const settings = {
         dots: false,
         infinite: true,
@@ -52,6 +53,8 @@ const Home = () => {
         ],
     };
 
+    const galleryItems = [gallery_1, gallery_2, gallery_3, gallery_4, gallery_5];
+
     return (
         <div>
             {/* Full-screen Video Section */}
@@ -73,25 +76,14 @@ const Home = () => {
 
             {/* Auto-scrolling Gallery Section */}
             <Box className="gallery-section">
-
                 <Typography variant="h3" className="gallery-title">Nuevos Desarrollos</Typography>
-
-
-                <Slider {...settings}>
-                    {[gallery_1, gallery_2, gallery_3, gallery_4, gallery_5].map((img, index) => (
-                        <Card key={index} className="gallery-card fade-effect">
-                            <CardMedia component="img" image={img} alt={`Gallery Image ${index + 1}`} className="card-image" />
-                            <Box className="card-overlay">
-                                <Typography variant="h5" className="card-title">Propiedad {index + 1}</Typography>
-                            </Box>
-                        </Card>
-                    ))}
-                </Slider>
-                <Button component="a" href="/Desarrollos" variant="outlined" className="nuevos-desarrollos-button">Ver desarrollos</Button>
-
-
+                {/* Use the refactored GallerySlider here */}
+                <GallerySlider galleryItems={galleryItems} />
+                <Button component="a" href="/Desarrollos" variant="outlined" className="nuevos-desarrollos-button">
+                    Ver todos los desarrollos
+                </Button>
             </Box>
-            {/* <HomeSliderDevelopments /> */}
+
             {/* Section with Hola Background Image */}
             <Box className="welcome-section">
                 <Box className="welcome-content">
@@ -100,7 +92,9 @@ const Home = () => {
                         ¡Bienvenidos a WIZE! Tu nuevo comienzo empieza aquí.
                         Te acompañamos con confianza, transparencia y un trato cercano.
                     </Typography>
-                    <Button component="a" href="#compromiso" variant="outlined" className="scroll-button">Ver ↓</Button>
+                    <Button component="a" href="#compromiso" variant="outlined" className="scroll-button">
+                        Ver ↓
+                    </Button>
                 </Box>
             </Box>
 
@@ -152,7 +146,7 @@ const Home = () => {
                                     <Typography className="commitment-description">
                                         {item.text}
                                     </Typography>
-                                    <br></br>
+                                    <br />
                                     <Typography className="commitment-paragraph">
                                         {item.paragraph}
                                     </Typography>
@@ -161,13 +155,14 @@ const Home = () => {
                         ))}
                     </Grid>
                 </Container>
-
             </Box>
 
             {/* HABLEMOS Section */}
             <Box className="hablemos-section">
                 <Typography variant="h4" className="hablemos-subtitle">Hablemos de negocios</Typography>
-                <Button component="a" href="#footer" variant="outlined" className="hablemos-button">Agendá una llamada</Button>
+                <Button component="a" href="#footer" variant="outlined" className="hablemos-button">
+                    Agendá una llamada
+                </Button>
             </Box>
 
             {/* ✅ TESTIMONIOS Section */}

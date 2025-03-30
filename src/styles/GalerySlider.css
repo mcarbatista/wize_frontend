@@ -1,0 +1,93 @@
+.gallery-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    margin: 5px !important;
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+    .gallery-card {
+        width: 350px;
+        height: 550px;
+    }
+}
+
+/* Medium screens */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .gallery-card {
+        width: 300px;
+        height: 500px;
+    }
+}
+
+/* Small screens */
+@media (max-width: 767px) {
+    .gallery-card {
+        width: 250px;
+        height: 450px;
+    }
+}
+
+/* Initially hide overlay content, disable pointer events and lower z-index */
+.card-overlay {
+    pointer-events: none !important;
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-family: "Avenir", sans-serif;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, background 0.6s ease-in-out;
+}
+
+/* Show overlay & text on hover */
+.gallery-card:hover .card-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+}
+
+.gallery-card:hover .card-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure the image covers the entire card area */
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.card-title {
+    position: absolute;
+    bottom: 30px;
+    left: 10px;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    padding: 5%;
+    margin-bottom: 10px !important;
+}
+
+.card-text {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    margin: 0;
+    font-size: 1rem;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    padding: 5%;
+}

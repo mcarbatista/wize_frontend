@@ -134,15 +134,7 @@ const DevelopmentDetails = () => {
                 <Grid container spacing={4}>
                     {/* LEFT COLUMN (9 parts) */}
                     <Grid item xs={12} md={9}>
-                        {/* Ubicación */}
-                        <Box mb={3}>
-                            <Typography variant="h6" className="dev-subtitle">
-                                Ubicación
-                            </Typography>
-                            <Typography className="dev-summary">
-                                {development.Ubicacion}
-                            </Typography>
-                        </Box>
+
 
                         {/* Descripción */}
                         <Box mb={3}>
@@ -156,7 +148,15 @@ const DevelopmentDetails = () => {
                                 useHtml
                             />
                         </Box>
-
+                        {/* Ubicación */}
+                        <Box mb={3}>
+                            <Typography variant="h6" className="dev-subtitle">
+                                Ubicación
+                            </Typography>
+                            <Typography className="dev-summary">
+                                {development.Ubicacion}
+                            </Typography>
+                        </Box>
                         {/* MAP */}
                         <Box className="dev-map-wrapper">
                             <iframe

@@ -16,7 +16,7 @@ const ImageGallery = ({ mediaItems = [] }) => {
 
     // Thumbnail slider settings (no default arrows).
     const sliderSettings = {
-        slidesToShow: Math.min(mediaItems.length, 6),
+        slidesToShow: 6, // Default: show 6 thumbnails on large screens
         slidesToScroll: 1,
         arrows: false,
         infinite: false,
@@ -24,6 +24,20 @@ const ImageGallery = ({ mediaItems = [] }) => {
         focusOnSelect: true,
         centerMode: true,
         centerPadding: "0px",
+        responsive: [
+            {
+                breakpoint: 1300,
+                settings: {
+                    slidesToShow: 4, // Show 4 thumbnails on medium screens
+                },
+            },
+            {
+                breakpoint: 850,
+                settings: {
+                    slidesToShow: 3, // Show 2 thumbnails on small screens
+                },
+            },
+        ],
     };
 
     const handleThumbnailClick = (idx) => {

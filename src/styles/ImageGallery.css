@@ -2,8 +2,6 @@
     width: 100% !important;
     margin: 0 auto;
     text-align: center;
-    padding: 0 5%;
-    /* Matches the page padding */
 }
 
 .main-image {
@@ -12,6 +10,19 @@
     object-fit: cover;
     border-radius: 10px;
     cursor: pointer !important;
+}
+
+/* Responsive adjustments for the main image */
+@media (max-width: 768px) {
+    .main-image {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-image {
+        max-height: 300px;
+    }
 }
 
 /* Slider centrado */
@@ -50,7 +61,8 @@
 /* Miniaturas */
 .thumbnail-wrapper {
     cursor: pointer;
-    margin: 0;
+    margin: 0 5px;
+    /* Added horizontal gap between slides */
     padding: 0;
 }
 
@@ -64,6 +76,21 @@
 
 .thumbnail-image:hover {
     transform: scale(1.05);
+}
+
+/* Responsive adjustments for thumbnails */
+@media (max-width: 768px) {
+    .thumbnail-image {
+        width: 120px;
+        height: 72px;
+    }
+}
+
+@media (max-width: 480px) {
+    .thumbnail-image {
+        width: 100px;
+        height: 60px;
+    }
 }
 
 /* Remove any default arrow styles */

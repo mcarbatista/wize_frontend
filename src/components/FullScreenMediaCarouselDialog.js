@@ -7,7 +7,13 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import "../styles/FullScreenMediaCarouselDialog.css";
 
-const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems, initialIndex, setCurrentIndex }) => {
+const FullScreenMediaCarouselDialog = ({
+    open,
+    onClose,
+    mediaItems,
+    initialIndex,
+    setCurrentIndex,
+}) => {
     const sliderRef = useRef(null);
 
     // Slider settings: no default arrows.
@@ -33,35 +39,50 @@ const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems, initialIndex
     return (
         <Dialog fullScreen open={open} onClose={onClose}>
             <div className="fullscreen-container">
-                {/* Big black "X" close button */}
-                <IconButton
-                    onClick={onClose}
-                    className="fullscreen-close-button"
-                >
-                    <CloseIcon style={{ fontSize: "3rem", color: "#000" }} />
-                </IconButton>
-                {/* Slider container with padding and max-width */}
+
+                {/* Slider container with padding and fixed height */}
                 <div
                     className="fullscreen-slider-wrapper"
                     style={{
                         position: "relative",
                         padding: "5%",
+                        boxSizing: "border-box",
                         maxWidth: "1200px",
                         margin: "0 auto",
+                        height: "calc(100vh - 10%)", // 5% padding top and bottom
                     }}
                 >
+                    {/* Close Button */}
+                    <IconButton onClick={onClose} className="fullscreen-close-button">
+                        <CloseIcon style={{ fontSize: "3rem", color: "#0F4C54" }} />
+                    </IconButton>
+
                     <Slider ref={sliderRef} {...sliderSettings}>
                         {mediaItems.map((item, idx) => (
                             <div key={idx}>
-                                <img
-                                    src={item.url}
-                                    alt={item.alt || `Media ${idx}`}
-                                    style={{
-                                        width: "100%",
-                                        height: "calc(100vh - 100px)",
-                                        objectFit: "contain",
-                                    }}
-                                />
+                                {item.type === "video" ? (
+                                    <video
+                                        src={item.url}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain",
+                                        }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={item.url}
+                                        alt={item.alt || `Media ${idx}`}
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            objectFit: "contain",
+                                        }}
+                                    />
+                                )}
                             </div>
                         ))}
                     </Slider>
@@ -74,7 +95,7 @@ const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems, initialIndex
                                     top: "50%",
                                     left: 20,
                                     transform: "translateY(-50%)",
-                                    color: "#fff",
+                                    color: "#0F4C54",
                                     background: "none",
                                 }}
                             >
@@ -87,7 +108,7 @@ const FullScreenMediaCarouselDialog = ({ open, onClose, mediaItems, initialIndex
                                     top: "50%",
                                     right: 20,
                                     transform: "translateY(-50%)",
-                                    color: "#fff",
+                                    color: "#0F4C54",
                                     background: "none",
                                 }}
                             >
