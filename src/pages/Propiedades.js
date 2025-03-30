@@ -136,57 +136,61 @@ const Propiedades = () => {
                         variant="contained"
                         onClick={() => setExpanded(!expanded)}
                         className="filter-toggle-button"
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 3 }}
                     >
                         {expanded ? "Ocultar Filtros ↑" : "Mostrar Filtros ↓"}
                     </Button>
                 )}
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <Box container spacing={3} className="filter-grid">
-                        {[
-                            { label: "Estado", value: statusFilter, setValue: setStatusFilter, options: statusOptions },
-                            { label: "Tipo", value: TipoFilter, setValue: setTipoFilter, options: TipoOptions },
-                            { label: "Dormitorios", value: bedroomFilter, setValue: setBedroomFilter, options: bedroomOptions },
-                            { label: "Baños", value: bathroomFilter, setValue: setBathroomFilter, options: bathroomOptions },
-                            { label: "Ciudad", value: cityFilter, setValue: setCityFilter, options: cityOptions },
-                            { label: "Barrio", value: neighborhoodFilter, setValue: setNeighborhoodFilter, options: neighborhoodOptions }
-                        ].map(({ label, value, setValue, options }) => (
-                            <Box key={label} item xs={12} sm={12} md={3} className="filter-column">
-                                <Typography className="filter-title">{label}</Typography>
-                                <Select
-                                    multiple
-                                    fullWidth
-                                    value={value}
-                                    onChange={(e) =>
-                                        setValue(typeof e.target.value === "string" ? e.target.value.split(",") : e.target.value)
-                                    }
-                                    className="filter-select"
-                                    renderValue={(selected) => selected.join(", ")}
-                                >
-                                    {options.length > 0 ? (
-                                        options.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)
-                                    ) : (
-                                        <MenuItem disabled>Cargando...</MenuItem>
-                                    )}
-                                </Select>
+                        <Box item xs={12} sm={12} md={9} className="filter-column-params">
+                            {[
+                                { label: "Estado", value: statusFilter, setValue: setStatusFilter, options: statusOptions },
+                                { label: "Tipo", value: TipoFilter, setValue: setTipoFilter, options: TipoOptions },
+                                { label: "Dormitorios", value: bedroomFilter, setValue: setBedroomFilter, options: bedroomOptions },
+                                { label: "Baños", value: bathroomFilter, setValue: setBathroomFilter, options: bathroomOptions },
+                                { label: "Ciudad", value: cityFilter, setValue: setCityFilter, options: cityOptions },
+                                { label: "Barrio", value: neighborhoodFilter, setValue: setNeighborhoodFilter, options: neighborhoodOptions }
+                            ].map(({ label, value, setValue, options }) => (
+                                <Box key={label} item xs={12} sm={12} md={3} className="filter-column">
+                                    <Typography className="filter-title">{label}</Typography>
+                                    <Select
+                                        multiple
+                                        fullWidth
+                                        value={value}
+                                        onChange={(e) =>
+                                            setValue(typeof e.target.value === "string" ? e.target.value.split(",") : e.target.value)
+                                        }
+                                        className="filter-select"
+                                        renderValue={(selected) => selected.join(", ")}
+                                    >
+                                        {options.length > 0 ? (
+                                            options.map((option) => <MenuItem key={option} value={option}>{option}</MenuItem>)
+                                        ) : (
+                                            <MenuItem disabled>Cargando...</MenuItem>
+                                        )}
+                                    </Select>
+                                </Box>
+                            ))}
+                            {/* 🔹 Ordenar por Precio */}
+                            <Box item xs={12} sm={12} md={3} className="filter-column">
+                                <Box sx={{ width: "100%" }}>
+                                    <Typography className="filter-title">Ordenar por Precio</Typography>
+                                    <Select fullWidth value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="sort-select">
+                                        <MenuItem value="asc">Menor a Mayor</MenuItem>
+                                        <MenuItem value="desc">Mayor a Menor</MenuItem>
+                                    </Select>
+                                </Box>
                             </Box>
-                        ))}
-                        {/* 🔹 Ordenar por Precio */}
-                        <Box item xs={12} sm={12} md={3} className="filter-column">
-                            <Box sx={{ width: "100%" }}>
-                                <Typography className="filter-title">Ordenar por Precio</Typography>
-                                <Select fullWidth value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="sort-select">
-                                    <MenuItem value="asc">Menor a Mayor</MenuItem>
-                                    <MenuItem value="desc">Mayor a Menor</MenuItem>
-                                </Select>
+                            <Box className="filter-column" sx={{ mt: 2 }}>
+                                <button onClick={fetchPropiedades} className="search-button">
+                                    Buscar Propiedades
+                                </button>
                             </Box>
                         </Box>
+
                     </Box>
-                    <Box className="filter-column" sx={{ mt: 2 }}>
-                        <button onClick={fetchPropiedades} className="search-button">
-                            Buscar Propiedades
-                        </button>
-                    </Box>
+
                 </Collapse>
             </Box>
 
