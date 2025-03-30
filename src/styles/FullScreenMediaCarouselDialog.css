@@ -1,0 +1,13 @@
+.fullscreen-container {
+    position: relative;
+    background: #fbf7ea;
+    /* Black background for fullscreen */
+}
+
+.fullscreen-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: none;
+}

@@ -1,297 +1,156 @@
-.property-detail-container {
-    padding: 2% 0 !important;
-}
-
-.MuiTypography-root {
-    font-family: "Avenir Medium", sans-serif !important;
-}
-
-.property-detail-all {
+/* Global page wrapper */
+.dev-details-page {
     margin: 0 auto;
-    background-color: #FBF7EA;
+    background-color: #fbf7ea;
+    /* Add horizontal padding to all sections */
+    padding: 0 15%;
+    /* adjust as needed */
 }
 
+/* Top bar (Back button, etc.) */
+.dev-details-topbar {
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    /* for spacing from top or nav */
+}
+
+/* Back button */
 .back-button {
     background: none;
     border: none;
     font-size: 16px;
     cursor: pointer;
-    color: #13272D !important;
+    color: #13272d !important;
     font-family: "Avenir Light", sans-serif !important;
-    margin-top: 80px !important;
     text-transform: lowercase;
 }
 
-/* 🔹 Ensures Header is a Flex Container */
-.property-detail-header-start {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    /* mejor que space-around para alinear más claro */
-    align-items: flex-start !important;
-    gap: 12% !important;
-    text-align: left !important;
-    max-width: 92% !important;
-    /* antes estaba en 80% */
-    margin: 0 auto !important;
-    padding: 0 3%;
-    width: 100%;
+/* HEADER SECTION */
+.dev-details-header {
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
-
-/* 🔹 Ensures Header is a Flex Container */
-.property-detail-header {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: flex-start !important;
-    gap: 12%;
-    margin: 40px !important;
-    text-align: flex-start !important;
-    padding-bottom: 3%;
-
-}
-
-/* 🔹 Title Styling */
-.property-detail-title {
+/* Title & Summary */
+.dev-title {
     font-size: 2.7rem !important;
     font-family: "Avenir Heavy", sans-serif !important;
-    color: #13272D !important;
+    color: #13272d !important;
     margin-bottom: 20px !important;
-    max-width: 800px !important;
-    text-align: left;
 }
 
-.property-detail-subtitle {
-    font-size: 1.7rem !important;
-    font-family: "Avenir Heavy", sans-serif !important;
-    color: #13272D;
-    margin-bottom: 20px !important;
-    text-align: left;
-}
-
-.property-detail-small-subtitle {
-    font-size: 1.3rem !important;
-    font-family: "Avenir Medium", sans-serif !important;
-    color: #13272D;
-    margin-bottom: 10px !important;
-    text-align: left;
-    min-width: 100px !important;
-}
-
-/* 🔹 Description */
-.property-detail-summary {
+.dev-summary {
     font-size: 1.2rem !important;
-    color: #13272D !important;
     font-family: "Avenir", sans-serif !important;
+    color: #13272d !important;
     margin-bottom: 15px !important;
-    text-align: left !important;
-    justify-content: left !important;
-    align-items: left !important;
-    min-width: 100px !important;
+    max-width: 98%;
 }
 
-/* 🔹 Estado (Status) */
-.property-detail-status {
+/* Divider in header */
+/* .dev-divider {
+    background-color: #13272d !important;
+    width: 1px !important;
+    height: 45px !important;
+    match the height to the parent container automatically
+} */
+
+/* Estado & Price in header */
+.dev-status {
     font-size: 1.2rem !important;
     font-family: "Avenir Light", sans-serif !important;
     font-weight: bold;
-    color: #13272D;
+    color: #13272d;
     text-transform: uppercase;
-    text-align: right !important;
-    max-width: 280px !important;
+    margin-bottom: 5px;
 }
 
-/* 🔹 Price Styling */
-.property-detail-price {
-    font-size: 2rem !important;
-    color: #13272D;
-    margin-top: 5px !important;
-}
-
-/* 🔹 Right Side: Estado & Price */
-.property-detail-price-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    /* 👈 alinear a la izquierda */
-    justify-content: center;
-    max-width: 240px;
-    padding-left: 50px;
-    /* espacio entre divider y texto */
-}
-
-.property-detail-info {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    margin-top: 20px;
-    color: #444;
-    font-size: 1.5rem;
-    color: #13272D !important;
-    font-family: "Avenir Medium", sans-serif !important;
-    max-width: 800px !important
-}
-
-.property-detail-info-start {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: left !important;
-    margin-top: 20px;
-    font-size: 1.5rem;
-    color: #13272D !important;
-    font-family: "Avenir Medium", sans-serif !important;
-}
-
-.property-detail-info-right {
-    display: flex;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    margin-top: 20px;
-    color: #444;
-    font-size: 1.5rem;
-    color: #13272D !important;
-    font-family: "Avenir Medium", sans-serif !important;
-    max-width: 150px !important
-}
-
-.property-detail-description-container {
+.dev-price-label {
     font-size: 1.2rem !important;
-    color: #13272D !important;
-    font-family: "Avenir", sans-serif !important;
-    margin-bottom: 10px !important;
-    max-width: 800px !important;
-    text-align: left !important;
-    justify-content: left !important;
-    align-items: left !important;
+    color: #13272d;
+    display: block;
 }
 
-/* .expand-link {
-    font-size: 1rem;
-    color: #0F4C54;
-    text-decoration: underline;
-    cursor: pointer;
-    display: inline-block;
-    margin-top: 5px;
-} */
-
-/* 🔹 Divider Styling */
-.property-detail-divider {
-    height: 70px !important;
-    width: 1px !important;
-    background-color: #13272D !important;
-    margin-left: 7% !important;
-    display: block !important;
-    margin-right: 3%;
+.dev-price {
+    font-size: 2rem !important;
+    color: #13272d;
+    font-family: "Avenir Heavy", sans-serif;
 }
 
-.property-detail-gallery-contact {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 40px;
-    margin: 40px !important;
-    justify-content: center !important;
-    text-align: center !important;
-}
-
-/* .property-gallery {
-    margin-top: 10px;
-    width: 70%;
-} */
-
-
-.property-contact {
+/* GALLERY SECTION */
+.dev-details-gallery {
+    margin-bottom: 40px;
     text-align: center;
-    margin: 20px 0;
 }
 
+.dev-gallery-cta {
+    margin-top: 20px;
+}
+
+/* Contact button (below gallery) */
 .contact-button {
-    background-color: #0F4C54;
-    color: white;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 0;
-    /* 🔽 ensure no top spacing */
+    font-size: 1.4rem !important;
+    font-family: "Avenir Light", sans-serif !important;
+    padding: 8px 30px !important;
+    border-radius: 30px !important;
+    border: 2px solid #0f4c54 !important;
+    transition: all 0.3s ease-in-out !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    color: #0F4C54 !important;
 }
 
-.property-detail-header-button {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-evenly !important;
-    align-items: flex-start !important;
+.contact-button:hover {
+    color: #C3AF94 !important;
+    border: 2px solid #C3AF94 !important;
 }
 
-.property-map-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    /* 🔥 Alinea a la izquierda */
-    width: 100%;
+/* CONTENT SECTION (2:1 columns) */
+.dev-details-content {
+    margin-bottom: 40px;
 }
 
-.property-map {
+.dev-subtitle {
+    font-size: 1.7rem !important;
+    font-family: "Avenir Heavy", sans-serif !important;
+    color: #13272d;
+    margin-bottom: 10px !important;
+}
+
+.dev-small-subtitle {
+    font-size: 1.3rem !important;
+    font-family: "Avenir Medium", sans-serif !important;
+    color: #13272d;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* MAP */
+.dev-map-wrapper {
     margin-top: 20px;
     width: 100%;
-    max-width: 600px;
-}
-
-.google-map {
-    width: 100% !important;
-    /* Adjust width */
     max-width: 600px !important;
-    /* Set a maximum width */
-    height: 300px !important;
-    /* Adjust height */
-    border: none !important;
-    /* Remove iframe border */
-    border-radius: 5px !important;
-    /* Optional rounded corners */
-    margin: 3% !important;
 }
 
-.property-details-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 25px;
-    padding: 0 10%;
-    margin-bottom: 3% !important;
-    justify-content: flex-start;
-}
-
-/* 
-.property-main-slider {
-    width: 100%;
-    height: 500px;
-}
-
-.property-main-image {
+.dev-map {
     width: 100% !important;
-    max-width: 1000px !important;
-    height: 600px !important;
-    object-fit: cover !important;
-    object-position: center !important;
-    display: block !important;
-    margin: 0 auto !important;
-
-} */
-
-/* 
-.slick-slide {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    height: 100px !important;
-    overflow: visible !important;
+    max-width: 600px !important;
+    height: 300px !important;
+    border: none !important;
+    border-radius: 5px !important;
 }
 
-.slick-list,
-.slick-track {
-    min-height: 100px !important;
-} */
+/* RELATED PROPERTIES SECTION */
+.dev-details-related {
+    margin-bottom: 60px;
+}
+
+/* Example for .RelatedProperties container (if needed):
+  .related-properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  */

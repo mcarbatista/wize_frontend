@@ -16,7 +16,7 @@ import BASE_URL from "../../api/config";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const roles = ['admin', 'agente'];
+const roles = ['admin', 'agent'];
 
 const CreateUserPage = () => {
     document.title = "Wize | Crear usuario";
@@ -24,7 +24,7 @@ const CreateUserPage = () => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('agente'); // default role
+    const [role, setRole] = useState('agent'); // default role
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -94,7 +94,7 @@ const CreateUserPage = () => {
             setEmail('');
             setPhone('');
             setPassword('');
-            setRole('agente');
+            setRole('agent');
             // Or navigate somewhere else
             // navigate('/admin/desarrollos');
         } catch (err) {

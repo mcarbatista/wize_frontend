@@ -9,6 +9,9 @@ import "../styles/Properties.css";
 import BASE_URL from "../api/config"
 
 const Desarrollos = () => {
+
+    document.title = `Wize | Lista de Desarrollos`;
+
     const [desarrollos, setDesarrollos] = useState([]);
     const [sortOrder, setSortOrder] = useState("asc");
     const [neighborhoodFilter, setNeighborhoodFilter] = useState([]);

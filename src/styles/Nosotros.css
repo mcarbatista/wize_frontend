@@ -2,10 +2,8 @@
 .nosotros-container {
     width: 100% !important;
     min-height: 70dvh !important;
-    /* Change height to min-height for better responsiveness */
+    /* Use 70dvh for dynamic viewport height */
     background-color: #13272D;
-
-    /* ✅ Centering Fix */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -16,15 +14,12 @@
 
 /* 🔹 Section Wrapper */
 .nosotros-section {
-    width: 90% !important;
-    max-width: 850px !important;
     text-align: center !important;
-    padding: 7%, 0;
-    height: 70dvh;
-
-    /* ✅ Full Centering Fix */
+    padding: 7%;
+    /* Corrected padding syntax */
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
     justify-content: center !important;
 }
@@ -37,11 +32,9 @@
     margin-bottom: 2% !important;
     text-align: center !important;
     animation: fadeInUp 0.1s ease-in-out forwards;
-
 }
 
 .nosotros-title-text {
-
     font-size: clamp(2rem, 15vw, 6rem) !important;
     margin-top: 150px !important;
     font-family: "Avenir Medium", sans-serif;
@@ -49,7 +42,6 @@
     color: #13272D;
     word-spacing: 10dvh;
     text-align: center;
-
 }
 
 .nosotros-subtitle {
@@ -60,7 +52,7 @@
     display: block !important;
     width: 100% !important;
     margin-bottom: 10% !important;
-    animation: fadeInUp .2s ease-in-out forwards;
+    animation: fadeInUp 0.2s ease-in-out forwards;
 }
 
 /* 🔹 Text Description */
@@ -68,39 +60,29 @@
     font-size: 18px !important;
     font-family: "Avenir Light", sans-serif !important;
     color: #C3AF94 !important;
-    text-align: left !important;
-    /* ✅ Center the text */
+    text-align: center !important;
     margin: 0 auto 20px auto !important;
     max-width: 750px !important;
-    animation: fadeInUp .3s ease-in-out forwards;
+    animation: fadeInUp 0.3s ease-in-out forwards;
 }
 
-/* TESTIMONIOSS >>>>>> */
-
+/* TESTIMONIOS SECTION */
 .testimonios-section {
     width: 100% !important;
     min-height: 70dvh !important;
-    /* Change height to min-height for better responsiveness */
     background-color: #13272D;
-
-    /* ✅ Centering Fix */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     padding: 40px 20px !important;
     box-sizing: border-box;
-
-    height: 70dvh;
 }
-
-
 
 /* ✅ Responsive Fixes */
 @media (max-width: 768px) {
     .nosotros-title {
         font-size: 32px !important;
-        /* Reduce for tablets */
     }
 
     .nosotros-subtitle {
@@ -109,14 +91,13 @@
 
     .nosotros-description {
         font-size: 16px !important;
-        text-align: left !important;
+        text-align: center !important;
     }
 }
 
 @media (max-width: 480px) {
     .nosotros-title {
         font-size: 28px !important;
-        /* Reduce for mobile */
     }
 
     .nosotros-subtitle {

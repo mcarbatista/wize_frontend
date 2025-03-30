@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, Grid, Card, CardMedia, CardContent, Container } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/Nosotros.css";
 import HomeSliderNosotros from "../components/HomeSliderNosotros"; // ✅ Import the slider
 
-const Home = () => {
+const Nosotros = () => {
     const [showText, setShowText] = useState(false);
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const Home = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Auto-scroll settings for the gallery
+    // Auto-scroll settings for the gallery (unchanged)
     const settings = {
         dots: false,
         infinite: true,
@@ -34,7 +34,6 @@ const Home = () => {
     };
 
     return (
-
         <Box>
             {/* 🔹 Page Title */}
             <Box className="title-section">
@@ -42,43 +41,49 @@ const Home = () => {
             </Box>
 
             {/* 🔹 Service Sections */}
-
             <Box className="nosotros-container">
                 {showText && (
-                    <Grid container className="nosotros-section">
-                        <Box item xs={12}>
+                    <Grid container direction="column" className="nosotros-section">
+                        <Grid item xs={12}>
                             <Typography variant="h3" className="nosotros-title">
                                 Transformando la gestión de activos inmobiliarios
                             </Typography>
-                        </Box>
-                        <Box item xs={12}>
+                        </Grid>
+                        <Grid item xs={12}>
                             <Typography variant="h5" className="nosotros-subtitle">
                                 Soluciones personalizadas y accesibles
                             </Typography>
-                        </Box>
-                        <Grid >
-                            <Box item xs={12}>
-                                <Typography variant="body1" className="nosotros-description">
-                                    En Wize, nuestra misión es empoderar a inversionistas y futuros propietarios de viviendas en Uruguay y Estados Unidos brindándoles servicios inmobiliarios excepcionales. Estamos dedicados a cumplir los objetivos financieros de nuestros clientes a través de inversiones inmobiliarias estratégicas, enfocándonos en áreas de alto crecimiento.
-                                </Typography>
-                            </Box>
-                            <Box item xs={12}>
-                                <Typography variant="body1" className="nosotros-description">
-                                    Nos esforzamos por crear una experiencia fluida y gratificante para todos nuestros clientes, ya sea que estén buscando invertir o encontrar la casa de sus sueños. Ya sea que esté comprando, vendiendo o invirtiendo, estamos aquí para ayudarlo en cada paso del camino. Nos esforzamos por garantizar una experiencia exitosa de principio a fin.
-                                </Typography>
-                            </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" className="nosotros-description">
+                                En Wize, nuestra misión es empoderar a inversionistas y futuros
+                                propietarios de viviendas en Uruguay y Estados Unidos brindándoles
+                                servicios inmobiliarios excepcionales. Estamos dedicados a cumplir
+                                los objetivos financieros de nuestros clientes a través de
+                                inversiones inmobiliarias estratégicas, enfocándonos en áreas de
+                                alto crecimiento.
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" className="nosotros-description">
+                                Nos esforzamos por crear una experiencia fluida y gratificante para
+                                todos nuestros clientes, ya sea que estén buscando invertir o
+                                encontrar la casa de sus sueños. Ya sea que esté comprando,
+                                vendiendo o invirtiendo, estamos aquí para ayudarlo en cada paso del
+                                camino. Nos esforzamos por garantizar una experiencia exitosa de
+                                principio a fin.
+                            </Typography>
                         </Grid>
                     </Grid>
                 )}
             </Box>
+
             <Box>
                 {/* ✅ TESTIMONIOS Section */}
-                < HomeSliderNosotros />
-
-            </Box >
-        </Box >
-
+                <HomeSliderNosotros />
+            </Box>
+        </Box>
     );
 };
 
-export default Home;
+export default Nosotros;

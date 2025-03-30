@@ -10,6 +10,9 @@ import BASE_URL from "../api/config";
 
 
 const Propiedades = () => {
+
+    document.title = `Wize | Lista de Propiedades`;
+
     const [propiedades, setPropiedades] = useState([]);
     const [sortOrder, setSortOrder] = useState("asc");
     const [neighborhoodFilter, setNeighborhoodFilter] = useState([]);

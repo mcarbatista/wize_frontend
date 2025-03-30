@@ -1,0 +1,51 @@
+/* Make the slider section (or container) the positioning context */
+.slider-section {
+    position: relative;
+}
+
+/* Center the dots absolutely within the slider-section */
+.slick-dots {
+    position: absolute;
+    bottom: 10px !important;
+    /* Adjust vertical positioning as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    /* For horizontal arrangement */
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Spacing between individual dot elements */
+.slick-dots li {
+    margin: 0 10px;
+    /* Adjust horizontal spacing between dots */
+}
+
+/* Non-active dots: filled circle */
+.slick-dots li button:before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    /* Solid white fill */
+    border: none;
+    box-sizing: border-box;
+    /* Ensures border doesn't expand total size */
+    opacity: 1 !important;
+}
+
+/* Active dot: ring with transparent center and white border */
+.slick-dots li.slick-active button:before {
+    background: transparent;
+    border: 2px solid #fff;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    /* Keep total size 14px x 14px */
+    opacity: 1 !important;
+}

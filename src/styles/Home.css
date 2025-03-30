@@ -678,7 +678,7 @@
     font-size: 1rem !important;
     font-family: "Avenir Book", sans-serif !important;
     text-align: center !important;
-    padding: 5%;
+    padding: 15% !important;
     margin: 0, 10px;
 }
 
@@ -688,6 +688,7 @@
     bottom: 0px !important;
     color: #C3AF94 !important;
     opacity: 0.7 !important;
+    margin-top: 40px !important;
     margin-top: 40px !important;
     text-align: center !important;
 }

@@ -5,21 +5,15 @@ import {
     Box,
     Typography,
     Grid,
-    Button,
-    Divider,
-    Card,
-    CardMedia,
-    CardContent,
+    Button
 } from "@mui/material";
 import DOMPurify from "dompurify";
 import "../styles/PropertyDetails.css";
 import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 import BASE_URL from "../api/config";
-import ImageGallery from "../components/ImageGallery"; // Updated gallery with full-screen modal
-import MarkdownTypography from "../components/Markdown";
+import ImageGallery from "../components/ImageGallery"; // Make sure arrows are on the big image
 import RelatedProperties from "../components/RelatedProperties";
 
 const DevelopmentDetails = () => {
@@ -42,7 +36,6 @@ const DevelopmentDetails = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/api/desarrollos/${id}`);
                 setDevelopment(response.data.desarrollo);
-                // Dynamically update the browser tab title.
                 document.title = `Wize | ${response.data.desarrollo.Proyecto_Nombre || ""}`;
                 setRelatedProperties(response.data.propiedades);
                 setError(null);
@@ -57,165 +50,245 @@ const DevelopmentDetails = () => {
         fetchDevelopment();
     }, [id, navigate]);
 
-
     if (loading || !development) return <Typography>Cargando...</Typography>;
     if (error) return <Typography>Error: {error}</Typography>;
 
+    // Sanitize text
     const safeDescripcion = DOMPurify.sanitize(development.Descripcion || "");
     const safeDescripcionExpandir = DOMPurify.sanitize(
         development.Descripcion_Expandir || ""
     );
-    const safeFormaDePago = DOMPurify.sanitize(
-        development.Forma_de_Pago || ""
-    );
+    const safeFormaDePago = DOMPurify.sanitize(development.Forma_de_Pago || "");
+
+    // Format price if needed
+    const formattedPrice = development.Precio
+        ? `$ ${development.Precio.toLocaleString()}`
+        : "";
 
     return (
-        <Box className="property-detail-all">
-            {/* Header Section */}
-            <Box className="property-detail-container">
-                <Button className="back-button" onClick={() => window.history.back()}>
+        <Box className="dev-details-page" sx={{ paddingBottom: "50px" }}>
+            {/* BACK BUTTON */}
+            <Box className="dev-details-topbar">
+                <Button className="back-button" onClick={() => navigate(-1)}>
                     ← Atrás
                 </Button>
-                <Box className="property-detail-header-start">
-                    <Grid container spacing={3} alignItems="center" sx={{ margin: '0 auto', width: '85%' }}>
-                        <Grid item xs={12} md={7}>
-                            <Box className="property-detail-info-start">
-                                <Typography variant="h3" className="property-detail-title">
-                                    {development.Proyecto_Nombre || 'Sin título'}
-                                </Typography>
-                                <Typography className="property-detail-summary">
-                                    {development.Resumen}
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12} md={4} sx={{ ml: 'auto', pr: 3 }}>
-                            <Grid container alignItems="center" justifyContent="flex-end">
-                                <Grid item>
-                                    <Divider orientation="vertical" flexItem className="property-detail-divider" />
-                                </Grid>
-                                <Grid item>
-                                    <Box className="property-detail-price-box">
-                                        <Typography className="property-detail-status">{development.Estado}</Typography>
-                                        <Typography className="property-detail-price">Desde </Typography>
-                                        <Typography className="property-detail-price">
-                                            $ {development.Precio?.toLocaleString()}
-                                        </Typography>
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Box>
             </Box>
 
-            {/* Gallery & Contact Section */}
-            <Box className="property-detail-gallery-contact">
-                {development.Galeria?.length > 0 && (
-                    <ImageGallery mediaItems={development.Galeria} />
-                )}
-                <Grid container spacing={3} className="property-detail-header-button" sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%", flexWrap: "nowrap" }}>
-                    <Grid item sx={{ mt: 0 }}>
-                        <Button
-                            variant="contained"
-                            onClick={() => {
-                                const el = document.getElementById("footer");
-                                if (el) el.scrollIntoView({ behavior: "smooth" });
-                            }}
-                            className="contact-button"
-                            sx={{ display: { xs: "none", sm: "flex" } }}
-                        >
-                            Contacto
-                        </Button>
+            {/* HEADER SECTION (two columns) */}
+            <Box className="dev-details-header">
+                <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+                    {/* LEFT COLUMN: Proyecto_Nombre & Resumen (takes more space) */}
+                    <Grid item xs={12} lg={8}>
+                        <Typography variant="h3" className="dev-title">
+                            {development.Proyecto_Nombre || "Sin título"}
+                        </Typography>
+                        <Typography className="dev-summary">
+                            {development.Resumen}
+                        </Typography>
+                    </Grid>
+
+                    {/* RIGHT COLUMN: Estado & Precio with left border (divider) on large screens */}
+                    <Grid
+                        item
+                        xs={12}
+                        lg={3}
+                        textAlign={{ xs: "left", lg: "right" }}
+                        sx={{
+                            borderLeft: { lg: "1px solid #13272D" },
+                            pl: { lg: 2 },
+                        }}
+                    >
+                        <Typography className="dev-status">
+                            {development.Estado}
+                        </Typography>
+                        <Box>
+                            <Typography className="dev-price-label">Desde</Typography>
+                            <Typography className="dev-price">{formattedPrice}</Typography>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
 
-            {/* Content Section */}
-            <Box className="property-detail-container">
-                <Box className="property-detail-header">
-                    <Grid container spacing={3} className="property-detail-info">
-                        <Grid item xs={12} sm={6} className="property-detail-info">
-                            <Typography className="property-detail-subtitle" variant="h6">
+            {/* GALLERY SECTION + CONTACT CTA */}
+            <Box className="dev-details-gallery">
+                {development.Galeria?.length > 0 && (
+                    <ImageGallery mediaItems={development.Galeria} />
+                )}
+
+                <Box className="dev-gallery-cta">
+                    <Button
+                        variant="contained"
+                        className="contact-button"
+                        onClick={() => {
+                            // Future popup logic can go here
+                            alert("Open Contact Popup (to be developed)");
+                        }}
+                    >
+                        Contacto
+                    </Button>
+                </Box>
+            </Box>
+
+            {/* CONTENT SECTION (9:3 columns) */}
+            <Box className="dev-details-content">
+                <Grid container spacing={4}>
+                    {/* LEFT COLUMN (9 parts) */}
+                    <Grid item xs={12} md={9}>
+                        {/* Ubicación */}
+                        <Box mb={3}>
+                            <Typography variant="h6" className="dev-subtitle">
                                 Ubicación
                             </Typography>
-                            <Typography className="property-detail-summary">
+                            <Typography className="dev-summary">
                                 {development.Ubicacion}
                             </Typography>
-                        </Grid>
+                        </Box>
 
-                        <Grid item xs={12} sm={6} className="property-detail-info">
-                            <Typography className="property-detail-subtitle" variant="h6">
+                        {/* Descripción */}
+                        <Box mb={3}>
+                            <Typography variant="h6" className="dev-subtitle">
                                 Descripción
                             </Typography>
                             <DescriptionWithExpand
-                                className="property-detail-summary"
+                                className="dev-summary"
                                 shortText={safeDescripcion}
                                 extraText={safeDescripcionExpandir}
                                 useHtml
                             />
-                        </Grid>
-
-                        <Box className="property-map-wrapper">
-                            {/* Google Map */}
-                            <Box className="property-map">
-                                <iframe
-                                    src={`https://www.google.com/maps?q=${development.Ubicacion}&output=embed`}
-                                    title="Google Map"
-                                    className="google-map"
-                                />
-                            </Box>
                         </Box>
 
-                        <Grid item xs={12} sm={6} className="property-detail-info">
-                            <Typography className="property-detail-subtitle" variant="h6">
-                                Propiedades en este desarrollo
-                            </Typography>
-                        </Grid>
-                        <RelatedProperties relatedProperties={relatedProperties} />
+                        {/* MAP */}
+                        <Box className="dev-map-wrapper">
+                            <iframe
+                                src={`https://www.google.com/maps?q=${development.Ubicacion}&output=embed`}
+                                title="Google Map"
+                                className="dev-map"
+                            />
+                        </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={2} className="property-detail-info-right">
-                        <Grid item xs={12} sm={6}>
-                            <Typography className="property-detail-subtitle" variant="h6">
-                                Contacto
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Email}
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Celular}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography className="property-detail-subtitle" variant="h6">
-                                Detalles
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Detalles}
-                            </Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6">
-                                Tipo
-                            </Typography>
-                            <Typography className="property-detail-summary">
-                                {development.Tipo}
-                            </Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6"> Tamaño </Typography>
-                            <Typography className="property-detail-summary">{development.Tamano_m2} m²</Typography>
-                            <Typography className="property-detail-small-subtitle" variant="h6"> Forma de pago</Typography>
-                            <Typography
-                                className="property-detail-summary"
-                                component="div"
-                                dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
-                            />
-                        </Grid>
-                        <Typography className="property-detail-small-subtitle" variant="h6">
-                            Gastos de ocupación
-                        </Typography>
-                        <Typography className="property-detail-summary">
-                            {development.Gastos_Ocupacion}
-                        </Typography>
+                    {/* RIGHT COLUMN (3 parts) */}
+                    <Grid item xs={12} md={3}>
+                        {/* For large screens, show the original layout */}
+                        <Box sx={{ display: { xs: "none", lg: "block" } }}>
+                            {/* Contacto */}
+                            <Box mb={3}>
+                                <Typography variant="h6" className="dev-subtitle">
+                                    Contacto
+                                </Typography>
+                                <Typography className="dev-summary">{development.Email}</Typography>
+                                <Typography className="dev-summary">{development.Celular}</Typography>
+                            </Box>
+
+                            {/* Detalles */}
+                            <Box mb={3}>
+                                <Typography variant="h6" className="dev-subtitle">
+                                    Detalles
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: 2,
+                                    }}
+                                >
+                                    <Box sx={{ flex: { xs: "1 0 25%", lg: "1 0 100%" } }}>
+                                        <Typography className="dev-small-subtitle">Tipo</Typography>
+                                        <Typography className="dev-summary">{development.Tipo}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: { xs: "1 0 25%", lg: "1 0 100%" } }}>
+                                        <Typography className="dev-small-subtitle">Fecha de construcción</Typography>
+                                        <Typography className="dev-summary">{development.Entrega}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: { xs: "1 0 25%", lg: "1 0 100%" } }}>
+                                        <Typography className="dev-small-subtitle">Gastos</Typography>
+                                        <Typography className="dev-summary">
+                                            {development.Gastos_Ocupacion}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ flex: { xs: "1 0 25%", lg: "1 0 100%" } }}>
+                                        <Typography className="dev-small-subtitle">Forma de pago</Typography>
+                                        <Typography
+                                            className="dev-summary"
+                                            component="div"
+                                            dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
+                                        />
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                        </Box>
+
+                        {/* For medium and small screens, use the new two-box layout */}
+                        <Box sx={{ display: { xs: "block", lg: "none" } }}>
+                            {/* Contacto Box */}
+                            <Box mb={3}>
+                                <Typography variant="h6" className="dev-subtitle">
+                                    Contacto
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: 2,
+                                    }}
+                                >
+                                    <Box sx={{ flex: "1 0 50%" }}>
+                                        <Typography className="dev-summary">{development.Email}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 50%" }}>
+                                        <Typography className="dev-summary">{development.Celular}</Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+
+                            {/* Detalles Box */}
+                            <Box mb={3}>
+                                <Typography variant="h6" className="dev-subtitle">
+                                    Detalles
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: 2,
+                                    }}
+                                >
+                                    <Box sx={{ flex: "1 0 25%" }}>
+                                        <Typography className="dev-small-subtitle">Tipo</Typography>
+                                        <Typography className="dev-summary">{development.Tipo}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 25%" }}>
+                                        <Typography className="dev-small-subtitle">Fecha de construcción</Typography>
+                                        <Typography className="dev-summary">{development.Entrega}</Typography>
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 25%" }}>
+                                        <Typography className="dev-small-subtitle">Gastos</Typography>
+                                        <Typography className="dev-summary">
+                                            {development.Gastos_Ocupacion}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ flex: "1 0 25%" }}>
+                                        <Typography className="dev-small-subtitle">Forma de pago</Typography>
+                                        <Typography
+                                            className="dev-summary"
+                                            component="div"
+                                            dangerouslySetInnerHTML={{ __html: safeFormaDePago }}
+                                        />
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
                     </Grid>
-                </Box>
+                </Grid>
+            </Box>
+
+            {/* RELATED PROPERTIES */}
+            <Box className="dev-details-related">
+                <Typography variant="h6" className="dev-subtitle" mb={2}>
+                    Propiedades en este desarrollo
+                </Typography>
+                <RelatedProperties relatedProperties={relatedProperties} />
             </Box>
         </Box>
     );
