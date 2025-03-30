@@ -36,10 +36,15 @@ const FullScreenMediaCarouselDialog = ({
         sliderRef.current.slickNext();
     };
 
+    const mediaStyle = {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain"
+    };
+
     return (
         <Dialog fullScreen open={open} onClose={onClose}>
             <div className="fullscreen-container">
-
                 {/* Slider container with padding and fixed height */}
                 <div
                     className="fullscreen-slider-wrapper"
@@ -57,7 +62,7 @@ const FullScreenMediaCarouselDialog = ({
                         <CloseIcon style={{ fontSize: "3rem", color: "#0F4C54" }} />
                     </IconButton>
 
-                    <Slider ref={sliderRef} {...sliderSettings}>
+                    <Slider ref={sliderRef} {...sliderSettings} className="media-element">
                         {mediaItems.map((item, idx) => (
                             <div key={idx}>
                                 {item.type === "video" ? (
@@ -66,21 +71,13 @@ const FullScreenMediaCarouselDialog = ({
                                         autoPlay
                                         muted
                                         loop
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                        }}
+                                        style={mediaStyle}
                                     />
                                 ) : (
                                     <img
                                         src={item.url}
                                         alt={item.alt || `Media ${idx}`}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "contain",
-                                        }}
+                                        style={mediaStyle}
                                     />
                                 )}
                             </div>
@@ -98,6 +95,7 @@ const FullScreenMediaCarouselDialog = ({
                                     color: "#0F4C54",
                                     background: "none",
                                 }}
+                                className="fs-arrow-button fs-left-arrow"
                             >
                                 <ArrowBackIosNewIcon style={{ fontSize: "3rem" }} />
                             </IconButton>
@@ -111,6 +109,7 @@ const FullScreenMediaCarouselDialog = ({
                                     color: "#0F4C54",
                                     background: "none",
                                 }}
+                                className="fs-arrow-button fs-right-arrow"
                             >
                                 <ArrowForwardIosIcon style={{ fontSize: "3rem" }} />
                             </IconButton>

@@ -7,16 +7,14 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const ImageGallery = ({ mediaItems = [] }) => {
-    // Track current index and open state for fullscreen.
     const [currentIndex, setCurrentIndex] = useState(0);
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    // Derive the main item from the current index.
     const mainItem = mediaItems.length > 0 ? mediaItems[currentIndex] : {};
 
     // Thumbnail slider settings (no default arrows).
     const sliderSettings = {
-        slidesToShow: 6, // Default: show 6 thumbnails on large screens
+        slidesToShow: 6,
         slidesToScroll: 1,
         arrows: false,
         infinite: false,
@@ -28,13 +26,13 @@ const ImageGallery = ({ mediaItems = [] }) => {
             {
                 breakpoint: 1300,
                 settings: {
-                    slidesToShow: 4, // Show 4 thumbnails on medium screens
+                    slidesToShow: 4,
                 },
             },
             {
                 breakpoint: 850,
                 settings: {
-                    slidesToShow: 3, // Show 2 thumbnails on small screens
+                    slidesToShow: 3,
                 },
             },
         ],
@@ -44,19 +42,21 @@ const ImageGallery = ({ mediaItems = [] }) => {
         setCurrentIndex(idx);
     };
 
-    // Handlers for overlay arrows on the main image.
     const handleMainPrev = () => {
-        setCurrentIndex((prev) => (prev > 0 ? prev - 1 : mediaItems.length - 1));
+        setCurrentIndex((prev) =>
+            prev > 0 ? prev - 1 : mediaItems.length - 1
+        );
     };
 
     const handleMainNext = () => {
-        setCurrentIndex((prev) => (prev < mediaItems.length - 1 ? prev + 1 : 0));
+        setCurrentIndex((prev) =>
+            prev < mediaItems.length - 1 ? prev + 1 : 0
+        );
     };
 
     return (
         <div className="gallery-container">
-            {/* Main media display with overlay arrows */}
-            <div className="main-media-wrapper" style={{ position: "relative" }}>
+            <div className="main-media-wrapper">
                 {mainItem.type === "video" ? (
                     <video
                         src={mainItem.url}
@@ -74,31 +74,18 @@ const ImageGallery = ({ mediaItems = [] }) => {
                         onClick={() => setDialogOpen(true)}
                     />
                 )}
+
                 {mediaItems.length > 1 && (
                     <>
                         <IconButton
                             onClick={handleMainPrev}
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: 20,
-                                transform: "translateY(-50%)",
-                                color: "#fff",
-                                background: "none",
-                            }}
+                            className="arrow-button left-arrow"
                         >
                             <ArrowBackIosNewIcon style={{ fontSize: "3rem" }} />
                         </IconButton>
                         <IconButton
                             onClick={handleMainNext}
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                right: 20,
-                                transform: "translateY(-50%)",
-                                color: "#fff",
-                                background: "none",
-                            }}
+                            className="arrow-button right-arrow"
                         >
                             <ArrowForwardIosIcon style={{ fontSize: "3rem" }} />
                         </IconButton>
@@ -106,7 +93,6 @@ const ImageGallery = ({ mediaItems = [] }) => {
                 )}
             </div>
 
-            {/* Thumbnail slider without arrows */}
             <Slider {...sliderSettings} className="thumbnail-slider">
                 {mediaItems.map((item, idx) => (
                     <div
@@ -132,7 +118,6 @@ const ImageGallery = ({ mediaItems = [] }) => {
                 ))}
             </Slider>
 
-            {/* Fullscreen Carousel Dialog */}
             <FullScreenMediaCarouselDialog
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}

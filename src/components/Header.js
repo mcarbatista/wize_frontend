@@ -172,7 +172,7 @@ const Header = () => {
                         "& .MuiDrawer-paper": {
                             width: "250px",
                             backgroundColor: "#FBF7EA",
-                            opacity: "0.8",
+                            opacity: "0.9",
                         }
                     }}
                 >
@@ -198,7 +198,8 @@ const Header = () => {
                                         textAlign: "center",
                                         fontSize: "16px",
                                         color: "#0F4C54",
-                                        fontWeight: "bold"
+                                        fontWeight: "bold",
+                                        fontFamily: "Avenir Medium, sans serif"
                                     }}
                                 />
                             </ListItem>

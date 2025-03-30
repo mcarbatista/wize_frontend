@@ -4,18 +4,44 @@
     text-align: center;
 }
 
+.main-media-wrapper {
+    position: relative;
+    display: inline-block;
+    /* Ensures container height matches the image */
+    width: 100% !important;
+}
+
+/* Main image styling */
 .main-image {
+    display: block;
+    /* Make sure container height matches image height */
     width: 100%;
     max-height: 600px;
     object-fit: cover;
     border-radius: 10px;
-    cursor: pointer !important;
+    cursor: pointer;
 }
 
 /* Responsive adjustments for the main image */
 @media (max-width: 768px) {
     .main-image {
         max-height: 400px;
+    }
+
+    .gallery-container {
+        width: 90% !important;
+    }
+
+    /* Positioning the left arrow to the left side of the image */
+    .left-arrow {
+        left: -5 % !important;
+        /* Adjust to your preference */
+    }
+
+    /* Positioning the right arrow to the right side of the image */
+    .right-arrow {
+        right: -5% !important;
+        /* Adjust to your preference */
     }
 }
 
@@ -25,7 +51,29 @@
     }
 }
 
-/* Slider centrado */
+/* Common arrow button styling */
+.arrow-button {
+    position: absolute !important;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    background: none;
+    z-index: 2;
+}
+
+/* Positioning the left arrow to the left side of the image */
+.left-arrow {
+    left: -10% !important;
+    /* Adjust to your preference */
+}
+
+/* Positioning the right arrow to the right side of the image */
+.right-arrow {
+    right: -10% !important;
+    /* Adjust to your preference */
+}
+
+/* Thumbnail slider styling */
 .thumbnail-slider {
     margin-top: 20px;
     overflow: hidden;
@@ -58,11 +106,10 @@
     margin: 0 !important;
 }
 
-/* Miniaturas */
+/* Thumbnail items */
 .thumbnail-wrapper {
     cursor: pointer;
     margin: 0 5px;
-    /* Added horizontal gap between slides */
     padding: 0;
 }
 
@@ -93,7 +140,7 @@
     }
 }
 
-/* Remove any default arrow styles */
+/* Remove any default arrow styles from slick slider */
 .slick-prev,
 .slick-next {
     display: none !important;
