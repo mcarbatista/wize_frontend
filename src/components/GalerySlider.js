@@ -23,7 +23,6 @@ const GallerySlider = () => {
                 console.error("❌ API did not return an array.");
                 return;
             }
-
             setDesarrollos(data);
         } catch (error) {
             console.error("Error fetching desarrollos:", error);
@@ -31,17 +30,14 @@ const GallerySlider = () => {
     };
 
     const settings = {
-        dots: false,
-        infinite: true,
-        speed: 5000,
-        cssEase: "linear",
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
+        centerMode: true,
+
+        infinite: true,
         autoplay: true,
-        autoplaySpeed: 10000,
-        pauseOnHover: true,
-        arrows: true,
-        swipe: true,
+        autoplaySpeed: 500,
+        speed: 2000,
         nextArrow: (
             <div className="custom-arrow custom-next">
                 <ChevronRight />
@@ -57,12 +53,16 @@ const GallerySlider = () => {
                 breakpoint: 1200,
                 settings: {
                     slidesToShow: 2,
+                    slidesToScroll: 2,
+                    centerPadding: "20px", // Slightly less space on medium screens
                 },
             },
             {
                 breakpoint: 767,
                 settings: {
                     slidesToShow: 1,
+                    slidesToScroll: 1,
+                    centerPadding: "0px", // No extra padding on small screens
                 },
             },
         ],
@@ -71,26 +71,30 @@ const GallerySlider = () => {
     return (
         <Slider {...settings}>
             {desarrollos.map((desarrollo, index) => (
-                <Card
+                <a
                     key={index}
-                    className="gallery-card fade-effect"
-                    style={{ margin: "0 10px" }} // Added margin for spacing between cards
+                    href={`/desarrollos/${desarrollo._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "none" }}
                 >
-                    <CardMedia
-                        component="img"
-                        image={desarrollo.Imagen}
-                        alt={`Image of ${desarrollo.Proyecto_Nombre}`}
-                        className="card-image"
-                    />
-                    <Box className="card-overlay">
-                        <Typography variant="h5" className="card-title">
-                            {desarrollo.Proyecto_Nombre}
-                        </Typography>
-                        <Typography variant="h5" className="card-text">
-                            {desarrollo.Entrega}
-                        </Typography>
-                    </Box>
-                </Card>
+                    <Card className="gallery-card fade-effect">
+                        <CardMedia
+                            component="img"
+                            image={desarrollo.Imagen}
+                            alt={`Image of ${desarrollo.Proyecto_Nombre}`}
+                            className="card-image"
+                        />
+                        <Box className="card-overlay">
+                            <Typography variant="h5" className="card-title">
+                                {desarrollo.Proyecto_Nombre}
+                            </Typography>
+                            <Typography variant="h5" className="card-text">
+                                {desarrollo.Entrega}
+                            </Typography>
+                        </Box>
+                    </Card>
+                </a>
             ))}
         </Slider>
     );

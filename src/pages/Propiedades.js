@@ -204,18 +204,18 @@ const Propiedades = () => {
                                 <CardMedia component="img" image={propiedad.Imagen} alt={propiedad.Title} />
                                 <CardContent className="property-details">
                                     <Typography className="property-status">{propiedad.Estado}</Typography>
-                                    <Typography className="property-price">{propiedad.Precio_Con_Formato}</Typography>
+                                    <Typography className="property-price">$ {propiedad.Precio_Con_Formato}</Typography>
                                     <Typography className="property-barrio" variant="h6">{propiedad.Barrio}</Typography>
                                     <Typography className="property-title" variant="h6">{propiedad.Titulo}</Typography>
                                     <div className="property-icons">
                                         <span>
-                                            <FaBed /> {propiedad.Dormitorios}
+                                            <FaBed style={{ fontSize: "1.5rem" }} />{propiedad.Dormitorios}
                                         </span>
                                         <span>
-                                            <FaBath /> {propiedad.Banos}
+                                            <FaBath style={{ fontSize: "1.2rem" }} />
                                         </span>
                                         <span>
-                                            <FaRulerCombined /> {propiedad.Tamano_m2} m²
+                                            <FaRulerCombined style={{ fontSize: "1.2rem" }} />
                                         </span>
                                     </div>
                                 </CardContent>

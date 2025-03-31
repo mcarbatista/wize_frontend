@@ -2,21 +2,28 @@
     position: relative;
     overflow: hidden;
     border-radius: 5px;
-    margin: 0 10px !important;
+    margin: 0;
+    /* Remove inline margin from here if spacing is added on slide wrapper */
 }
 
 /* Large screens */
 @media (min-width: 1200px) {
     .gallery-card {
-        width: 350px;
+        width: 450px;
         height: 550px;
+    }
+
+    /* Add extra space between slides on large screens */
+    .slick-slide {
+        margin: 0 20px !important;
+        /* Adjust value as needed */
     }
 }
 
 /* Medium screens */
 @media (min-width: 768px) and (max-width: 1200px) {
     .gallery-card {
-        width: 300px;
+        width: 350px;
         height: 500px;
     }
 }
@@ -24,7 +31,7 @@
 /* Small screens */
 @media (max-width: 767px) {
     .gallery-card {
-        width: 250px;
+        width: 350px;
         height: 450px;
     }
 }
@@ -90,4 +97,11 @@
     color: #fff;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
     padding: 5%;
+}
+
+/* Optionally remove global slick-slider padding if not needed */
+.slick-slider,
+.slick-list {
+    padding: 0 !important;
+    margin: 0 auto;
 }
