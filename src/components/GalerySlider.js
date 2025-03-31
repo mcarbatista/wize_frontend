@@ -38,12 +38,10 @@ const GallerySlider = () => {
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3000,
+        autoplaySpeed: 10000,
         pauseOnHover: true,
         arrows: true,
-        // draggable: true,   // explicitly enable dragging
-        swipe: true,       // enable swipe gestures
-        // touchMove: true,   // allow touch move
+        swipe: true,
         nextArrow: (
             <div className="custom-arrow custom-next">
                 <ChevronRight />
@@ -56,13 +54,13 @@ const GallerySlider = () => {
         ),
         responsive: [
             {
-                breakpoint: 1024,
+                breakpoint: 1200,
                 settings: {
                     slidesToShow: 2,
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 767,
                 settings: {
                     slidesToShow: 1,
                 },
@@ -73,7 +71,11 @@ const GallerySlider = () => {
     return (
         <Slider {...settings}>
             {desarrollos.map((desarrollo, index) => (
-                <Card key={index} className="gallery-card fade-effect">
+                <Card
+                    key={index}
+                    className="gallery-card fade-effect"
+                    style={{ margin: "0 10px" }} // Added margin for spacing between cards
+                >
                     <CardMedia
                         component="img"
                         image={desarrollo.Imagen}
