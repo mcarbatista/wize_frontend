@@ -139,8 +139,8 @@ const Header = () => {
                     }}
                     sx={{
                         // Our custom styles
-                        background: "transparent",
-                        border: "2px solid #0F4C54",
+                        background: "#FBF7EA",
+                        border: "1px solid #0F4C54",
                         color: "#0F4C54",
                         fontSize: "1.0rem",
                         fontFamily: "Avenir Light, sans-serif",
@@ -150,7 +150,7 @@ const Header = () => {
                         boxShadow: "none",
                         "&:hover": {
                             color: "#C3AF94",
-                            borderColor: "#C3AF94",
+                            border: "1px solid #C3AF94",
                             boxShadow: "none"
                         },
 

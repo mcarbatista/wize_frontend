@@ -72,7 +72,7 @@
 .video-text,
 .video-subtext {
     color: white;
-    font-family: "Avenir", sans-serif;
+    font-family: "Avenir", sans-serif !important;
     /* Inherit from parent container */
     display: flex;
     text-align: left;
@@ -81,13 +81,12 @@
     min-width: 280px;
     max-width: 50%;
     margin: 0 auto;
+    font-weight: bold !important;
+
 }
 
 /* Adjust text sizes for responsiveness */
 .video-text {
-    font-size: 5rem;
-    font-weight: bold;
-    font-size: 45px;
     animation: fadeInUp 1s ease-in-out forwards;
     font-size: clamp(2rem, 10vw, 5rem) !important;
 }
@@ -96,7 +95,8 @@
     padding-top: 30px;
     margin-top: 20px;
     animation: fadeInUp 2s ease-in-out forwards;
-    font-size: clamp(1rem, 5vw, 1.2rem) !important;
+    font-size: clamp(1.5rem, 5vw, 1.2rem) !important;
+    max-width: 550px !important;
 }
 
 /* Fade-in Animation */
@@ -126,11 +126,14 @@
 }
 
 .gallery-title {
-    font-size: 2.5rem;
-    font-family: "Avenir", sans-serif;
-    color: #C3AF94;
-    margin-bottom: 30px;
+    color: #C3AF94 !important;
     padding: 5%;
+    /* text-align: left !important; */
+    font-size: 3rem !important;
+    font-family: "Avenir", sans-serif !important;
+    font-weight: bold !important;
+    margin-bottom: 50px !important;
+    letter-spacing: 3px !important;
 }
 
 
@@ -269,9 +272,9 @@
 }
 
 .nuevos-desarrollos-button {
-    background: rgba(251, 247, 234, 0) !important;
+    background: #FBF7EA !important;
     border: 2px solid #FBF7EA !important;
-    color: #FBF7EA !important;
+    color: #13272D !important;
     font-size: 1rem !important;
     font-family: "Avenir Light", sans-serif !important;
     font-weight: bold !important;
@@ -280,14 +283,14 @@
     cursor: pointer !important;
     transition: all 0.3s ease-in-out !important;
     text-transform: none !important;
-    min-width: 30% !important;
+    min-width: 20% !important;
     margin: 5% !important;
 
 }
 
 .nuevos-desarrollos-button:hover {
     border: 2px solid #FBF7EA !important;
-    background: rgba(251, 247, 234, 0.3) !important;
+    background: transparent !important;
     color: #FBF7EA !important;
 }
 
@@ -325,17 +328,17 @@
 
 /* ✅ Subtitle Styling */
 .welcome-subtitle {
-    font-size: 2.5rem;
-    font-family: "Avenir", sans-serif;
-    color: #C3AF94;
-    /* New font color */
-    font-weight: bold;
+    color: #C3AF94 !important;
     margin-bottom: 15px;
+    font-size: 3rem !important;
+    font-family: "Avenir", sans-serif !important;
+    font-weight: bold !important;
+    letter-spacing: 3px !important;
 }
 
 /* ✅ Main Text Styling */
 .welcome-text {
-    font-size: 1.2rem;
+    font-size: 1.1rem !important;
     font-family: "Avenir Light", sans-serif !important;
     color: #C3AF94;
     /* Updated font color */
@@ -383,10 +386,12 @@
 
 /* ✅ Title & Subheader Styling */
 .commitment-title {
-    font-size: 3rem;
-    color: #13272D;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 3rem !important;
+    font-family: "Avenir", sans-serif !important;
+    color: #13272D !important;
+    font-weight: bold !important;
+    margin-bottom: 50px !important;
+    letter-spacing: 3px !important;
 }
 
 .commitment-subheader {
@@ -408,18 +413,16 @@
     flex-direction: row !important;
     flex-wrap: wrap !important;
     /* max-width: 100% !important; */
-    margin: 0 auto;
     justify-content: space-evenly !important;
     align-items: flex-start !important;
     /* Ensures all columns have equal height */
+    margin-top: 80px !important;
 
-    padding: 0 16px;
-    max-width: 100%;
-    margin: 0 auto;
+    padding: 0 150px !important;
+    max-width: 100% !important;
 }
 
 .commitment-container.MuiGrid-root {
-    max-width: 1200px !important;
     width: 100% !important;
 }
 
@@ -465,33 +468,37 @@
 .commitment-subtitle {
     font-size: 1.8rem;
     color: #13272D;
-    font-weight: bold;
-    margin-bottom: 30px !important;
+    margin-bottom: 50px !important;
+    font-family: "Avenir Book", sans-serif !important;
+    font-weight: 550 !important;
 }
 
 .commitment-subtitle-text {
-    font-size: 1.2rem;
+    font-size: 1.1rem !important;
     color: #13272D;
-    font-weight: bold;
+    font-weight: 550 !important;
     margin-bottom: 30px !important;
+    font-family: "Avenir Medium", sans-serif !important;
 }
 
 /* ✅ Description & Paragraph Styling */
 .commitment-description {
-    font-size: 1.1rem;
+    font-size: 1.1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
     color: #13272D;
-    max-width: 85%;
-    margin: 0 auto 10px;
-    line-height: 1.5;
+    max-width: 800px !important;
+    line-height: 1.4;
+    margin: 0 auto !important;
 }
 
 .commitment-paragraph {
-    font-size: 1rem;
+    font-size: 1.1rem !important;
+    font-family: "Avenir Light", sans-serif !important;
     color: #13272D;
-    max-width: 85%;
-    opacity: 0.8;
+    max-width: 85% !important;
     margin-top: 5px;
     line-height: 1.4;
+    margin: 0 auto !important;
 }
 
 /* ✅ Responsive Tweaks */
@@ -509,20 +516,12 @@
         font-size: 1.5rem;
     }
 
-    /* .commitment-container .MuiGrid-container {
-        flex-direction: column !important;
-        flex-wrap: wrap !important;
-        justify-content: center;
-        text-align: center;
-        max-width: 75%;
-    } */
-
     .commitment-column {
         display: flex;
         justify-content: center;
         text-align: center;
         width: 100% !important;
-        padding: 0, 10%;
+        padding: 0, 25%;
 
         width: 100% !important;
         max-width: 100% !important;
@@ -564,6 +563,7 @@
     background-position: center;
     background-repeat: no-repeat;
     /* Increased padding for better spacing */
+    max-height: 600px !important;
 
 }
 
@@ -580,7 +580,7 @@
 
 .hablemos-button {
     background: rgba(251, 247, 234, 0) !important;
-    border: 2px solid #FBF7EA !important;
+    border: 1px solid #FBF7EA !important;
     color: #FBF7EA !important;
     font-size: 1rem !important;
     font-family: "Avenir Light", sans-serif !important;
@@ -595,7 +595,7 @@
 }
 
 .hablemos-button:hover {
-    border: 2px solid #FBF7EA !important;
+    border: 1px solid #FBF7EA !important;
     background: rgba(251, 247, 234, 0.3) !important;
     color: #FBF7EA !important;
 }
@@ -625,14 +625,14 @@
 
 /* ✅ Title */
 .slide-title {
-    font-size: 2.2rem !important;
     margin-top: 15px;
     margin-bottom: 5px;
-    font-family: "Avenir", sans-serif;
     padding: 5%;
-    color: #13272D;
-    font-weight: bold;
-
+    font-size: 3rem !important;
+    font-family: "Avenir", sans-serif !important;
+    color: #13272D !important;
+    font-weight: bold !important;
+    letter-spacing: 3px !important;
 }
 
 /* ✅ Text */

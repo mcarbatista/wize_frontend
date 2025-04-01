@@ -103,7 +103,7 @@ const Home = () => {
                 <Typography variant="h3" className="commitment-title">
                     Nuestro Compromiso
                 </Typography>
-                <Typography variant="h5" className="commitment-subheader">
+                <Typography className="commitment-description">
                     Entender tus necesidades con un enfoque humano, cercano y transparente.
                     Combinamos nuestra experiencia y servicio personalizado para ofrecerte soluciones inmobiliarias
                     que construyan confianza y aseguren tu futuro.
@@ -116,22 +116,19 @@ const Home = () => {
                                 img: iconInverti,
                                 title: "Invertí",
                                 subtitle: "Optimiza sus retornos",
-                                text: "Wize ofrece soluciones de inversión personalizadas para maximizar su rentabilidad.",
-                                paragraph: "Nuestros conocimientos estratégicos y nuestro enfoque personalizado permiten a los inversores alcanzar sus objetivos financieros."
+                                text: "Wize ofrece soluciones de inversión personalizadas para maximizar su rentabilidad. Nuestros conocimientos estratégicos y nuestro enfoque personalizado permiten a los inversores alcanzar sus objetivos financieros."
                             },
                             {
                                 img: iconCompra,
                                 title: "Comprá",
                                 subtitle: "Encontrá tu propiedad ideal",
-                                text: "En Wize, nos dedicamos a ayudar a los compradores a encontrar las propiedades de sus sueños.",
-                                paragraph: "Nuestro enfoque personalizado garantiza que usted descubra la inversión inmobiliaria perfecta."
+                                text: "En Wize, nos dedicamos a ayudar a los compradores a encontrar las propiedades de sus sueños. Nuestro enfoque personalizado garantiza que usted descubra la inversión inmobiliaria perfecta."
                             },
                             {
                                 img: iconVende,
                                 title: "Vendé",
                                 subtitle: "Maximiza el valor de su propiedad",
-                                text: "Cuando se trata de vender su propiedad, Wize brinda orientación experta para ayudarlo a lograr el mejor valor.",
-                                paragraph: "Con nuestro servicio gratuito de HOMESTAGING, estamos comprometidos a hacer que el proceso de venta sea sencillo y eficiente."
+                                text: "Cuando se trata de vender su propiedad, Wize brinda orientación experta para ayudarlo a lograr el mejor valor. Con nuestro servicio gratuito de HOMESTAGING, estamos comprometidos a hacer que el proceso de venta sea sencillo y eficiente."
                             }
                         ].map((item, index) => (
                             <Grid item xs={12} sm={12} md={4} key={index} className="commitment-column">
@@ -143,12 +140,8 @@ const Home = () => {
                                     <Typography className="commitment-subtitle-text">
                                         <strong>{item.subtitle}</strong>
                                     </Typography>
-                                    <Typography className="commitment-description">
-                                        {item.text}
-                                    </Typography>
-                                    <br />
                                     <Typography className="commitment-paragraph">
-                                        {item.paragraph}
+                                        {item.text}
                                     </Typography>
                                 </Box>
                             </Grid>
