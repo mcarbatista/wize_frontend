@@ -1,26 +1,67 @@
+/* Custom Arrow Container */
+.custom-arrow {
+    position: absolute;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 50px;
+    height: 50px;
+    background: #c3af94 !important;
+    /* Solid background without opacity */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    border: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Maintain same background on hover/focus */
+.custom-arrow:hover,
+.custom-arrow:focus {
+    background: #c3af94 !important;
+}
+
+/* Active (click) state: invert background and arrow colors */
+.custom-arrow:active {
+    background: #fff !important;
+}
+
+.custom-arrow:active .arrow-icon {
+    color: #c3af94 !important;
+}
+
+/* Arrow Icon Style */
+.arrow-icon {
+    font-size: 5rem;
+    /* Large arrow */
+    color: #fff;
+    /* White arrow normally */
+    line-height: 1;
+    user-select: none;
+    /* Prevent text selection on click */
+}
+
+/* Existing slider/card styles below... */
 .gallery-card {
     position: relative;
     overflow: hidden;
     border-radius: 5px;
     margin: 0;
-    /* Remove inline margin from here if spacing is added on slide wrapper */
 }
 
-/* Large screens */
 @media (min-width: 1200px) {
     .gallery-card {
         width: 450px;
         height: 550px;
     }
 
-    /* Add extra space between slides on large screens */
     .slick-slide {
         margin: 0 20px !important;
-        /* Adjust value as needed */
     }
 }
 
-/* Medium screens */
 @media (min-width: 768px) and (max-width: 1200px) {
     .gallery-card {
         width: 350px;
@@ -28,7 +69,6 @@
     }
 }
 
-/* Small screens */
 @media (max-width: 767px) {
     .gallery-card {
         width: 350px;
@@ -36,7 +76,6 @@
     }
 }
 
-/* Initially hide overlay content, disable pointer events and lower z-index */
 .card-overlay {
     pointer-events: none !important;
     z-index: 1;
@@ -56,7 +95,6 @@
     transition: opacity 0.5s ease-in-out, background 0.6s ease-in-out;
 }
 
-/* Show overlay & text on hover */
 .gallery-card:hover .card-overlay {
     background: rgba(0, 0, 0, 0.6);
     opacity: 1;
@@ -67,7 +105,6 @@
     transform: translateY(0);
 }
 
-/* Ensure the image covers the entire card area */
 .card-image {
     width: 100%;
     height: 100%;
@@ -99,7 +136,6 @@
     padding: 5%;
 }
 
-/* Optionally remove global slick-slider padding if not needed */
 .slick-slider,
 .slick-list {
     padding: 0 !important;

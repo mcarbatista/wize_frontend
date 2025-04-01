@@ -1,6 +1,7 @@
 .fullscreen-container {
     position: relative;
     background: #fbf7ea;
+    margin: 0 auto;
 }
 
 .fullscreen-slider-wrapper {
