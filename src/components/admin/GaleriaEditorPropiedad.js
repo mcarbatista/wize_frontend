@@ -29,32 +29,33 @@ const ImageCard = styled(Paper)(({ theme }) => ({
     textAlign: "center",
 }));
 
-const GaleriaEditorPropiedad = ({ imagenes = [], onChange, ImagenPrincipal, onMainSelect }) => {
+const GaleriaEditorPropiedad = ({ imagenes = [], onChange, selectedMainImage, onMainSelect }) => {
     const onDrop = async (acceptedFiles) => {
         const uploads = await Promise.all(
-            acceptedFiles.map((file) => {
-                return new Promise((resolve) => {
+            acceptedFiles.map((file) =>
+                new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = () => {
                         resolve({
                             url: reader.result,
                             alt: file.name,
                             description: "",
-                            position: imagenes.length,
+                            position: imagenes.length, // temporary position; will update below
                             file,
                         });
                     };
                     reader.readAsDataURL(file);
-                });
-            })
+                })
+            )
         );
 
+        // Append new images to the existing ones
         const updated = [...imagenes, ...uploads];
         updated.forEach((img, i) => (img.position = i));
         onChange(updated);
     };
 
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: true });
 
     const handleDelete = (index) => {
         const updated = imagenes.filter((_, i) => i !== index);
@@ -68,7 +69,6 @@ const GaleriaEditorPropiedad = ({ imagenes = [], onChange, ImagenPrincipal, onMa
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
-
         const reordered = [...imagenes];
         const [moved] = reordered.splice(result.source.index, 1);
         reordered.splice(result.destination.index, 0, moved);
@@ -119,7 +119,7 @@ const GaleriaEditorPropiedad = ({ imagenes = [], onChange, ImagenPrincipal, onMa
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
                                                     <IconButton onClick={() => handleSetMain(img.url)} size="small">
-                                                        {ImagenPrincipal === img.url ? (
+                                                        {selectedMainImage === img.url ? (
                                                             <StarIcon color="warning" fontSize="small" />
                                                         ) : (
                                                             <StarBorderIcon fontSize="small" />

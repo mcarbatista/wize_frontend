@@ -15,6 +15,7 @@ import {
     FormHelperText
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "../../styles/Admin.css";
@@ -584,39 +585,38 @@ const AdminDesarrollos = () => {
                     {desarrollos.map((dev) => (
                         <Grid item xs={12} md={6} key={dev._id}>
                             <Card className="property-card-edit">
-                                {/* 
-                  Put CardMedia by itself (no children) if component="img"
-                */}
-                                <CardMedia
-                                    component="img"
-                                    image={dev.Imagen}
-                                    alt={dev.Proyecto_Nombre}
-                                    sx={{ height: 200, objectFit: "cover" }}
-                                />
-                                <CardContent>
-                                    <Typography className="property-status">{dev.Estado}</Typography>
-                                    <Typography className="property-price">Desde ${dev.Precio_Con_Formato}</Typography>
-                                    <Typography className="property-title-desarrollos" variant="h6">{dev.Proyecto_Nombre}</Typography>
-                                    <Typography className="property-barrio" variant="h6">{dev.Barrio} </Typography>
-                                    <Typography className="desarrollo-entrega">{dev.Entrega}</Typography>
-                                    <Button onClick={() => handleEdit(dev)} size="small" className="admin-button-edit">
-                                        Editar
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(dev._id)}
-                                        size="small"
-                                        color="error"
-                                        className="admin-button-edit"
-                                    >
-                                        Eliminar
-                                    </Button>
-                                </CardContent>
+                                <Link to={`/desarrollos/${dev._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                    <CardMedia
+                                        component="img"
+                                        image={dev.Imagen}
+                                        alt={dev.Proyecto_Nombre}
+                                        sx={{ height: 200, objectFit: "cover" }}
+                                    />
+                                    <CardContent>
+                                        <Typography className="property-status">{dev.Estado}</Typography>
+                                        <Typography className="property-price">Desde ${dev.Precio_Con_Formato}</Typography>
+                                        <Typography className="property-title-desarrollos" variant="h6" style={{ height: "90px" }}>{dev.Proyecto_Nombre}</Typography>
+                                        <Typography className="property-barrio" variant="h6">{dev.Barrio} </Typography>
+                                        <Typography className="desarrollo-entrega">{dev.Entrega}</Typography>
+                                        <Button onClick={() => handleEdit(dev)} size="small" className="admin-button-edit">
+                                            Editar
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleDelete(dev._id)}
+                                            size="small"
+                                            color="error"
+                                            className="admin-button-edit"
+                                        >
+                                            Eliminar
+                                        </Button>
+                                    </CardContent>
+                                </Link>
                             </Card>
                         </Grid>
                     ))}
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 };
 

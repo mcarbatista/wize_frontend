@@ -12,8 +12,9 @@ import {
     CardContent,
     InputLabel,
     FormControl,
-    FormHelperText
+    FormHelperText,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -22,9 +23,6 @@ import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropieda
 import "../../styles/Admin.css";
 import BASE_URL from "../../api/config";
 
-// -----------------------
-// PropertyForm Component
-// -----------------------
 const requiredFields = [
     "Titulo",
     "Precio",
@@ -32,7 +30,7 @@ const requiredFields = [
     "Banos",
     "Tamano_m2",
     "DesarrolloId",
-    "Owner"
+    "Owner",
 ];
 
 const PropertyForm = ({
@@ -44,47 +42,31 @@ const PropertyForm = ({
     handleSubmit,
     handleImageChange,
     errors = {},
-    successMessage
+    successMessage,
 }) => {
+    // We keep a filtered gallery (if needed for display) but also
+    // auto-prefill the property gallery from the selected development if empty.
     const [filteredGaleria, setFilteredGaleria] = useState([]);
 
+    // Update filteredGaleria to the development's gallery (for display, if desired)
     useEffect(() => {
         const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
         if (selected) {
             setFilteredGaleria(selected.Galeria || []);
-
-            // Update several fields from the selected desarrollo
-            [
-                "Resumen",
-                "Descripcion",
-                "Ciudad",
-                "Barrio",
-                "Ubicacion",
-                "Estado"
-            ].forEach((field) => {
-                handleChange({
-                    target: {
-                        name: field,
-                        value: selected[field] || ""
-                    }
-                });
-            });
-
-            // Prefill the Owner field based on desarrollo if not already set.
-            if (!form.Owner && selected.Owner) {
-                handleChange({
-                    target: { name: "Owner", value: selected.Owner }
-                });
-            }
-
-            // Also prefill Galeria (if needed)
-            handleChange({
-                target: { name: "Galeria", value: selected.Galeria || [] }
-            });
         } else {
             setFilteredGaleria([]);
         }
-    }, [form.DesarrolloId, desarrollos, handleChange, form.Owner]);
+    }, [form.DesarrolloId, desarrollos]);
+
+    // Prefill the property gallery with the development's gallery if it is empty.
+    useEffect(() => {
+        const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
+        if (selected && (!form.Galeria || form.Galeria.length === 0)) {
+            handleChange({
+                target: { name: "Galeria", value: selected.Galeria || [] },
+            });
+        }
+    }, [form.DesarrolloId, desarrollos]); // Note: This runs only when DesarrolloId changes.
 
     // List of fields (excluding Owner, Email and Celular)
     const fields = [
@@ -96,14 +78,13 @@ const PropertyForm = ({
         "Tipo",
         "Metraje",
         "Piso",
-        "Unidad"
+        "Unidad",
     ];
 
     // Helper function to format labels (adding an asterisk for required fields)
-    const getLabel = (field) => {
-        const label = field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-        return requiredFields.includes(field) ? `${label} *` : label;
-    };
+    const getLabel = (field) =>
+        field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()) +
+        (requiredFields.includes(field) ? " *" : "");
 
     return (
         <Box
@@ -119,21 +100,25 @@ const PropertyForm = ({
                 <Grid item xs={12}>
                     <FormControl fullWidth error={!!errors.DesarrolloId}>
                         <InputLabel>
-                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
+                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""
+                                }`}
                         </InputLabel>
                         <Select
                             name="DesarrolloId"
                             value={form.DesarrolloId}
                             onChange={handleChange}
-                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
+                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""
+                                }`}
                         >
-                            {(desarrollos || []).map((prop) => (
-                                <MenuItem key={prop._id} value={prop._id}>
-                                    {prop.Titulo}
+                            {(desarrollos || []).map((dev) => (
+                                <MenuItem key={dev._id} value={dev._id}>
+                                    {dev.Proyecto_Nombre}
                                 </MenuItem>
                             ))}
                         </Select>
-                        {errors.DesarrolloId && <FormHelperText>{errors.DesarrolloId}</FormHelperText>}
+                        {errors.DesarrolloId && (
+                            <FormHelperText>{errors.DesarrolloId}</FormHelperText>
+                        )}
                     </FormControl>
                 </Grid>
 
@@ -155,7 +140,9 @@ const PropertyForm = ({
                 {/* Owner Dropdown */}
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={!!errors.Owner}>
-                        <InputLabel>{`Owner${requiredFields.includes("Owner") ? " *" : ""}`}</InputLabel>
+                        <InputLabel>
+                            {`Owner${requiredFields.includes("Owner") ? " *" : ""}`}
+                        </InputLabel>
                         <Select
                             name="Owner"
                             value={form.Owner || ""}
@@ -164,7 +151,7 @@ const PropertyForm = ({
                         >
                             {usuarios && usuarios.length > 0 ? (
                                 usuarios.map((user) => (
-                                    <MenuItem key={user._id} value={user.nombre}>
+                                    <MenuItem key={user._id} value={user._id}>
                                         {user.nombre}
                                     </MenuItem>
                                 ))
@@ -186,10 +173,10 @@ const PropertyForm = ({
                     <GaleriaEditorPropiedad
                         imagenes={form.Galeria || []}
                         onChange={handleImageChange}
-                        imagenPrincipal={form.Imagen}
                         onMainSelect={(url) =>
                             handleChange({ target: { name: "Imagen", value: url } })
                         }
+                        selectedMainImage={form.Imagen}
                     />
                 </Grid>
 
@@ -200,8 +187,9 @@ const PropertyForm = ({
                     </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Plano || []}
-                        onChange={(imgs) => handleChange({ target: { name: "Plano", value: imgs } })}
-                        imagenPrincipal={null}
+                        onChange={(imgs) =>
+                            handleChange({ target: { name: "Plano", value: imgs } })
+                        }
                         onMainSelect={() => { }}
                     />
                 </Grid>
@@ -224,9 +212,6 @@ const PropertyForm = ({
     );
 };
 
-// ----------------------------
-// AdminPropiedades Component
-// ----------------------------
 const AdminPropiedades = () => {
     document.title = "Wize | Admin Propiedades";
     const navigate = useNavigate();
@@ -256,12 +241,11 @@ const AdminPropiedades = () => {
         Owner: "",
         Proyecto_Nombre: "",
         Imagen: "",
-        ImagenPrincipal: "",
         DesarrolloId: "",
         Galeria: [],
         Plano: [],
         Email: "",
-        Celular: ""
+        Celular: "",
     });
     const [editId, setEditId] = useState(null);
     const [errors, setErrors] = useState({});
@@ -269,7 +253,6 @@ const AdminPropiedades = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
 
-    // Check for token on mount
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (!storedToken) {
@@ -278,7 +261,7 @@ const AdminPropiedades = () => {
             setToken(storedToken);
             axios
                 .get(`${BASE_URL}/api/admin/propiedades`, {
-                    headers: { Authorization: `Bearer ${storedToken}` }
+                    headers: { Authorization: `Bearer ${storedToken}` },
                 })
                 .catch((err) => {
                     console.error("Authorization error:", err);
@@ -287,7 +270,6 @@ const AdminPropiedades = () => {
         }
     }, [navigate]);
 
-    // Fetch data after token is set
     useEffect(() => {
         if (token) {
             fetchPropiedades();
@@ -298,8 +280,16 @@ const AdminPropiedades = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
-        requiredFields.forEach((field) => {
+        const reqFields = [
+            "Titulo",
+            "Precio",
+            "Dormitorios",
+            "Banos",
+            "Tamano_m2",
+            "DesarrolloId",
+            "Owner",
+        ];
+        reqFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
         });
         setErrors(newErrors);
@@ -309,9 +299,7 @@ const AdminPropiedades = () => {
     const fetchPropiedades = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/propiedades`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setPropiedades(res.data);
         } catch (err) {
@@ -322,9 +310,7 @@ const AdminPropiedades = () => {
     const fetchDesarrollos = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/desarrollos`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setDesarrollos(res.data);
         } catch (err) {
@@ -335,7 +321,7 @@ const AdminPropiedades = () => {
     const fetchUsuarios = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/auth/usuarios`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setUsuarios(res.data);
         } catch (err) {
@@ -345,7 +331,6 @@ const AdminPropiedades = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // If Owner changes, update Email and Celular based on the selected user.
         if (name === "Owner") {
             const selectedOwner = usuarios.find((user) => user.nombre === value);
             if (selectedOwner) {
@@ -353,7 +338,7 @@ const AdminPropiedades = () => {
                     ...prev,
                     Owner: value,
                     Email: selectedOwner.email,
-                    Celular: selectedOwner.celular
+                    Celular: selectedOwner.celular,
                 }));
             } else {
                 setForm((prev) => ({ ...prev, Owner: value }));
@@ -391,20 +376,20 @@ const AdminPropiedades = () => {
             const galeriaRes = await axios.post(`${BASE_URL}/api/upload`, formDataImgs, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             const imagenesFinal = [
                 ...form.Galeria.filter((img) => !img.file),
-                ...(galeriaRes.data.galeria || [])
+                ...(galeriaRes.data.galeria || []),
             ].map((img, index) => ({
                 ...img,
-                position: index
+                position: index,
             }));
 
-            // Pick ImagenPrincipal if not set.
-            const ImagenPrincipal = form.ImagenPrincipal || imagenesFinal[0]?.url;
+            // Determine the main image – use form.Imagen if set, else default to the first image
+            const mainImage = form.Imagen || imagenesFinal[0]?.url;
 
             // Upload Plano images
             const planoFinal = [];
@@ -418,26 +403,25 @@ const AdminPropiedades = () => {
                     const planoRes = await axios.post(`${BASE_URL}/api/upload`, fd, {
                         headers: {
                             "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${token}`
-                        }
+                            Authorization: `Bearer ${token}`,
+                        },
                     });
 
                     const uploaded = planoRes.data.galeria?.[0];
                     if (uploaded) {
                         planoFinal.push({
                             ...uploaded,
-                            position: i
+                            position: i,
                         });
                     }
                 } else {
                     planoFinal.push({
                         ...img,
-                        position: i
+                        position: i,
                     });
                 }
             }
 
-            // Build payload.
             const payload = {
                 Titulo: form.Titulo,
                 Descripcion: form.Descripcion,
@@ -455,14 +439,15 @@ const AdminPropiedades = () => {
                 Forma_de_Pago: form.Forma_de_Pago,
                 Gastos_Ocupacion: form.Gastos_Ocupacion,
                 Owner: form.Owner,
+                Email: form.Email,
+                Celular: form.Celular,
                 Proyecto_Nombre: form.Proyecto_Nombre,
-                Imagen: ImagenPrincipal,
+                Imagen: mainImage,
                 DesarrolloId: form.DesarrolloId,
                 Galeria: imagenesFinal,
-                Plano: planoFinal
+                Plano: planoFinal,
             };
 
-            // If an Owner is selected, verify Email and Celular are set.
             if (form.Owner) {
                 if (!payload.Email || !payload.Celular) {
                     const selectedOwner = usuarios.find((user) => user.nombre === form.Owner);
@@ -475,16 +460,12 @@ const AdminPropiedades = () => {
 
             if (editId) {
                 await axios.put(`${BASE_URL}/api/propiedades/${editId}`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 setSuccessMessage("Propiedad actualizada con éxito.");
             } else {
                 await axios.post(`${BASE_URL}/api/propiedades`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 setSuccessMessage("Propiedad creada con éxito.");
             }
@@ -524,60 +505,20 @@ const AdminPropiedades = () => {
             Owner: "",
             Proyecto_Nombre: "",
             Imagen: "",
-            ImagenPrincipal: "",
             DesarrolloId: "",
             Galeria: [],
             Plano: [],
             Email: "",
-            Celular: ""
+            Celular: "",
         });
         setErrors({});
         setEditId(null);
     };
 
-    // The handleEdit function is no longer used to set local state.
-    // Instead, we'll redirect to the edit form route using navigate.
-    // Remove or keep this function if needed.
-    // const handleEdit = (prop) => {
-    //     setEditId(prop._id);
-    //     setForm({
-    //         Titulo: prop.Titulo || "",
-    //         Descripcion: prop.Descripcion || "",
-    //         Descripcion_Expandir: prop.Descripcion_Expandir || "",
-    //         Precio: prop.Precio || "",
-    //         Estado: prop.Estado || "",
-    //         Resumen: prop.Resumen || "",
-    //         Ciudad: prop.Ciudad || "",
-    //         Barrio: prop.Barrio || "",
-    //         Ubicacion: prop.Ubicacion || "",
-    //         Tipo: prop.Tipo || "",
-    //         Entrega: prop.Entrega || "",
-    //         Dormitorios: prop.Dormitorios || "",
-    //         Banos: prop.Banos || "",
-    //         Tamano_m2: prop.Tamano_m2 || "",
-    //         Metraje: prop.Metraje || "",
-    //         Piso: prop.Piso || "",
-    //         Unidad: prop.Unidad || "",
-    //         Forma_de_Pago: prop.Forma_de_Pago || "",
-    //         Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
-    //         Owner: prop.Owner || "",
-    //         Email: prop.Email || "",
-    //         Celular: prop.Celular || "",
-    //         Proyecto_Nombre: prop.Proyecto_Nombre || "",
-    //         Imagen: prop.Imagen || "",
-    //         ImagenPrincipal: prop.Imagen || "",
-    //         DesarrolloId: prop.DesarrolloId || "",
-    //         Galeria: prop.Galeria || [],
-    //         Plano: prop.Plano || []
-    //     });
-    // };
-
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/api/propiedades/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
             fetchPropiedades();
         } catch (err) {
@@ -622,55 +563,55 @@ const AdminPropiedades = () => {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    gap: 3
+                    gap: 3,
                 }}
             >
                 {propiedades.map((prop) => (
                     <Grid item xs={12} md={6} key={prop._id}>
                         <Card className="property-card-edit">
-                            <CardMedia
-                                component="img"
-                                image={prop.Imagen}
-                                alt={prop.Proyecto_Nombre}
-                                sx={{ height: 200, objectFit: "cover" }}
-                            />
-                            <CardContent>
-                                <Typography className="property-status">
-                                    {prop.Estado}
-                                </Typography>
-                                <Typography className="property-price">
-                                    Desde ${prop.Precio_Con_Formato}
-                                </Typography>
-                                <Typography
-                                    className="property-title-desarrollos"
-                                    variant="h6"
-                                >
-                                    {prop.Titulo}
-                                </Typography>
-                                <Typography className="property-barrio" variant="h6">
-                                    {prop.Barrio}
-                                </Typography>
-                                <Typography className="desarrollo-entrega">
-                                    {prop.Entrega}
-                                </Typography>
-                                <Button
-                                    onClick={() =>
-                                        navigate(`/admin/propiedades/edit/${prop._id}`)
-                                    }
-                                    size="small"
-                                    className="admin-button-edit"
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    onClick={() => handleDelete(prop._id)}
-                                    size="small"
-                                    color="error"
-                                    className="admin-button-edit"
-                                >
-                                    Eliminar
-                                </Button>
-                            </CardContent>
+                            <Link to={`/propiedades/${prop._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                <CardMedia
+                                    component="img"
+                                    image={prop.Imagen}
+                                    alt={prop.Proyecto_Nombre}
+                                    sx={{ height: 200, objectFit: "cover" }}
+                                />
+                                <CardContent>
+                                    <Typography className="property-status">
+                                        {prop.Estado}
+                                    </Typography>
+                                    <Typography className="property-price">
+                                        ${prop.Precio_Con_Formato}
+                                    </Typography>
+                                    <Typography
+                                        className="property-title-desarrollos"
+                                        variant="h6" style={{ height: "90px" }}
+                                    >
+                                        {prop.Titulo}
+                                    </Typography>
+                                    <Typography className="property-barrio" variant="h6">
+                                        {prop.Barrio}
+                                    </Typography>
+                                    <Typography className="desarrollo-entrega">
+                                        {prop.Entrega}
+                                    </Typography>
+                                    <Button
+                                        onClick={() => navigate(`/admin/propiedades/edit/${prop._id}`)}
+                                        size="small"
+                                        className="admin-button-edit"
+                                    >
+                                        Editar
+                                    </Button>
+                                    <Button
+                                        onClick={() => handleDelete(prop._id)}
+                                        size="small"
+                                        color="error"
+                                        className="admin-button-edit"
+                                    >
+                                        Eliminar
+                                    </Button>
+                                </CardContent>
+                            </Link>
                         </Card>
                     </Grid>
                 ))}

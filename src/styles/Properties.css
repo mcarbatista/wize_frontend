@@ -285,6 +285,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     width: 300px;
+    height: 550px;
 }
 
 .property-card:hover,
