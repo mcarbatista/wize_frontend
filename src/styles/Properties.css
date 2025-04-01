@@ -20,10 +20,11 @@ body {
 .title-text {
     font-size: clamp(2rem, 15vw, 6rem) !important;
     margin-top: 150px !important;
-    font-family: "Avenir Medium", sans-serif;
+    font-family: "Avenir Light", sans-serif !important;
     padding: 5%;
     color: #13272D;
-    word-spacing: 10dvh;
+    font-weight: 600 !important;
+    letter-spacing: 3px !important;
     text-align: center;
 }
 

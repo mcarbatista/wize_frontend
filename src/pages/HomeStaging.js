@@ -22,23 +22,14 @@ const HomeStaging = () => {
                 <Typography className="nosotros-title-text">Home Staging</Typography>
             </Box>
 
-            <Box className="homestaging-container">
-                <Box container className="homestaging-section">
-                    <Box item xs={12}>
-                        <Container sx={{ py: 8 }} data-aos="fade-left">
-                            <Typography className="homestaging-title" gutterBottom>
-                                Qué es el Home Staging
-                            </Typography>
-                            <Typography variant="body1" className="homestaging-description">
-                                {/* Es una técnica de marketing inmobiliario que busca mejorar la imagen de una propiedad para acelerar su venta o alquiler y obtener mejores condiciones económicas. */}
-                                El home staging te ayuda a vender tu propiedad al mejor precio en un período de tiempo más corto. Los profesionales de WIZE te ayudarán a presentar tu propiedad de manera que se destaque su máximo potencial.
-                            </Typography>
-                            <Typography variant="body1" className="homestaging-description">
-                                {/* Se aplican mejoras no estructurales con un enfoque neutro y acogedor que permite al futuro comprador imaginarse viviendo allí. */}
-                                Nuestro amplio inventario de muebles y accesorios para el hogar está disponible para entrega en Montevideo. Permítenos ayudarte a causar una excelente impresión en los compradores potenciales.
-                            </Typography>
-                        </Container>
-                    </Box>
+            <Box className="homestaging-section">
+                <Box item xs={12}>
+                    <Container sx={{ py: 8 }} data-aos="fade-left">
+                        <Typography variant="body1" className="homestaging-description">
+                            {/* Es una técnica de marketing inmobiliario que busca mejorar la imagen de una propiedad para acelerar su venta o alquiler y obtener mejores condiciones económicas. */}
+                            El home staging te ayuda a vender tu propiedad al mejor precio en un período de tiempo más corto. Los profesionales de WIZE te ayudarán a presentar tu propiedad de manera que se destaque su máximo potencial. Nuestro amplio inventario de muebles y accesorios para el hogar está disponible para entrega en Montevideo. Permítenos ayudarte a causar una excelente impresión en los compradores potenciales.
+                        </Typography>
+                    </Container>
                 </Box>
             </Box>
             <Box>

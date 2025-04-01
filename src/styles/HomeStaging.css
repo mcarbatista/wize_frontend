@@ -1,43 +1,16 @@
-/* 🔹 General Styling */
-.homestaging-container {
-    width: 100% !important;
-    min-height: 70dvh !important;
-    /* Change height to min-height for better responsiveness */
-    background-color: #13272D;
-
-    /* ✅ Centering Fix */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 40px 20px !important;
-    box-sizing: border-box;
-}
-
 /* 🔹 Section Wrapper */
 .homestaging-section {
     width: 90% !important;
-    max-width: 850px !important;
+    max-width: 1050px !important;
     text-align: center !important;
     justify-content: center !important;
     padding: 7%, 0;
-
     /* ✅ Full Centering Fix */
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-}
-
-/* 🔹 Titles & Subtitle */
-.homestaging-title {
-    font-size: 44px !important;
-    font-family: "Avenir", sans-serif !important;
-    color: #C3AF94 !important;
-    margin-bottom: 2% !important;
-    text-align: center !important;
-    animation: fadeInUp 0.1s ease-in-out forwards;
-
+    margin: 0 auto !important
 }
 
 /* Title Section */
@@ -48,57 +21,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 }
 
 .homestaging-title-text {
     font-size: clamp(2rem, 15vw, 6rem) !important;
     margin-top: 150px !important;
-    font-family: "Avenir Medium", sans-serif;
+    font-family: "Avenir Light", sans-serif !important;
     padding: 5%;
     color: #13272D;
-    word-spacing: 10dvh;
+    font-weight: 600 !important;
+    letter-spacing: 3px !important;
     text-align: center;
-}
-
-.homestaging-subtitle {
-    flex: 1;
-    padding: 0 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 220px;
-    /* Altura mínima para alinear verticalmente */
-    position: relative;
 }
 
 /* 🔹 Text Description */
 .homestaging-description {
-    font-size: 22px !important;
-    font-family: "Avenir Light", sans-serif !important;
+    font-family: "Avenir light", sans-serif !important;
     color: #C3AF94 !important;
+    font-weight: lighter !important;
     text-align: center !important;
     /* ✅ Center the text */
-    margin: 0 auto 20px auto !important;
-    max-width: 750px !important;
+    margin: 0 auto !important;
     animation: fadeInUp .3s ease-in-out forwards;
-}
-
-.testimonios-section {
-    width: 100% !important;
-    min-height: 70dvh !important;
-    /* Change height to min-height for better responsiveness */
-    background-color: #13272D;
-
-    /* ✅ Centering Fix */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 40px 20px !important;
-    box-sizing: border-box;
-
-    height: 70dvh;
+    font-size: 1.25rem !important;
+    line-height: 2.5rem !important;
+    margin: 0 auto;
 }
 
 .homestaging-pics-section {
@@ -110,7 +58,6 @@
     flex-direction: column !important;
     align-items: center;
 }
-
 
 /* ✅ Title */
 .homestaging-pics-title {
@@ -150,9 +97,6 @@
 }
 
 /* ✅ Responsive Fixes */
-
-
-
 
 @media (max-width: 768px) {
     .homestaging-title {

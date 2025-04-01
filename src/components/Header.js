@@ -115,8 +115,8 @@ const Header = () => {
                                 component={Link}
                                 to={`/${item.toLowerCase()}`}
                                 sx={{
-                                    fontFamily: "Avenir, sans-serif",
-                                    fontSize: "14px",
+                                    fontFamily: "Avenir Medium, sans-serif",
+                                    fontSize: "15px",
                                     fontWeight: "bold",
                                     color: "#C3AF94",
                                     textTransform: "none",
