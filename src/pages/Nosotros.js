@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/Nosotros.css";
-import HomeSliderNosotros from "../components/HomeSliderNosotros"; // ✅ Import the slider
+import Testimonios_Nosotros from "../components/Slider_TestimoniosNosotros"; // ✅ Import the slider
 
 const Nosotros = () => {
     const [showText, setShowText] = useState(false);
@@ -80,7 +80,7 @@ const Nosotros = () => {
 
             <Box>
                 {/* ✅ TESTIMONIOS Section */}
-                <HomeSliderNosotros />
+                <Testimonios_Nosotros />
             </Box>
         </Box>
     );

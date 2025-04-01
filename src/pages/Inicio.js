@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Typography, Button, Grid, Card, CardMedia, CardContent, Container } from "@mui/material";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Box, Typography, Button, Grid, Container } from "@mui/material";
 import "../styles/Home.css";
-import HomeSlider from "../components/HomeSlider"; // ✅ Import the slider
 import videoSrc from "../assets/videoHome.mp4";
-import gallery_1 from "../assets/gallery_1.png";
-import gallery_2 from "../assets/gallery_2.png";
-import gallery_3 from "../assets/gallery_3.png";
-import gallery_4 from "../assets/gallery_4.png";
-import gallery_5 from "../assets/gallery_5.png";
 import iconInverti from "../assets/icono_inverti.svg";
 import iconVende from "../assets/icono_vende.svg";
 import iconCompra from "../assets/icono_compra.svg";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import GallerySlider from "../components/GalerySlider";
+import DevelopmentsHomeSlider from "../components/Slider_DevelopmentsHome";
+import Testimonios from "../components/Slider_TestimoniosHome"; // ✅ Import the slider
 
 const Home = () => {
     const [showText, setShowText] = useState(false);
@@ -25,35 +16,6 @@ const Home = () => {
         setTimeout(() => setShowText(true), 2000); // Show text after 2 seconds
         window.scrollTo(0, 0);
     }, []);
-
-    // Auto-scroll settings for the gallery (used by other slider if needed)
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 3000,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1,
-        arrows: true, // ✅ Ensure arrows are enabled
-        fade: false, // ✅ Disable default fade to apply custom effect
-        nextArrow: (
-            <div className="custom-arrow custom-next">
-                <ChevronRight />
-            </div>
-        ),
-        prevArrow: (
-            <div className="custom-arrow custom-prev">
-                <ChevronLeft />
-            </div>
-        ),
-        responsive: [
-            { breakpoint: 1024, settings: { slidesToShow: 2 } },
-            { breakpoint: 600, settings: { slidesToShow: 1 } },
-        ],
-    };
-
-    const galleryItems = [gallery_1, gallery_2, gallery_3, gallery_4, gallery_5];
 
     return (
         <div>
@@ -78,7 +40,7 @@ const Home = () => {
             <Box className="gallery-section">
                 <Typography variant="h3" className="gallery-title">Nuevos Desarrollos</Typography>
                 {/* Use the refactored GallerySlider here */}
-                <GallerySlider galleryItems={galleryItems} />
+                <DevelopmentsHomeSlider />
                 <Button component="a" href="/Desarrollos" variant="outlined" className="nuevos-desarrollos-button">
                     Ver todos los desarrollos
                 </Button>
@@ -159,7 +121,7 @@ const Home = () => {
             </Box>
 
             {/* ✅ TESTIMONIOS Section */}
-            <HomeSlider />
+            <Testimonios />
         </div>
     );
 };

@@ -8,7 +8,7 @@ import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import BASE_URL from "../api/config";
-import ImageGallery from "../components/ImageGallery";
+import ImageGallery from "../components/ImageGallery_Details";
 
 const PropertyDetails = () => {
     const { id } = useParams();

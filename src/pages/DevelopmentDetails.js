@@ -13,7 +13,7 @@ import DescriptionWithExpand from "../components/DescriptionWithExpand";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import BASE_URL from "../api/config";
-import ImageGallery from "../components/ImageGallery"; // Make sure arrows are on the big image
+import ImageGallery from "../components/ImageGallery_Details"; // Make sure arrows are on the big image
 import RelatedProperties from "../components/RelatedProperties";
 
 const DevelopmentDetails = () => {

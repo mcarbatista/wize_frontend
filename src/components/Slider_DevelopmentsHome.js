@@ -3,10 +3,12 @@ import axios from "axios";
 import Slider from "react-slick";
 import { Card, CardMedia, Box, Typography } from "@mui/material";
 import "../styles/GalerySlider.css";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import { ChevronLeft, ChevronRight, DoNotStepTwoTone } from "@mui/icons-material";
 import BASE_URL from "../api/config";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-const GallerySlider = () => {
+const DevelopmentsHomeSlider = () => {
     const [desarrollos, setDesarrollos] = useState([]);
 
     useEffect(() => {
@@ -30,24 +32,15 @@ const GallerySlider = () => {
     };
 
     const settings = {
+        infinite: true,
+        dots: false,
+        speed: 5000,
         slidesToShow: 3,
         slidesToScroll: 3,
         centerMode: true,
-
-        infinite: true,
         autoplay: true,
-        autoplaySpeed: 500,
-        speed: 2000,
-        nextArrow: (
-            <div className="custom-arrow custom-next">
-                <ChevronRight />
-            </div>
-        ),
-        prevArrow: (
-            <div className="custom-arrow custom-prev">
-                <ChevronLeft />
-            </div>
-        ),
+        autoplaySpeed: 100,
+        arrows: true, // ✅ Ensure arrows are enabled
         responsive: [
             {
                 breakpoint: 1200,
@@ -100,4 +93,4 @@ const GallerySlider = () => {
     );
 };
 
-export default GallerySlider;
+export default DevelopmentsHomeSlider;

@@ -16,10 +16,6 @@ const testimonios = [
     {
         text: "Poner mi propiedad en manos de WIZE fue la mejor decisión. Su estrategia de marketing y su red de contactos hicieron que vendiera rápido y al mejor precio. Además, el trato humano y la comunicación constante marcaron la diferencia.",
         name: "Laura Fernández, Parque miramar, MVD",
-    },
-    {
-        text: "Poner mi propiedad en manos de WIZE fue la mejor decisión. Su estrategia de marketing y su red de contactos hicieron que vendiera rápido y al mejor precio. Además, el trato humano y la comunicación constante marcaron la diferencia.",
-        name: "Laura Fernández, Parque miramar, MVD",
     }
 ];
 
@@ -57,7 +53,7 @@ const PrevArrow = ({ onClick }) => (
     </IconButton>
 );
 
-const Testimonios = () => {
+const Testimonios_Nosotros = () => {
     const settings = {
         dots: true, // ✅ Enable dots
         infinite: true,
@@ -91,4 +87,4 @@ const Testimonios = () => {
     );
 };
 
-export default Testimonios;
+export default Testimonios_Nosotros;
