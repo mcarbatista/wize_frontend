@@ -140,6 +140,7 @@
     box-shadow: none !important;
     margin: 5px !important;
     margin-top: 10px !important;
+    z-index: 2 !important;
 }
 
 /* ✅ Ensure button stays the same on focus */

@@ -12,10 +12,13 @@ import {
     Card,
     CardMedia,
     CardContent,
-    FormHelperText
+    FormHelperText,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "../../styles/Admin.css";
@@ -40,7 +43,7 @@ const requiredFields = [
     "Forma_de_Pago",
     "Gastos_Ocupacion",
     "Tipo",
-    "Owner"
+    "Owner",
 ];
 
 const estadoOptions = ["Pre-Venta", "En Construcción", "A Estrenar"];
@@ -67,7 +70,7 @@ const AdminDesarrollos = () => {
         Gastos_Ocupacion: "",
         Tipo: "",
         Galeria: [],
-        Owner: ""
+        Owner: "",
     });
     const [errors, setErrors] = useState({});
     const [editId, setEditId] = useState(null);
@@ -75,11 +78,15 @@ const AdminDesarrollos = () => {
     const [resetKey, setResetKey] = useState(Date.now());
     const [isSaving, setIsSaving] = useState(false);
 
+    // New state for deletion confirmation
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [devToDelete, setDevToDelete] = useState(null);
+
     // Helper to append an asterisk for required fields.
     const getLabel = (field, defaultLabel) =>
         requiredFields.includes(field) ? `${defaultLabel} *` : defaultLabel;
 
-    // Authorization check: decode token and validate expiry.
+    // Authorization check
     useEffect(() => {
         document.title = "Wize | Admin Desarrollos";
         const token = localStorage.getItem("token");
@@ -96,7 +103,7 @@ const AdminDesarrollos = () => {
             }
             axios
                 .get(`${BASE_URL}/api/admin/propiedades`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` },
                 })
                 .catch((err) => {
                     if (err.response && [401, 403].includes(err.response.status)) {
@@ -123,8 +130,8 @@ const AdminDesarrollos = () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/desarrollos`, {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             setDesarrollos(res.data);
         } catch (error) {
@@ -137,7 +144,7 @@ const AdminDesarrollos = () => {
         const token = localStorage.getItem("token");
         axios
             .get(`${BASE_URL}/api/auth/usuarios`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => setUsuarios(res.data))
             .catch((err) => console.error("Error fetching usuarios:", err));
@@ -192,8 +199,8 @@ const AdminDesarrollos = () => {
             const uploadRes = await axios.post(`${BASE_URL}/api/upload`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             if (!uploadRes.data.success || !uploadRes.data.galeria) {
@@ -203,7 +210,7 @@ const AdminDesarrollos = () => {
 
             const galeriaFinal = uploadRes.data.galeria.map((img, index) => ({
                 ...img,
-                position: index
+                position: index,
             }));
 
             const mainIndex = form.Galeria.findIndex((img) => img.isMain);
@@ -227,14 +234,11 @@ const AdminDesarrollos = () => {
                 Gastos_Ocupacion: form.Gastos_Ocupacion,
                 Tipo: form.Tipo,
                 Imagen: imagenPrincipal,
-                Galeria: galeriaFinal
+                Galeria: galeriaFinal,
             };
 
-            // If an Owner is selected, look up the full owner data from usuarios.
             if (form.Owner) {
-                const selectedOwner = usuarios.find(
-                    (user) => user.nombre === form.Owner
-                );
+                const selectedOwner = usuarios.find((user) => user.nombre === form.Owner);
                 if (selectedOwner) {
                     payload.Owner = selectedOwner.nombre;
                     payload.Email = selectedOwner.email;
@@ -247,15 +251,15 @@ const AdminDesarrollos = () => {
             if (editId) {
                 await axios.put(`${BASE_URL}/api/desarrollos/${editId}`, payload, {
                     headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 setSuccessMessage("Desarrollo actualizado con éxito.");
             } else {
                 await axios.post(`${BASE_URL}/api/desarrollos`, payload, {
                     headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 setSuccessMessage("Desarrollo creado con éxito.");
             }
@@ -280,8 +284,8 @@ const AdminDesarrollos = () => {
             ...prev,
             Galeria: prev.Galeria.map((img) => ({
                 ...img,
-                isMain: img.preview === url || img.url === url
-            }))
+                isMain: img.preview === url || img.url === url,
+            })),
         }));
     };
 
@@ -290,14 +294,25 @@ const AdminDesarrollos = () => {
         navigate(`/admin/desarrollos/edit/${dev._id}`);
     };
 
+    // Updated deletion functionality with confirmation dialog.
+    const confirmDelete = (id) => {
+        const selectedDev = desarrollos.find((dev) => dev._id === id);
+        setDevToDelete(selectedDev);
+        setOpenConfirm(true);
+    };
+
     const handleDelete = async (id) => {
         const token = localStorage.getItem("token");
-        await axios.delete(`${BASE_URL}/api/desarrollos/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        fetchDesarrollos();
+        try {
+            await axios.delete(`${BASE_URL}/api/desarrollos/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            fetchDesarrollos();
+        } catch (err) {
+            console.error("Error deleting development:", err);
+        }
     };
 
     const resetForm = () => {
@@ -318,7 +333,7 @@ const AdminDesarrollos = () => {
             Gastos_Ocupacion: "",
             Tipo: "",
             Galeria: [],
-            Owner: ""
+            Owner: "",
         });
         setErrors({});
         setEditId(null);
@@ -417,9 +432,7 @@ const AdminDesarrollos = () => {
                                 name="Descripcion_Expandir"
                                 value={form.Descripcion_Expandir}
                                 onChange={(val) =>
-                                    handleChange({
-                                        target: { name: "Descripcion_Expandir", value: val }
-                                    })
+                                    handleChange({ target: { name: "Descripcion_Expandir", value: val } })
                                 }
                                 error={errors.Descripcion_Expandir}
                                 helperText={errors.Descripcion_Expandir}
@@ -579,13 +592,25 @@ const AdminDesarrollos = () => {
                 <Typography variant="h5" mb={2}>
                     Desarrollos Existentes
                 </Typography>
-                <Box container spacing={2} sx={{
-                    display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 3
-                }}>
+                <Box
+                    container
+                    spacing={2}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        gap: 3,
+                    }}
+                >
                     {desarrollos.map((dev) => (
                         <Grid item xs={12} md={6} key={dev._id}>
                             <Card className="property-card-edit">
-                                <Link to={`/desarrollos/${dev._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                <Link
+                                    to={`/desarrollos/${dev._id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ textDecoration: "none", color: "inherit" }}
+                                >
                                     <CardMedia
                                         component="img"
                                         image={dev.Imagen}
@@ -594,29 +619,68 @@ const AdminDesarrollos = () => {
                                     />
                                     <CardContent>
                                         <Typography className="property-status">{dev.Estado}</Typography>
-                                        <Typography className="property-price">Desde ${dev.Precio_Con_Formato}</Typography>
-                                        <Typography className="property-title-desarrollos" variant="h6" style={{ height: "90px" }}>{dev.Proyecto_Nombre}</Typography>
-                                        <Typography className="property-barrio" variant="h6">{dev.Barrio} </Typography>
-                                        <Typography className="desarrollo-entrega">{dev.Entrega}</Typography>
-                                        <Button onClick={() => handleEdit(dev)} size="small" className="admin-button-edit">
-                                            Editar
-                                        </Button>
-                                        <Button
-                                            onClick={() => handleDelete(dev._id)}
-                                            size="small"
-                                            color="error"
-                                            className="admin-button-edit"
+                                        <Typography className="property-price">
+                                            Desde ${dev.Precio_Con_Formato}
+                                        </Typography>
+                                        <Typography
+                                            className="property-title-desarrollos"
+                                            variant="h6"
+                                            style={{ height: "90px" }}
                                         >
-                                            Eliminar
-                                        </Button>
+                                            {dev.Proyecto_Nombre}
+                                        </Typography>
+                                        <Typography className="property-barrio" variant="h6">
+                                            {dev.Barrio}{" "}
+                                        </Typography>
+                                        <Typography className="desarrollo-entrega">{dev.Entrega}</Typography>
                                     </CardContent>
                                 </Link>
+                                <Box sx={{ display: "flex", justifyContent: "space-around", pb: 2 }}>
+                                    <Button
+                                        onClick={() => handleEdit(dev)}
+                                        size="small"
+                                        className="admin-button-edit"
+                                    >
+                                        Editar
+                                    </Button>
+                                    <Button
+                                        onClick={() => confirmDelete(dev._id)}
+                                        size="small"
+                                        color="error"
+                                        className="admin-button-edit"
+                                    >
+                                        Eliminar
+                                    </Button>
+                                </Box>
                             </Card>
                         </Grid>
                     ))}
                 </Box>
             </Box>
-        </Box >
+
+            {/* Confirmation Dialog for Deletion */}
+            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+                <DialogTitle>Confirmar Eliminación</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        ¿Está seguro de que desea eliminar el desarrollo{" "}
+                        {devToDelete ? `"${devToDelete.Proyecto_Nombre}"` : ""}?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenConfirm(false)}>Cancelar</Button>
+                    <Button
+                        onClick={() => {
+                            handleDelete(devToDelete._id);
+                            setOpenConfirm(false);
+                        }}
+                        color="error"
+                    >
+                        Eliminar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
     );
 };
 

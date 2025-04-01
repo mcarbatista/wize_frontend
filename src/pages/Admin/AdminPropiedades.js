@@ -13,10 +13,13 @@ import {
     InputLabel,
     FormControl,
     FormHelperText,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
 import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropiedad";
@@ -66,7 +69,7 @@ const PropertyForm = ({
                 target: { name: "Galeria", value: selected.Galeria || [] },
             });
         }
-    }, [form.DesarrolloId, desarrollos]); // Note: This runs only when DesarrolloId changes.
+    }, [form.DesarrolloId, desarrollos]);
 
     // List of fields (excluding Owner, Email and Celular)
     const fields = [
@@ -100,15 +103,13 @@ const PropertyForm = ({
                 <Grid item xs={12}>
                     <FormControl fullWidth error={!!errors.DesarrolloId}>
                         <InputLabel>
-                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""
-                                }`}
+                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
                         </InputLabel>
                         <Select
                             name="DesarrolloId"
                             value={form.DesarrolloId}
                             onChange={handleChange}
-                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""
-                                }`}
+                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
                         >
                             {(desarrollos || []).map((dev) => (
                                 <MenuItem key={dev._id} value={dev._id}>
@@ -116,9 +117,7 @@ const PropertyForm = ({
                                 </MenuItem>
                             ))}
                         </Select>
-                        {errors.DesarrolloId && (
-                            <FormHelperText>{errors.DesarrolloId}</FormHelperText>
-                        )}
+                        {errors.DesarrolloId && <FormHelperText>{errors.DesarrolloId}</FormHelperText>}
                     </FormControl>
                 </Grid>
 
@@ -140,9 +139,7 @@ const PropertyForm = ({
                 {/* Owner Dropdown */}
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={!!errors.Owner}>
-                        <InputLabel>
-                            {`Owner${requiredFields.includes("Owner") ? " *" : ""}`}
-                        </InputLabel>
+                        <InputLabel>{`Owner${requiredFields.includes("Owner") ? " *" : ""}`}</InputLabel>
                         <Select
                             name="Owner"
                             value={form.Owner || ""}
@@ -252,6 +249,9 @@ const AdminPropiedades = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
+    // New state for deletion confirmation
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [propertyToDelete, setPropertyToDelete] = useState(null);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
@@ -515,6 +515,7 @@ const AdminPropiedades = () => {
         setEditId(null);
     };
 
+    // Updated deletion functionality with confirmation dialog.
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/api/propiedades/${id}`, {
@@ -569,7 +570,12 @@ const AdminPropiedades = () => {
                 {propiedades.map((prop) => (
                     <Grid item xs={12} md={6} key={prop._id}>
                         <Card className="property-card-edit">
-                            <Link to={`/propiedades/${prop._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                            <Link
+                                to={`/propiedades/${prop._id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ textDecoration: "none", color: "inherit" }}
+                            >
                                 <CardMedia
                                     component="img"
                                     image={prop.Imagen}
@@ -585,7 +591,8 @@ const AdminPropiedades = () => {
                                     </Typography>
                                     <Typography
                                         className="property-title-desarrollos"
-                                        variant="h6" style={{ height: "90px" }}
+                                        variant="h6"
+                                        style={{ height: "90px" }}
                                     >
                                         {prop.Titulo}
                                     </Typography>
@@ -595,27 +602,55 @@ const AdminPropiedades = () => {
                                     <Typography className="desarrollo-entrega">
                                         {prop.Entrega}
                                     </Typography>
-                                    <Button
-                                        onClick={() => navigate(`/admin/propiedades/edit/${prop._id}`)}
-                                        size="small"
-                                        className="admin-button-edit"
-                                    >
-                                        Editar
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(prop._id)}
-                                        size="small"
-                                        color="error"
-                                        className="admin-button-edit"
-                                    >
-                                        Eliminar
-                                    </Button>
                                 </CardContent>
                             </Link>
+                            <Box sx={{ display: "flex", justifyContent: "space-around", pb: 2 }}>
+                                <Button
+                                    onClick={() => navigate(`/admin/propiedades/edit/${prop._id}`)}
+                                    size="small"
+                                    className="admin-button-edit"
+                                >
+                                    Editar
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setPropertyToDelete(prop);
+                                        setOpenConfirm(true);
+                                    }}
+                                    size="small"
+                                    color="error"
+                                    className="admin-button-edit"
+                                >
+                                    Eliminar
+                                </Button>
+                            </Box>
                         </Card>
                     </Grid>
                 ))}
             </Box>
+
+            {/* Confirmation Dialog */}
+            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+                <DialogTitle>Confirmar Eliminación</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        ¿Está seguro de que desea eliminar la propiedad{" "}
+                        {propertyToDelete ? `"${propertyToDelete.Titulo}"` : ""}?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenConfirm(false)}>Cancelar</Button>
+                    <Button
+                        onClick={() => {
+                            handleDelete(propertyToDelete._id);
+                            setOpenConfirm(false);
+                        }}
+                        color="error"
+                    >
+                        Eliminar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };
