@@ -158,7 +158,7 @@ const PropertyDetails = () => {
                         {/* Plano Section */}
                         {property.Plano && property.Plano.length > 0 && (
                             <Box mb={3}>
-                                <Typography variant="h6" className="prop-subtitle">
+                                <Typography variant="h6" className="dev-subtitle">
                                     Plano
                                 </Typography>
                                 {property.Plano.map((plano, index) => (
@@ -166,8 +166,10 @@ const PropertyDetails = () => {
                                         <img
                                             src={plano.url}
                                             alt={plano.alt || "Plano Image"}
-                                            className="dev-map"
-                                            style={{ cursor: "pointer" }}
+                                            style={{
+                                                cursor: "pointer",
+                                                maxWidth: "600px"
+                                            }}
                                             onClick={() => setSelectedPlano(plano.url)}
                                         />
                                     </Box>
@@ -324,8 +326,9 @@ const PropertyDetails = () => {
                         alt="Plano Full"
                         style={{
                             maxWidth: "100%",
-                            maxHeight: "80vh",
-                            objectFit: "contain"
+                            maxHeight: "100vh",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center"
                         }}
                     />
                 </DialogContent>

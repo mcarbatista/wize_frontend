@@ -48,8 +48,8 @@
 }
 
 .dev-summary {
-    font-size: 1.2rem !important;
-    font-family: "Avenir", sans-serif !important;
+    font-size: 1.3rem !important;
+    font-family: "Avenir Light", sans-serif !important;
     color: #13272d !important;
     margin-bottom: 15px !important;
     max-width: 98%;
@@ -147,6 +147,7 @@
     height: 300px !important;
     border: none !important;
     border-radius: 5px !important;
+    margin-bottom: 20px !important;
 }
 
 /* RELATED PROPERTIES SECTION */
