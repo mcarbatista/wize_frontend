@@ -1,7 +1,7 @@
 .fullscreen-container {
     position: relative;
     background: #fbf7ea;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 
 .fullscreen-slider-wrapper {
@@ -9,9 +9,28 @@
     padding: 5%;
     box-sizing: border-box;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto !important;
     height: calc(100vh - 10%) !important;
 }
+
+/* On medium devices, reduce the height a bit */
+@media (max-width: 1024px) {
+    .fullscreen-slider-wrapper {
+        height: calc(100vh - 12%) !important;
+    }
+}
+
+/* On small devices, allow auto height so the image can fill horizontally */
+@media (max-width: 768px) {
+    .fullscreen-slider-wrapper {
+        max-width: 100%;
+        margin: 0 !important;
+        padding: 2%;
+        height: auto !important;
+        /* Let the content define height */
+    }
+}
+
 
 .fullscreen-close-button {
     position: absolute !important;
@@ -23,6 +42,7 @@
 .media-element {
     width: 100% !important;
     height: 100% !important;
+    margin: 0 auto !important
 }
 
 /* Optional: you can keep additional arrow styles here if needed */
