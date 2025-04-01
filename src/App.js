@@ -10,10 +10,11 @@ import DevelopmentDetails from "./pages/DevelopmentDetails";
 import Servicios from "./pages/Servicios";
 import Nosotros from "./pages/Nosotros";
 import NotFound from "./pages/NotFound";
-import AdminPropiedades from "./pages/AdminPropiedades";
-import AdminDesarrollos from "./pages/AdminDesarrollos";
+import AdminPropiedades from "./pages/Admin/AdminPropiedades";
+import AdminDesarrollos from "./pages/Admin/AdminDesarrollos";
 import EditDevelopment from "./pages/Admin/EditDevelopment";
-import AdminSelector from "./pages/AdminSelector";
+import EditProperty from "./pages/Admin/EditProperty";
+import AdminSelector from "./pages/Admin/AdminSelector";
 import HomeStaging from "./pages/HomeStaging";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -57,14 +58,7 @@ function App() {
                             </PrivateRoute>
                         }
                     />
-                    <Route
-                        path="/admin"
-                        element={
-
-                            <AdminSelector />
-
-                        }
-                    />
+                    <Route path="/admin" element={<AdminSelector />} />
                     <Route path="/" element={<Inicio />} />
                     <Route path="/inicio" element={<Inicio />} />
                     <Route path="/propiedades" element={<Propiedades />} />
@@ -77,14 +71,8 @@ function App() {
                     <Route path="/not-found" element={<NotFound />} />
                     <Route path="/admin/desarrollos" element={<AdminDesarrollos />} />
                     <Route path="/admin/desarrollos/edit/:id" element={<EditDevelopment />} />
-                    <Route
-                        path="/admin/propiedades"
-                        element={
-
-                            <AdminPropiedades />
-
-                        }
-                    />
+                    <Route path="/admin/propiedades/edit/:id" element={<EditProperty />} />
+                    <Route path="/admin/propiedades" element={<AdminPropiedades />} />
                 </Routes>
             </main>
 

@@ -15,10 +15,10 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import LoadingIndicator from "../components/admin/LoadingIndicator";
-import GaleriaEditorPropiedad from "../components/admin/GaleriaEditorPropiedad";
-import "../styles/Admin.css";
-import BASE_URL from "../api/config";
+import LoadingIndicator from "../../components/admin/LoadingIndicator";
+import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropiedad";
+import "../../styles/Admin.css";
+import BASE_URL from "../../api/config";
 
 // -----------------------
 // PropertyForm Component
@@ -206,7 +206,7 @@ const PropertyForm = ({
 
                 {/* Submit Button */}
                 <Grid item xs={12}>
-                    <Button className="admin-button" variant="contained" type="submit" sx={{ mt: 3 }}>
+                    <Button variant="contained" type="submit" sx={{ mt: 3 }}>
                         {editId ? "Actualizar Propiedad" : "Crear Propiedad"}
                     </Button>
                     {successMessage && (
@@ -605,25 +605,6 @@ const AdminPropiedades = () => {
                 errors={errors}
                 successMessage={successMessage}
             />
-
-            <Grid container spacing={2} mt={2}>
-                <Grid item xs={6}>
-                    <TextField
-                        label="Estado del Desarrollo"
-                        value={form.Estado}
-                        InputProps={{ readOnly: true }}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        label="Barrio del Desarrollo"
-                        value={form.Barrio}
-                        InputProps={{ readOnly: true }}
-                        fullWidth
-                    />
-                </Grid>
-            </Grid>
             {isSaving && <LoadingIndicator />}
 
             <Typography variant="h5" mt={5} mb={2}>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BASE_URL from "../api/config";
-import "../styles/Admin.css";
+import BASE_URL from "../../api/config";
+import "../../styles/Admin.css";
 
 const AdminSelector = () => {
     const navigate = useNavigate();
