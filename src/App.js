@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom"; // <-- add useLocation
+import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Inicio from "./pages/Inicio";
@@ -22,17 +22,32 @@ import PrivateRoute from './components/admin/PrivateRoute';
 import LoginPage from "./components/admin/LoginPage";
 import CreateUserPage from "./components/admin/CreateUserPage";
 import ChangePassword from "./components/admin/ChangePassword";
-import './App.css';
+import "./App.css";
 
 function App() {
     // 1) Grab the current URL location
     const location = useLocation();
 
-    // 2) List any paths where you want to hide the header
-    const hideHeaderPaths = ["/admin/desarrollos", "/admin/propiedades", "admin/create-user", "admin/change-password", "/admin/desarrollos/edit/{:id}"];
+    // 2) List any paths where you want to hide the header.
+    // Note: For dynamic routes, use a placeholder `"{:id}"` which will be replaced.
+    const hideHeaderPaths = [
+        "/admin/desarrollos",
+        "/admin/propiedades",
+        "/admin/create-user",
+        "/admin/change-password",
+        "/admin/desarrollos/edit/{:id}",
+        "/admin/propiedades/edit/{:id}"
+    ];
 
-    // 3) Check if we are on a path where the header should be hidden
-    const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
+    // 3) Check if we are on a path where the header should be hidden.
+    // For dynamic routes, check if the current pathname starts with the base path.
+    const shouldHideHeader = hideHeaderPaths.some((path) => {
+        if (path.includes("{:id}")) {
+            const basePath = path.replace("/{:id}", "");
+            return location.pathname.startsWith(basePath);
+        }
+        return location.pathname === path;
+    });
 
     return (
         <div className="app-container">

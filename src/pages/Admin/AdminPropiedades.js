@@ -3,11 +3,13 @@ import {
     Box,
     Typography,
     Grid,
-    Paper,
     Button,
     TextField,
     MenuItem,
     Select,
+    Card,
+    CardMedia,
+    CardContent,
     InputLabel,
     FormControl,
     FormHelperText
@@ -125,9 +127,9 @@ const PropertyForm = ({
                             onChange={handleChange}
                             label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
                         >
-                            {(desarrollos || []).map((dev) => (
-                                <MenuItem key={dev._id} value={dev._id}>
-                                    {dev.Proyecto_Nombre}
+                            {(desarrollos || []).map((prop) => (
+                                <MenuItem key={prop._id} value={prop._id}>
+                                    {prop.Titulo}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -533,39 +535,42 @@ const AdminPropiedades = () => {
         setEditId(null);
     };
 
-    const handleEdit = (prop) => {
-        setEditId(prop._id);
-        setForm({
-            Titulo: prop.Titulo || "",
-            Descripcion: prop.Descripcion || "",
-            Descripcion_Expandir: prop.Descripcion_Expandir || "",
-            Precio: prop.Precio || "",
-            Estado: prop.Estado || "",
-            Resumen: prop.Resumen || "",
-            Ciudad: prop.Ciudad || "",
-            Barrio: prop.Barrio || "",
-            Ubicacion: prop.Ubicacion || "",
-            Tipo: prop.Tipo || "",
-            Entrega: prop.Entrega || "",
-            Dormitorios: prop.Dormitorios || "",
-            Banos: prop.Banos || "",
-            Tamano_m2: prop.Tamano_m2 || "",
-            Metraje: prop.Metraje || "",
-            Piso: prop.Piso || "",
-            Unidad: prop.Unidad || "",
-            Forma_de_Pago: prop.Forma_de_Pago || "",
-            Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
-            Owner: prop.Owner || "",
-            Email: prop.Email || "",
-            Celular: prop.Celular || "",
-            Proyecto_Nombre: prop.Proyecto_Nombre || "",
-            Imagen: prop.Imagen || "",
-            ImagenPrincipal: prop.Imagen || "",
-            DesarrolloId: prop.DesarrolloId || "",
-            Galeria: prop.Galeria || [],
-            Plano: prop.Plano || []
-        });
-    };
+    // The handleEdit function is no longer used to set local state.
+    // Instead, we'll redirect to the edit form route using navigate.
+    // Remove or keep this function if needed.
+    // const handleEdit = (prop) => {
+    //     setEditId(prop._id);
+    //     setForm({
+    //         Titulo: prop.Titulo || "",
+    //         Descripcion: prop.Descripcion || "",
+    //         Descripcion_Expandir: prop.Descripcion_Expandir || "",
+    //         Precio: prop.Precio || "",
+    //         Estado: prop.Estado || "",
+    //         Resumen: prop.Resumen || "",
+    //         Ciudad: prop.Ciudad || "",
+    //         Barrio: prop.Barrio || "",
+    //         Ubicacion: prop.Ubicacion || "",
+    //         Tipo: prop.Tipo || "",
+    //         Entrega: prop.Entrega || "",
+    //         Dormitorios: prop.Dormitorios || "",
+    //         Banos: prop.Banos || "",
+    //         Tamano_m2: prop.Tamano_m2 || "",
+    //         Metraje: prop.Metraje || "",
+    //         Piso: prop.Piso || "",
+    //         Unidad: prop.Unidad || "",
+    //         Forma_de_Pago: prop.Forma_de_Pago || "",
+    //         Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
+    //         Owner: prop.Owner || "",
+    //         Email: prop.Email || "",
+    //         Celular: prop.Celular || "",
+    //         Proyecto_Nombre: prop.Proyecto_Nombre || "",
+    //         Imagen: prop.Imagen || "",
+    //         ImagenPrincipal: prop.Imagen || "",
+    //         DesarrolloId: prop.DesarrolloId || "",
+    //         Galeria: prop.Galeria || [],
+    //         Plano: prop.Plano || []
+    //     });
+    // };
 
     const handleDelete = async (id) => {
         try {
@@ -610,28 +615,66 @@ const AdminPropiedades = () => {
             <Typography variant="h5" mt={5} mb={2}>
                 Propiedades Existentes
             </Typography>
-            <Grid container spacing={2}>
+            <Box
+                container
+                spacing={2}
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 3
+                }}
+            >
                 {propiedades.map((prop) => (
                     <Grid item xs={12} md={6} key={prop._id}>
-                        <Paper elevation={2} sx={{ p: 2 }}>
-                            <Typography variant="h6">{prop.Titulo}</Typography>
-                            <Typography variant="body2">
-                                {prop.Barrio} - {prop.Precio}
-                            </Typography>
-                            <Button onClick={() => handleEdit(prop)} size="small">
-                                Editar
-                            </Button>
-                            <Button
-                                onClick={() => handleDelete(prop._id)}
-                                size="small"
-                                color="error"
-                            >
-                                Eliminar
-                            </Button>
-                        </Paper>
+                        <Card className="property-card-edit">
+                            <CardMedia
+                                component="img"
+                                image={prop.Imagen}
+                                alt={prop.Proyecto_Nombre}
+                                sx={{ height: 200, objectFit: "cover" }}
+                            />
+                            <CardContent>
+                                <Typography className="property-status">
+                                    {prop.Estado}
+                                </Typography>
+                                <Typography className="property-price">
+                                    Desde ${prop.Precio_Con_Formato}
+                                </Typography>
+                                <Typography
+                                    className="property-title-desarrollos"
+                                    variant="h6"
+                                >
+                                    {prop.Titulo}
+                                </Typography>
+                                <Typography className="property-barrio" variant="h6">
+                                    {prop.Barrio}
+                                </Typography>
+                                <Typography className="desarrollo-entrega">
+                                    {prop.Entrega}
+                                </Typography>
+                                <Button
+                                    onClick={() =>
+                                        navigate(`/admin/propiedades/edit/${prop._id}`)
+                                    }
+                                    size="small"
+                                    className="admin-button-edit"
+                                >
+                                    Editar
+                                </Button>
+                                <Button
+                                    onClick={() => handleDelete(prop._id)}
+                                    size="small"
+                                    color="error"
+                                    className="admin-button-edit"
+                                >
+                                    Eliminar
+                                </Button>
+                            </CardContent>
+                        </Card>
                     </Grid>
                 ))}
-            </Grid>
+            </Box>
         </Box>
     );
 };

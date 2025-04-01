@@ -311,11 +311,22 @@ const PropertyDetails = () => {
                 maxWidth="md"
                 fullWidth
             >
-                <DialogContent>
+                <DialogContent
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 0
+                    }}
+                >
                     <img
                         src={selectedPlano}
                         alt="Plano Full"
-                        style={{ width: "100%" }}
+                        style={{
+                            maxWidth: "100%",
+                            maxHeight: "80vh",
+                            objectFit: "contain"
+                        }}
                     />
                 </DialogContent>
             </Dialog>
