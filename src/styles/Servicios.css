@@ -78,7 +78,7 @@
 .parallax-image {
     width: 100% !important;
     height: 100% !important;
-    background-size: contain !important;
+    background-size: 27.8% auto !important;
     background-position: center !important;
     background-attachment: fixed !important;
     transition: background-size 0.5s ease-in-out;
@@ -157,7 +157,7 @@
     border-radius: 70px !important;
     transition: all 0.3s ease-in-out !important;
     text-transform: none !important;
-    width: 30%;
+    width: 20%;
 }
 
 .service-button:hover {
@@ -237,51 +237,50 @@
 
 /* 🔹 Service Grid Proporciones en Desktop */
 @media (min-width: 1025px) {
-    @media (min-width: 1025px) {
-        .service-grid {
-            display: flex !important;
-            height: 600px;
-        }
-
-        .row-normal {
-            flex-direction: row !important;
-        }
-
-        .row-reverse {
-            flex-direction: row-reverse !important;
-        }
-
-        .parallax-container {
-            flex: 1 !important;
-            height: 100% !important;
-            max-height: 600px !important;
-            max-width: 400px !important;
-        }
-
-        .content-container {
-            flex: 2 !important;
-            height: 100% !important;
-            max-height: 600px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-        }
-
-        .service-card {
-            height: 100% !important;
-            max-height: 600px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-        }
+    .service-grid {
+        display: flex !important;
+        height: 600px;
     }
 
+    .row-normal {
+        flex-direction: row !important;
+    }
+
+    .row-reverse {
+        flex-direction: row-reverse !important;
+    }
+
+    .parallax-container {
+        flex: 1 !important;
+        height: 100% !important;
+        max-height: 600px !important;
+        max-width: 400px !important;
+    }
+
+    .content-container {
+        flex: 2 !important;
+        height: 100% !important;
+        max-height: 600px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    .service-card {
+        height: 100% !important;
+        max-height: 600px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
 
     .parallax-container {
         flex: 1 !important;
         /* 1 parte */
         height: 100% !important;
         max-height: 600px !important;
+        max-width: 600px !important;
+        /* Increased from 400px */
     }
 
     .content-container {
