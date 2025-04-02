@@ -75,14 +75,24 @@
     max-width: 100%;
 }
 
-.parallax-image {
+.row-normal .parallax-image {
     width: 100% !important;
     height: 100% !important;
-    background-size: 27.8% auto !important;
-    background-position: center !important;
+    background-size: 38% !important;
+    background-position: left !important;
     background-attachment: fixed !important;
     transition: background-size 0.5s ease-in-out;
 }
+
+.row-reverse .parallax-image {
+    width: 100% !important;
+    height: 100% !important;
+    background-size: 31% !important;
+    background-position: left !important;
+    background-attachment: fixed !important;
+    transition: background-size 0.5s ease-in-out;
+}
+
 
 /* 🔹 Content Section */
 .content-container {
