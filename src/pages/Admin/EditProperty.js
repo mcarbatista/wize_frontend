@@ -9,7 +9,9 @@ import {
     Select,
     InputLabel,
     FormControl,
-    FormHelperText
+    FormHelperText,
+    Checkbox,
+    FormControlLabel,
 } from "@mui/material";
 import RichTextInput from "../../components/admin/RichTextInput";
 import { useNavigate, useParams } from "react-router-dom";
@@ -61,7 +63,9 @@ const EditProperty = () => {
         Galeria: [],
         Plano: [],
         Email: "",
-        Celular: ""
+        Celular: "",
+        // New field for synchronizing with InfoCasas
+        syncInfoCasas: false
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -126,14 +130,16 @@ const EditProperty = () => {
                     Forma_de_Pago: prop.Forma_de_Pago || "",
                     Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
                     Owner: prop.Owner || "",
+                    Email: prop.Email || "",
+                    Celular: prop.Celular || "",
                     Proyecto_Nombre: prop.Proyecto_Nombre || "",
                     Imagen: prop.Imagen || "",
                     ImagenPrincipal: prop.ImagenPrincipal || "",
                     DesarrolloId: prop.DesarrolloId || "",
                     Galeria: prop.Galeria || [],
                     Plano: prop.Plano || [],
-                    Email: prop.Email || "",
-                    Celular: prop.Celular || ""
+                    // Default false if not provided
+                    syncInfoCasas: prop.syncInfoCasas || false
                 });
                 setIsLoading(false);
             })
@@ -144,8 +150,7 @@ const EditProperty = () => {
     }, [id, navigate]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        // If Owner changes, update Email and Celular.
+        const { name, value, type, checked } = e.target;
         if (name === "Owner") {
             const selectedOwner = usuarios.find((user) => user._id === value);
             if (selectedOwner) {
@@ -158,6 +163,8 @@ const EditProperty = () => {
             } else {
                 setForm((prev) => ({ ...prev, Owner: value }));
             }
+        } else if (type === "checkbox") {
+            setForm((prev) => ({ ...prev, [name]: checked }));
         } else {
             setForm((prev) => ({ ...prev, [name]: value }));
         }
@@ -166,6 +173,15 @@ const EditProperty = () => {
 
     const handleImageChange = (Galeria) => {
         setForm((prev) => ({ ...prev, Galeria }));
+    };
+
+    // Function to handle marking an image as main (starred)
+    const handleStarImage = (url) => {
+        const updatedGaleria = form.Galeria.map((img) => ({
+            ...img,
+            isMain: img.url === url
+        }));
+        setForm((prev) => ({ ...prev, Galeria: updatedGaleria, Imagen: url }));
     };
 
     const validateForm = () => {
@@ -250,7 +266,9 @@ const EditProperty = () => {
                 Imagen: imagenPrincipal,
                 DesarrolloId: form.DesarrolloId,
                 Galeria: updatedGaleria,
-                Plano: form.Plano
+                Plano: form.Plano,
+                // Include the new sync flag
+                syncInfoCasas: form.syncInfoCasas
             };
 
             await axios.put(`${BASE_URL}/api/propiedades/${id}`, payload, {
@@ -402,6 +420,19 @@ const EditProperty = () => {
                                 )}
                             </FormControl>
                         </Grid>
+                        {/* Checkbox for synchronizing with InfoCasas */}
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        name="syncInfoCasas"
+                                        checked={form.syncInfoCasas}
+                                        onChange={handleChange}
+                                    />
+                                }
+                                label="Sincronizar con InfoCasas"
+                            />
+                        </Grid>
                         {/* Descripción */}
                         <Grid item xs={12}>
                             <RichTextInput
@@ -501,10 +532,8 @@ const EditProperty = () => {
                             <GaleriaEditorPropiedad
                                 imagenes={form.Galeria || []}
                                 onChange={handleImageChange}
-                                imagenPrincipal={form.Imagen}
-                                onMainSelect={(url) =>
-                                    handleChange({ target: { name: "Imagen", value: url } })
-                                }
+                                selectedMainImage={form.Imagen}
+                                onMainSelect={(url) => handleStarImage(url)}
                             />
                         </Grid>
                         {/* Planos */}
@@ -517,7 +546,7 @@ const EditProperty = () => {
                                 onChange={(imgs) =>
                                     handleChange({ target: { name: "Plano", value: imgs } })
                                 }
-                                imagenPrincipal={null}
+                                selectedMainImage={null}
                                 onMainSelect={() => { }}
                             />
                         </Grid>

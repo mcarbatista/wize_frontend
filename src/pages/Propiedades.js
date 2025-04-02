@@ -215,7 +215,7 @@ const Propiedades = () => {
                                             <FaBath style={{ fontSize: "1.2rem" }} />{propiedad.Banos}
                                         </span>
                                         <span>
-                                            <FaRulerCombined style={{ fontSize: "1.2rem" }} />{propiedad.Tamano_m2}
+                                            <FaRulerCombined style={{ fontSize: "1.2rem" }} />{propiedad.Tamano_m2} m²
                                         </span>
                                     </div>
                                 </CardContent>
