@@ -178,9 +178,9 @@ const Desarrollos = () => {
                     <Typography>No hay desarrollos disponibles con los filtros seleccionados.</Typography>
                 ) : (
                     desarrollos.map((desarrollo, index) => (
-                        <Card className="property-card" key={index}>
+                        <Card className="property-card-dev" key={index}>
                             <Link to={`/desarrollos/${desarrollo._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                <CardMedia component="img" image={desarrollo.Imagen} alt={desarrollo.Title} />
+                                <CardMedia component="img" image={desarrollo.Imagen} alt={desarrollo.Title} sx={{ height: "200px" }} />
                                 <CardContent>
                                     <Typography className="property-status">{desarrollo.Estado}</Typography>
                                     <Typography className="property-price">Desde ${desarrollo.Precio_Con_Formato}</Typography>

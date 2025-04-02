@@ -43,18 +43,18 @@ const Nosotros = () => {
             {/* 🔹 Service Sections */}
             <Box className="nosotros-container">
                 {showText && (
-                    <Grid container direction="column" className="nosotros-section">
-                        <Grid item xs={12}>
+                    <Box container direction="column" className="nosotros-section">
+                        <Box item xs={12}>
                             <Typography variant="h3" className="nosotros-title">
                                 Transformando la gestión de activos inmobiliarios
                             </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
+                        </Box>
+                        <Box item xs={12}>
                             <Typography variant="h5" className="nosotros-subtitle">
                                 Soluciones personalizadas y accesibles
                             </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
+                        </Box>
+                        <Box item xs={12} className="nosotros-description-section">
                             <Typography variant="body1" className="nosotros-description">
                                 En Wize, nuestra misión es empoderar a inversionistas y futuros
                                 propietarios de viviendas en Uruguay y Estados Unidos brindándoles
@@ -63,8 +63,6 @@ const Nosotros = () => {
                                 inversiones inmobiliarias estratégicas, enfocándonos en áreas de
                                 alto crecimiento.
                             </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
                             <Typography variant="body1" className="nosotros-description">
                                 Nos esforzamos por crear una experiencia fluida y gratificante para
                                 todos nuestros clientes, ya sea que estén buscando invertir o
@@ -73,8 +71,8 @@ const Nosotros = () => {
                                 camino. Nos esforzamos por garantizar una experiencia exitosa de
                                 principio a fin.
                             </Typography>
-                        </Grid>
-                    </Grid>
+                        </Box>
+                    </Box>
                 )}
             </Box>
 

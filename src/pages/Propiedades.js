@@ -199,9 +199,9 @@ const Propiedades = () => {
                     <Typography>No hay propiedades disponibles con los filtros seleccionados.</Typography>
                 ) : (
                     propiedades.map((propiedad, index) => (
-                        <Card className="property-card" key={index}>
+                        <Card className="property-card-prop" key={index}>
                             <Link to={`/propiedades/${propiedad._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                <CardMedia component="img" image={propiedad.Imagen} alt={propiedad.Title} />
+                                <CardMedia component="img" image={propiedad.Imagen} alt={propiedad.Title} sx={{ height: "200px" }} />
                                 <CardContent className="property-details">
                                     <Typography className="property-status">{propiedad.Estado}</Typography>
                                     <Typography className="property-price">$ {propiedad.Precio_Con_Formato}</Typography>
@@ -212,10 +212,10 @@ const Propiedades = () => {
                                             <FaBed style={{ fontSize: "1.5rem" }} />{propiedad.Dormitorios}
                                         </span>
                                         <span>
-                                            <FaBath style={{ fontSize: "1.2rem" }} />
+                                            <FaBath style={{ fontSize: "1.2rem" }} />{propiedad.Banos}
                                         </span>
                                         <span>
-                                            <FaRulerCombined style={{ fontSize: "1.2rem" }} />
+                                            <FaRulerCombined style={{ fontSize: "1.2rem" }} />{propiedad.Tamano_m2}
                                         </span>
                                     </div>
                                 </CardContent>

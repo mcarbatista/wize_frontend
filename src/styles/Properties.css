@@ -256,7 +256,7 @@ body {
 
 }
 
-.property-card {
+.property-card-dev {
     background-color: #FBF7EA !important;
     border-radius: 10px;
     overflow: hidden;
@@ -268,7 +268,23 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 450px;
+    height: 420px;
+    width: 300px;
+}
+
+.property-card-prop {
+    background-color: #FBF7EA !important;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid #FBF7EA !important;
+    padding: 5px;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 470px;
     width: 300px;
 }
 
@@ -345,6 +361,8 @@ body {
 
 .property-details {
     padding-bottom: 2% !important;
+    display: flex;
+    flex-direction: column;
 }
 
 .property-barrio {
@@ -377,20 +395,24 @@ body {
 }
 
 .property-icons {
+    margin-bottom: 5px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    /* left align */
     align-items: center;
-    padding-top: 10px;
+    gap: 60px;
     font-size: 14px;
-    color: #444;
-    /* Forces it to stick to the bottom */
-    margin-bottom: -20px !important;
+    position: absolute;
+    bottom: 10px;
+    /* Distance from the bottom of the card */
+    left: 25px;
 }
 
 .property-icons span {
     display: flex;
     align-items: center;
     gap: 5px;
+    font-family: "Avenir Light", sans-serif !important;
 }
 
 /* 🔹 Button */

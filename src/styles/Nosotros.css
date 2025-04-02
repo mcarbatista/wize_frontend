@@ -18,8 +18,7 @@
     padding: 7%;
     /* Corrected padding syntax */
     display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
 }
@@ -30,8 +29,11 @@
     font-family: "Avenir", sans-serif !important;
     color: #C3AF94 !important;
     margin-bottom: 2% !important;
+    font-weight: 800 !important;
     text-align: center !important;
+    max-width: 600px;
     animation: fadeInUp 0.1s ease-in-out forwards;
+    margin: 0 auto;
 }
 
 /* Title Section */
@@ -63,18 +65,47 @@
     display: block !important;
     width: 100% !important;
     margin-bottom: 10% !important;
+    padding: 5% 0 !important;
     animation: fadeInUp 0.2s ease-in-out forwards;
 }
 
 /* 🔹 Text Description */
+
+.nosotros-description-section {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: flex-start;
+    gap: 25 !important;
+}
+
 .nosotros-description {
     font-size: 18px !important;
     font-family: "Avenir Light", sans-serif !important;
     color: #C3AF94 !important;
-    text-align: center !important;
-    margin: 0 auto 20px auto !important;
-    max-width: 750px !important;
+    text-align: left !important;
+    margin: 0 20px 20px 0 !important;
+    max-width: 450px !important;
     animation: fadeInUp 0.3s ease-in-out forwards;
+}
+
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .nosotros-description-section {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        /* Keep items aligned to the left */
+        gap: 10px;
+        /* Adjust gap as needed */
+    }
+
+    .nosotros-description {
+        max-width: 100%;
+        /* Allow full width for each text block */
+        text-align: left !important;
+        margin: 0 0 20px 0 !important;
+    }
 }
 
 /* TESTIMONIOS SECTION */
