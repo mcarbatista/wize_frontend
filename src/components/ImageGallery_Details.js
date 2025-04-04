@@ -38,7 +38,6 @@ const ImageGallery = ({ mediaItems = [] }) => {
         infinite: false,
         swipeToSlide: true,
         focusOnSelect: true,
-        // centerMode: true,
         centerPadding: "0px",
         responsive: [
             {
@@ -101,12 +100,15 @@ const ImageGallery = ({ mediaItems = [] }) => {
                         <div key={idx} onClick={() => setDialogOpen(true)}>
                             {item.type === "video" ? (
                                 <video
-                                    src={item.url}
                                     autoPlay
                                     muted
                                     loop
+                                    playsInline
                                     className="main-image"
-                                />
+                                >
+                                    <source src={item.url} type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
                             ) : (
                                 <img
                                     src={item.url}
@@ -147,11 +149,13 @@ const ImageGallery = ({ mediaItems = [] }) => {
                     >
                         {item.type === "video" ? (
                             <video
-                                src={item.url}
                                 muted
                                 loop
                                 className="thumbnail-image"
-                            />
+                            >
+                                <source src={item.url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
                         ) : (
                             <img
                                 src={item.url}

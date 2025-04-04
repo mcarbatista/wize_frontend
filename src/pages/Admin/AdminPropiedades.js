@@ -33,7 +33,7 @@ const requiredFields = [
     "Banos",
     "Tamano_m2",
     "DesarrolloId",
-    "Owner",
+    "Owner"
 ];
 
 const PropertyForm = ({
@@ -45,13 +45,12 @@ const PropertyForm = ({
     handleSubmit,
     handleImageChange,
     errors = {},
-    successMessage,
+    successMessage
 }) => {
-    // We keep a filtered gallery (if needed for display) but also
-    // auto-prefill the property gallery from the selected development if empty.
+    // We keep a filtered gallery for display and also auto-prefill the property gallery
+    // from the selected development if empty.
     const [filteredGaleria, setFilteredGaleria] = useState([]);
 
-    // Update filteredGaleria to the development's gallery (for display, if desired)
     useEffect(() => {
         const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
         if (selected) {
@@ -61,15 +60,15 @@ const PropertyForm = ({
         }
     }, [form.DesarrolloId, desarrollos]);
 
-    // Prefill the property gallery with the development's gallery if it is empty.
+    // Auto-fill property gallery if empty
     useEffect(() => {
         const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
         if (selected && (!form.Galeria || form.Galeria.length === 0)) {
             handleChange({
-                target: { name: "Galeria", value: selected.Galeria || [] },
+                target: { name: "Galeria", value: selected.Galeria || [] }
             });
         }
-    }, [form.DesarrolloId, desarrollos]);
+    }, [form.DesarrolloId, desarrollos, handleChange]);
 
     // List of fields (excluding Owner, Email and Celular)
     const fields = [
@@ -81,7 +80,7 @@ const PropertyForm = ({
         "Tipo",
         "Metraje",
         "Piso",
-        "Unidad",
+        "Unidad"
     ];
 
     // Helper function to format labels (adding an asterisk for required fields)
@@ -162,10 +161,10 @@ const PropertyForm = ({
                     </FormControl>
                 </Grid>
 
-                {/* Imágenes de la propiedad */}
+                {/* Imágenes/Videos de la propiedad */}
                 <Grid item xs={12}>
                     <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
-                        Imágenes de la propiedad
+                        Imágenes / Videos de la propiedad
                     </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Galeria || []}
@@ -242,14 +241,14 @@ const AdminPropiedades = () => {
         Galeria: [],
         Plano: [],
         Email: "",
-        Celular: "",
+        Celular: ""
     });
     const [editId, setEditId] = useState(null);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
-    // New state for deletion confirmation
+    // State for deletion confirmation
     const [openConfirm, setOpenConfirm] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState(null);
 
@@ -261,7 +260,7 @@ const AdminPropiedades = () => {
             setToken(storedToken);
             axios
                 .get(`${BASE_URL}/api/admin/propiedades`, {
-                    headers: { Authorization: `Bearer ${storedToken}` },
+                    headers: { Authorization: `Bearer ${storedToken}` }
                 })
                 .catch((err) => {
                     console.error("Authorization error:", err);
@@ -280,15 +279,7 @@ const AdminPropiedades = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const reqFields = [
-            "Titulo",
-            "Precio",
-            "Dormitorios",
-            "Banos",
-            "Tamano_m2",
-            "DesarrolloId",
-            "Owner",
-        ];
+        const reqFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
         reqFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
         });
@@ -299,7 +290,7 @@ const AdminPropiedades = () => {
     const fetchPropiedades = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/propiedades`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` }
             });
             setPropiedades(res.data);
         } catch (err) {
@@ -310,7 +301,7 @@ const AdminPropiedades = () => {
     const fetchDesarrollos = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/desarrollos`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` }
             });
             setDesarrollos(res.data);
         } catch (err) {
@@ -321,7 +312,7 @@ const AdminPropiedades = () => {
     const fetchUsuarios = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/api/auth/usuarios`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` }
             });
             setUsuarios(res.data);
         } catch (err) {
@@ -338,7 +329,7 @@ const AdminPropiedades = () => {
                     ...prev,
                     Owner: value,
                     Email: selectedOwner.email,
-                    Celular: selectedOwner.celular,
+                    Celular: selectedOwner.celular
                 }));
             } else {
                 setForm((prev) => ({ ...prev, Owner: value }));
@@ -356,6 +347,12 @@ const AdminPropiedades = () => {
     const handleSubmit = async () => {
         if (!validateForm()) return;
 
+        // Ensure that a main image or video is selected
+        if (!form.Galeria.some(img => img.isMain)) {
+            alert("Debés seleccionar una imagen o video principal (haz clic en la estrella).");
+            return;
+        }
+
         const precio = Number(form.Precio);
         const tamano = Number(form.Tamano_m2);
         if (isNaN(precio) || isNaN(tamano)) {
@@ -365,7 +362,7 @@ const AdminPropiedades = () => {
 
         setIsSaving(true);
         try {
-            // Upload Galeria images
+            // Upload Galeria images/videos
             const formDataImgs = new FormData();
             const folderGaleria = `wize/propiedades/fotos/${form.Proyecto_Nombre}`;
             formDataImgs.append("folder", folderGaleria);
@@ -376,19 +373,19 @@ const AdminPropiedades = () => {
             const galeriaRes = await axios.post(`${BASE_URL}/api/upload`, formDataImgs, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`,
-                },
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             const imagenesFinal = [
                 ...form.Galeria.filter((img) => !img.file),
-                ...(galeriaRes.data.galeria || []),
+                ...(galeriaRes.data.galeria || [])
             ].map((img, index) => ({
                 ...img,
-                position: index,
+                position: index
             }));
 
-            // Determine the main image – use form.Imagen if set, else default to the first image
+            // Determine the main image/video – use form.Imagen if set, else default to the first file
             const mainImage = form.Imagen || imagenesFinal[0]?.url;
 
             // Upload Plano images
@@ -403,21 +400,21 @@ const AdminPropiedades = () => {
                     const planoRes = await axios.post(`${BASE_URL}/api/upload`, fd, {
                         headers: {
                             "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${token}`,
-                        },
+                            Authorization: `Bearer ${token}`
+                        }
                     });
 
                     const uploaded = planoRes.data.galeria?.[0];
                     if (uploaded) {
                         planoFinal.push({
                             ...uploaded,
-                            position: i,
+                            position: i
                         });
                     }
                 } else {
                     planoFinal.push({
                         ...img,
-                        position: i,
+                        position: i
                     });
                 }
             }
@@ -445,7 +442,7 @@ const AdminPropiedades = () => {
                 Imagen: mainImage,
                 DesarrolloId: form.DesarrolloId,
                 Galeria: imagenesFinal,
-                Plano: planoFinal,
+                Plano: planoFinal
             };
 
             if (form.Owner) {
@@ -460,12 +457,12 @@ const AdminPropiedades = () => {
 
             if (editId) {
                 await axios.put(`${BASE_URL}/api/propiedades/${editId}`, payload, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setSuccessMessage("Propiedad actualizada con éxito.");
             } else {
                 await axios.post(`${BASE_URL}/api/propiedades`, payload, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setSuccessMessage("Propiedad creada con éxito.");
             }
@@ -509,7 +506,7 @@ const AdminPropiedades = () => {
             Galeria: [],
             Plano: [],
             Email: "",
-            Celular: "",
+            Celular: ""
         });
         setErrors({});
         setEditId(null);
@@ -519,7 +516,7 @@ const AdminPropiedades = () => {
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/api/propiedades/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` }
             });
             fetchPropiedades();
         } catch (err) {
@@ -564,7 +561,7 @@ const AdminPropiedades = () => {
                     display: "flex",
                     flexDirection: "row",
                     flexWrap: "wrap",
-                    gap: 3,
+                    gap: 3
                 }}
             >
                 {propiedades.map((prop) => (

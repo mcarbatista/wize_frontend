@@ -173,6 +173,11 @@ const AdminDesarrollos = () => {
             );
             return;
         }
+        // Ensure a main file is selected before proceeding.
+        if (!form.Galeria.some(img => img.isMain)) {
+            alert("Debés seleccionar una imagen o video principal (haz clic en la estrella).");
+            return;
+        }
 
         const precioNum = Number(form.Precio);
         if (isNaN(precioNum)) {
@@ -247,7 +252,7 @@ const AdminDesarrollos = () => {
                     console.warn("No matching owner found for:", form.Owner);
                 }
             }
-
+            console.log("payload:", payload);
             if (editId) {
                 await axios.put(`${BASE_URL}/api/desarrollos/${editId}`, payload, {
                     headers: {
@@ -301,7 +306,7 @@ const AdminDesarrollos = () => {
         setOpenConfirm(true);
     };
 
-    const handleDelete = async (id) => {
+    const handleDeleteDev = async (id) => {
         const token = localStorage.getItem("token");
         try {
             await axios.delete(`${BASE_URL}/api/desarrollos/${id}`, {
@@ -337,6 +342,7 @@ const AdminDesarrollos = () => {
         });
         setErrors({});
         setEditId(null);
+        // Change the resetKey so that the form and child components re-mount
         setResetKey(Date.now());
     };
 
@@ -355,7 +361,8 @@ const AdminDesarrollos = () => {
                 ← Volver al Panel de Administración
             </Button>
             <Box className="admin-main-container" p={4}>
-                <Box component="form" onSubmit={handleSubmit} mb={4}>
+                {/* Assign the resetKey to the form so it fully resets */}
+                <Box component="form" key={resetKey} onSubmit={handleSubmit} mb={4}>
                     <Grid container spacing={2}>
                         {/* Row 1: Proyecto_Nombre, Precio, Estado */}
                         <Grid item xs={12} sm={6}>
@@ -564,6 +571,7 @@ const AdminDesarrollos = () => {
                         {/* Row 9: GaleriaEditor */}
                         <Grid item xs={12}>
                             <GaleriaEditor
+                                key={resetKey} // key forces re-mount of GaleriaEditor
                                 imagenes={form.Galeria}
                                 imagenPrincipal={form.Imagen}
                                 onChange={handleGaleriaChange}
@@ -671,7 +679,7 @@ const AdminDesarrollos = () => {
                     <Button onClick={() => setOpenConfirm(false)}>Cancelar</Button>
                     <Button
                         onClick={() => {
-                            handleDelete(devToDelete._id);
+                            handleDeleteDev(devToDelete._id);
                             setOpenConfirm(false);
                         }}
                         color="error"

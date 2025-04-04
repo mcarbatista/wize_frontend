@@ -53,7 +53,11 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
                     reader.readAsDataURL(file);
                 })
             )
+
         );
+        acceptedFiles.forEach(file => {
+            console.log(`File: ${file.name} - Size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+        });
         onChange([...imagenes, ...previews]);
     };
 
@@ -65,14 +69,14 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
         onChange(updated);
     };
 
-    // ⭐ Elegir archivo principal y enviarlo como 'Imagen' en el payload
+    // ⭐ Marcar archivo como principal y enviar su preview a onMainSelect.
     const handleSetMain = (index) => {
         const updated = imagenes.map((img, i) => ({
             ...img,
             isMain: i === index
         }));
         onChange(updated);
-        onMainSelect({ imagen: updated[index] });
+        onMainSelect(updated[index].preview);
     };
 
     // 🔃 Reordenar
@@ -84,16 +88,32 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
         onChange(reordered);
     };
 
-    // Contar archivos que NO tienen extensión .jpg (case insensitive)
+    // Constants for size limits
+    const IMAGE_MAX_SIZE = 10 * 1024 * 1024; // 10MB for images
+    const VIDEO_MAX_SIZE = 100 * 1024 * 1024;  // 100MB for videos
+
+    // For images: count those over 10MB.
+    const imageOverSizeFiles = imagenes.filter(
+        (img) =>
+            img.file.type.startsWith("image/") &&
+            img.file.size > IMAGE_MAX_SIZE
+    ).map(img => img.file.name);
+
+    // For images: count those that are not strictly JPG.
+    // A file is considered JPG only if its filename ends with '.jpg' (case insensitive)
+    // and its MIME type is 'image/jpeg'
     const nonJpgCount = imagenes.filter(
-        (img) => !img.file.name.toLowerCase().endsWith(".jpg")
+        (img) =>
+            img.file.type.startsWith("image/") &&
+            !(img.file.name.toLowerCase().endsWith(".jpg") && img.file.type === "image/jpeg")
     ).length;
 
-    // Filtrar archivos que superan los 10MB (10 * 1024 * 1024 bytes)
-    const MAX_SIZE = 10 * 1024 * 1024;
-    const overSizeFiles = imagenes.filter(
-        (img) => img.file.size > MAX_SIZE
-    ).map(img => img.file.name);
+    // For videos: check for videos over 100MB and prepare file name with size in MB.
+    const videoOverSizeFiles = imagenes.filter(
+        (img) =>
+            img.file.type.startsWith("video/") &&
+            img.file.size > VIDEO_MAX_SIZE
+    ).map(img => `${img.file.name} (${(img.file.size / (1024 * 1024)).toFixed(2)} MB)`);
 
     return (
         <Box>
@@ -104,15 +124,24 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
                 </Typography>
             </DropArea>
 
+            {/* Warning for images not in JPG format */}
             {nonJpgCount > 0 && (
                 <Alert severity="warning" sx={{ mb: 2 }}>
-                    Warning: {nonJpgCount} file{nonJpgCount > 1 ? "s" : ""} not in .jpg format.
+                    Warning: {nonJpgCount} image{nonJpgCount > 1 ? "s" : ""} not in JPG format.
                 </Alert>
             )}
 
-            {overSizeFiles.length > 0 && (
-                <Alert severity="warning" sx={{ mb: 2 }}>
-                    Warning: The following file{overSizeFiles.length > 1 ? "s are" : " is"} over 10MB: {overSizeFiles.join(", ")}
+            {/* Error for images over 10MB */}
+            {imageOverSizeFiles.length > 0 && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    Error: The following image file{imageOverSizeFiles.length > 1 ? "s are" : " is"} over 10MB: {imageOverSizeFiles.join(", ")}
+                </Alert>
+            )}
+
+            {/* Error for videos over 100MB */}
+            {videoOverSizeFiles.length > 0 && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    Error: The following video file{videoOverSizeFiles.length > 1 ? "s exceed" : " exceeds"} 100MB: {videoOverSizeFiles.join(", ")}
                 </Alert>
             )}
 
@@ -130,7 +159,12 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
                             {imagenes.map((img, index) => (
                                 <Draggable key={index} draggableId={`img-${index}`} index={index}>
                                     {(provided) => (
-                                        <Grid item ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        <Grid
+                                            item
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                        >
                                             <ImageCard elevation={2}>
                                                 {img.file.type.startsWith("video/") ? (
                                                     <video
