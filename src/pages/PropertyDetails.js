@@ -103,7 +103,6 @@ const PropertyDetails = () => {
                 {property.Galeria?.length > 0 && (
                     <ImageGallery mediaItems={property.Galeria} />
                 )}
-
                 <Box className="dev-gallery-cta">
                     <Button
                         variant="contained"

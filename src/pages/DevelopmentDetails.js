@@ -114,7 +114,6 @@ const DevelopmentDetails = () => {
                 {development.Galeria?.length > 0 && (
                     <ImageGallery mediaItems={development.Galeria} />
                 )}
-
                 <Box className="dev-gallery-cta">
                     <Button
                         variant="contained"

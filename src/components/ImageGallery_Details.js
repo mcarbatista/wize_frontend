@@ -16,6 +16,20 @@ const ImageGallery = ({ mediaItems = [] }) => {
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isMedium = useMediaQuery(theme.breakpoints.down("md"));
 
+    // Identify the item with alt="Imagen" so we can start there:
+    const mainImageIndex = mediaItems.findIndex((item) => item.alt === "Imagen");
+
+    // Main slider settings: enables swipe and updates currentIndex on slide change.
+    const mainSliderSettings = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        swipe: true,
+        // Start on the "Imagen" item if found
+        initialSlide: mainImageIndex >= 0 ? mainImageIndex : 0,
+        afterChange: (idx) => setCurrentIndex(idx),
+    };
+
     // Thumbnail slider settings (no default arrows).
     const thumbnailSliderSettings = {
         slidesToShow: 6,
@@ -24,7 +38,7 @@ const ImageGallery = ({ mediaItems = [] }) => {
         infinite: false,
         swipeToSlide: true,
         focusOnSelect: true,
-        centerMode: true,
+        // centerMode: true,
         centerPadding: "0px",
         responsive: [
             {
@@ -40,15 +54,6 @@ const ImageGallery = ({ mediaItems = [] }) => {
                 },
             },
         ],
-    };
-
-    // Main slider settings: enables swipe and updates currentIndex on slide change.
-    const mainSliderSettings = {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        swipe: true,
-        afterChange: (idx) => setCurrentIndex(idx),
     };
 
     const handleThumbnailClick = (idx) => {
@@ -105,7 +110,7 @@ const ImageGallery = ({ mediaItems = [] }) => {
                             ) : (
                                 <img
                                     src={item.url}
-                                    alt="Principal"
+                                    alt={item.alt || "Principal"}
                                     className="main-image"
                                 />
                             )}
