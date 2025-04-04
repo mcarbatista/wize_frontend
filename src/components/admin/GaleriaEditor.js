@@ -7,7 +7,8 @@ import {
     Typography,
     IconButton,
     Grid,
-    Paper
+    Paper,
+    Alert
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StarIcon from "@mui/icons-material/Star";
@@ -37,8 +38,8 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
     // 🧩 Drop handler
     const onDrop = async (acceptedFiles) => {
         const previews = await Promise.all(
-            acceptedFiles.map((file) => {
-                return new Promise((resolve) => {
+            acceptedFiles.map((file) =>
+                new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = () => {
                         resolve({
@@ -50,28 +51,28 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
                         });
                     };
                     reader.readAsDataURL(file);
-                });
-            })
+                })
+            )
         );
         onChange([...imagenes, ...previews]);
     };
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-    // 🗑 Eliminar imagen
+    // 🗑 Eliminar archivo
     const handleDelete = (index) => {
         const updated = imagenes.filter((_, i) => i !== index);
         onChange(updated);
     };
 
-    // ⭐ Elegir imagen principal
+    // ⭐ Elegir archivo principal y enviarlo como 'Imagen' en el payload
     const handleSetMain = (index) => {
         const updated = imagenes.map((img, i) => ({
             ...img,
             isMain: i === index
         }));
         onChange(updated);
-        onMainSelect(updated[index].preview); // usamos preview para matchear luego
+        onMainSelect({ imagen: updated[index] });
     };
 
     // 🔃 Reordenar
@@ -83,12 +84,37 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
         onChange(reordered);
     };
 
+    // Contar archivos que NO tienen extensión .jpg (case insensitive)
+    const nonJpgCount = imagenes.filter(
+        (img) => !img.file.name.toLowerCase().endsWith(".jpg")
+    ).length;
+
+    // Filtrar archivos que superan los 10MB (10 * 1024 * 1024 bytes)
+    const MAX_SIZE = 10 * 1024 * 1024;
+    const overSizeFiles = imagenes.filter(
+        (img) => img.file.size > MAX_SIZE
+    ).map(img => img.file.name);
+
     return (
         <Box>
             <DropArea {...getRootProps()}>
                 <input {...getInputProps()} />
-                <Typography>Arrastrá imágenes aquí o hacé clic para subir</Typography>
+                <Typography>
+                    Arrastrá imágenes aquí o hacé clic para subir
+                </Typography>
             </DropArea>
+
+            {nonJpgCount > 0 && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                    Warning: {nonJpgCount} file{nonJpgCount > 1 ? "s" : ""} not in .jpg format.
+                </Alert>
+            )}
+
+            {overSizeFiles.length > 0 && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                    Warning: The following file{overSizeFiles.length > 1 ? "s are" : " is"} over 10MB: {overSizeFiles.join(", ")}
+                </Alert>
+            )}
 
             <DragDropContext onDragEnd={handleDragEnd}>
                 <Droppable droppableId="imagenes" direction="horizontal">
@@ -106,16 +132,29 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
                                     {(provided) => (
                                         <Grid item ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                             <ImageCard elevation={2}>
-                                                <img
-                                                    src={img.preview}
-                                                    alt={img.alt || `Imagen ${index + 1}`}
-                                                    style={{
-                                                        width: 120,
-                                                        height: 120,
-                                                        objectFit: "cover",
-                                                        borderRadius: "8px",
-                                                    }}
-                                                />
+                                                {img.file.type.startsWith("video/") ? (
+                                                    <video
+                                                        src={img.preview}
+                                                        controls
+                                                        style={{
+                                                            width: 120,
+                                                            height: 120,
+                                                            objectFit: "cover",
+                                                            borderRadius: "8px",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src={img.preview}
+                                                        alt={img.alt || `Imagen ${index + 1}`}
+                                                        style={{
+                                                            width: 120,
+                                                            height: 120,
+                                                            objectFit: "cover",
+                                                            borderRadius: "8px",
+                                                        }}
+                                                    />
+                                                )}
                                                 <Box display="flex" justifyContent="center">
                                                     <IconButton onClick={() => handleDelete(index)} size="small">
                                                         <DeleteIcon fontSize="small" />
