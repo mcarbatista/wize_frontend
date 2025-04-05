@@ -20,6 +20,26 @@ const FullScreenMediaCarouselDialog = ({
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isMedium = useMediaQuery(theme.breakpoints.down("md"));
 
+    // Fallback check: if type is not provided, detect based on file extension.
+    const isVideoItem = (item) => {
+        const url = item.url.toLowerCase();
+        return (
+            item.type === "video" ||
+            url.endsWith(".mp4") ||
+            url.endsWith(".mov")
+        );
+    };
+
+    // Helper to determine the MIME type based on file extension.
+    const getVideoMimeType = (url) => {
+        const lowerUrl = url.toLowerCase();
+        if (lowerUrl.endsWith(".mov")) {
+            return "video/quicktime";
+        }
+        // Default to mp4 MIME type.
+        return "video/mp4";
+    };
+
     // Slider settings: no default arrows.
     const sliderSettings = {
         initialSlide: initialIndex,
@@ -97,8 +117,20 @@ const FullScreenMediaCarouselDialog = ({
                     <Slider ref={sliderRef} {...sliderSettings} className="media-element">
                         {mediaItems.map((item, idx) => (
                             <div key={idx}>
-                                {item.type === "video" ? (
-                                    <video src={item.url} autoPlay muted loop style={mediaStyle} />
+                                {isVideoItem(item) ? (
+                                    <video
+                                        autoPlay
+                                        muted
+                                        loop
+                                        controls
+                                        style={mediaStyle}
+                                    >
+                                        <source
+                                            src={item.url}
+                                            type={getVideoMimeType(item.url)}
+                                        />
+                                        Your browser does not support the video tag.
+                                    </video>
                                 ) : (
                                     <img
                                         src={item.url}

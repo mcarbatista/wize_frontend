@@ -53,6 +53,18 @@
     color: #13272d !important;
     margin-bottom: 15px !important;
     max-width: 98%;
+    padding-left: 0 !important;
+}
+
+.dev-summary ul {
+    margin: 10px 0;
+    /* Adjusts spacing above and below the entire list */
+    /* Adjusts the indentation of the list */
+}
+
+.dev-summary ul li {
+    margin-bottom: 5px;
+    /* Adjusts spacing between individual list items */
 }
 
 /* Divider in header */

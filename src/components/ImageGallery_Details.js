@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import { useTheme, useMediaQuery } from "@mui/material";
 import "../styles/ImageGallery.css";
@@ -25,9 +25,10 @@ const ImageGallery = ({ mediaItems = [] }) => {
         slidesToScroll: 1,
         arrows: false,
         swipe: true,
-        // Start on the "Imagen" item if found
+        adaptiveHeight: true, // help slider adjust height
         initialSlide: mainImageIndex >= 0 ? mainImageIndex : 0,
         afterChange: (idx) => setCurrentIndex(idx),
+        accessibility: false,
     };
 
     // Thumbnail slider settings (no default arrows).
@@ -92,32 +93,67 @@ const ImageGallery = ({ mediaItems = [] }) => {
 
     const iconFontSize = isMobile ? "2rem" : isMedium ? "2.5rem" : "3rem";
 
+    // Fallback check: if type is not provided, detect based on file extension.
+    const isVideoItem = (item) => {
+        const url = item.url.trim().toLowerCase();
+        const detected = item.type === "video" || url.endsWith(".mp4") || url.endsWith(".mov");
+        console.log(`Checking item: ${url} -> isVideo: ${detected}`);
+        return detected;
+    };
+
+    // Helper to determine the correct MIME type based on file extension.
+    const getVideoMimeType = (url) => {
+        const lowerUrl = url.trim().toLowerCase();
+        if (lowerUrl.endsWith(".mov")) {
+            return "video/quicktime";
+        }
+        return "video/mp4";
+    };
+
+    useEffect(() => {
+        // Log mediaItems for debugging.
+        mediaItems.forEach((item, idx) => {
+            console.log(`Media item ${idx}: URL: ${item.url}, type: ${item.type || "undefined"}, isVideo: ${isVideoItem(item)}, mime: ${isVideoItem(item) ? getVideoMimeType(item.url) : "n/a"}`);
+        });
+    }, [mediaItems]);
+
     return (
         <div className="gallery-container">
             <div className="main-media-wrapper">
                 <Slider ref={mainSliderRef} {...mainSliderSettings}>
-                    {mediaItems.map((item, idx) => (
-                        <div key={idx} onClick={() => setDialogOpen(true)}>
-                            {item.type === "video" ? (
-                                <video
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                    className="main-image"
-                                >
-                                    <source src={item.url} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            ) : (
-                                <img
-                                    src={item.url}
-                                    alt={item.alt || "Principal"}
-                                    className="main-image"
-                                />
-                            )}
-                        </div>
-                    ))}
+                    {mediaItems.map((item, idx) => {
+                        const isActive = idx === currentIndex;
+                        console.log(`Slide ${idx} active: ${isActive}`);
+                        return (
+                            <div key={idx} data-active={isActive} onClick={() => setDialogOpen(true)}>
+                                {isVideoItem(item) ? (
+                                    <video
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        controls
+                                        poster={item.poster || ""}
+                                        className="main-image"
+                                        style={{
+                                            width: "100%",
+                                            maxHeight: "600px",
+                                            minHeight: "300px",
+                                        }}
+                                    >
+                                        <source src={item.url} type={getVideoMimeType(item.url)} />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                ) : (
+                                    <img
+                                        src={item.url}
+                                        alt={item.alt || "Principal"}
+                                        className="main-image"
+                                    />
+                                )}
+                            </div>
+                        );
+                    })}
                 </Slider>
 
                 {mediaItems.length > 1 && (
@@ -147,13 +183,13 @@ const ImageGallery = ({ mediaItems = [] }) => {
                         className="thumbnail-wrapper"
                         onClick={() => handleThumbnailClick(idx)}
                     >
-                        {item.type === "video" ? (
+                        {isVideoItem(item) ? (
                             <video
                                 muted
                                 loop
                                 className="thumbnail-image"
                             >
-                                <source src={item.url} type="video/mp4" />
+                                <source src={item.url} type={getVideoMimeType(item.url)} />
                                 Your browser does not support the video tag.
                             </video>
                         ) : (
