@@ -2,15 +2,16 @@
     position: relative;
     background: #fbf7ea;
     margin: 0 auto !important;
+    width: 100% !important;
+    max-height: 90% !important;
 }
 
 .fullscreen-slider-wrapper {
     position: relative;
-    padding: 5%;
+    padding: 2% !important;
     box-sizing: border-box;
-    max-width: 1200px;
     margin: 0 auto !important;
-    height: calc(100vh - 10%) !important;
+    max-height: 90% !important;
 }
 
 /* On medium devices, reduce the height a bit */

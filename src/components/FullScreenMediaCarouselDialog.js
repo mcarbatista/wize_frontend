@@ -75,13 +75,13 @@ const FullScreenMediaCarouselDialog = ({
     const leftArrowStyle = {
         ...arrowStyle,
         left: isMobile ? "10px" : isMedium ? "35px" : "55px",
-        top: isMobile ? "18%" : isMedium ? "27%" : "50%",
+        top: isMobile ? "40%" : isMedium ? "27%" : "40%",
     };
 
     const rightArrowStyle = {
         ...arrowStyle,
         right: isMobile ? "10px" : isMedium ? "35px" : "55px",
-        top: isMobile ? "18%" : isMedium ? "27%" : "50%",
+        top: isMobile ? "40%" : isMedium ? "27%" : "40%",
     };
 
     const iconFontSize = isMobile ? "2rem" : isMedium ? "2.5rem" : "3rem";
@@ -89,8 +89,8 @@ const FullScreenMediaCarouselDialog = ({
     // Dynamic close button style based on device type
     const closeButtonStyle = {
         position: "absolute",
-        top: isMobile ? "3%" : isMedium ? "7%" : "10%",
-        right: isMobile ? "5%" : isMedium ? "7%" : "7%",
+        top: isMobile ? "3%" : isMedium ? "7%" : "5%",
+        right: isMobile ? "5%" : isMedium ? "7%" : "5%",
         zIndex: 1000,
     };
 
