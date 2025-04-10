@@ -16,6 +16,8 @@ import PropertyForm from "../../components/admin/PropertyForm";
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
 import "../../styles/Admin.css";
 import BASE_URL from "../../api/config";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const AdminPropiedades = () => {
     document.title = "Wize | Admin Propiedades";
@@ -416,7 +418,11 @@ const AdminPropiedades = () => {
                             setOpenConfirm(false);
                         }}
                         color="error"
-                    ></Button>
+                        variant="contained"
+                        startIcon={<DeleteIcon />}
+                        autoFocus
+                    >
+                        Eliminar</Button>
                 </DialogActions>
             </Dialog>
         </Box>

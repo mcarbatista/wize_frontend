@@ -2,6 +2,8 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const PropertyCard = ({ prop, onEdit, onDelete }) => (
     <Card className="property-card-edit">
@@ -40,8 +42,10 @@ const PropertyCard = ({ prop, onEdit, onDelete }) => (
         <Box sx={{ display: "flex", justifyContent: "space-around", pb: 2 }}>
             <Button
                 onClick={() => onEdit(prop._id)}
+                color="primary"
                 size="small"
-                className="admin-button-edit"
+                variant="contained"
+                startIcon={<EditIcon />}
             >
                 Editar
             </Button>
@@ -49,7 +53,9 @@ const PropertyCard = ({ prop, onEdit, onDelete }) => (
                 onClick={() => onDelete(prop)}
                 size="small"
                 color="error"
-                className="admin-button-edit"
+                startIcon={<DeleteIcon />}
+                variant="contained"
+                autoFocus
             >
                 Eliminar
             </Button>
