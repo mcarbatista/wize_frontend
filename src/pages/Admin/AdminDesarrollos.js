@@ -28,6 +28,7 @@ import GaleriaEditor from "../../components/admin/GaleriaEditor";
 import MapSelector from "../../components/admin/MapSelector";
 import RichTextInput from "../../components/admin/RichTextInput";
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const requiredFields = [
     "Proyecto_Nombre",
@@ -653,9 +654,10 @@ const AdminDesarrollos = () => {
                                     </Button>
                                     <Button
                                         onClick={() => confirmDelete(dev._id)}
-                                        size="small"
                                         color="error"
-                                        className="admin-button-edit"
+                                        variant="contained"
+                                        startIcon={<DeleteIcon />}
+                                        autoFocus
                                     >
                                         Eliminar
                                     </Button>
@@ -683,6 +685,7 @@ const AdminDesarrollos = () => {
                             setOpenConfirm(false);
                         }}
                         color="error"
+                        variant="contained"
                     >
                         Eliminar
                     </Button>
