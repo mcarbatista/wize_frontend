@@ -127,14 +127,14 @@ const GaleriaEditor = ({ imagenes, onChange, imagenPrincipal, onMainSelect }) =>
             {/* Warning for images not in JPG format */}
             {nonJpgCount > 0 && (
                 <Alert severity="warning" sx={{ mb: 2 }}>
-                    Warning: {nonJpgCount} image{nonJpgCount > 1 ? "s" : ""} not in JPG format.
+                    Alerta: {nonJpgCount} imagen{nonJpgCount > 1 ? "es" : ""} no están en formato JPG.
                 </Alert>
             )}
 
             {/* Error for images over 10MB */}
             {imageOverSizeFiles.length > 0 && (
                 <Alert severity="error" sx={{ mb: 2 }}>
-                    Error: The following image file{imageOverSizeFiles.length > 1 ? "s are" : " is"} over 10MB: {imageOverSizeFiles.join(", ")}
+                    Error: The following image archivo{imageOverSizeFiles.length > 1 ? "s are" : " is"} over 10MB: {imageOverSizeFiles.join(", ")}
                 </Alert>
             )}
 
