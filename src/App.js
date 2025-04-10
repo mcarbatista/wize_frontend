@@ -14,6 +14,7 @@ import AdminPropiedades from "./pages/Admin/AdminPropiedades";
 import AdminDesarrollos from "./pages/Admin/AdminDesarrollos";
 import EditDevelopment from "./pages/Admin/EditDevelopment";
 import EditProperty from "./pages/Admin/EditProperty";
+import EditPropertyNoDevForm from "./components/admin/EditPropertyNoDevForm";
 import AdminSelector from "./pages/Admin/AdminSelector";
 import HomeStaging from "./pages/HomeStaging";
 import "slick-carousel/slick/slick.css";
@@ -87,6 +88,8 @@ function App() {
                     <Route path="/admin/desarrollos" element={<AdminDesarrollos />} />
                     <Route path="/admin/desarrollos/edit/:id" element={<EditDevelopment />} />
                     <Route path="/admin/propiedades/edit/:id" element={<EditProperty />} />
+                    <Route path="/admin/propiedades/edit-no-dev/:id" element={<EditPropertyNoDevForm />} />
+
                     <Route path="/admin/propiedades" element={<AdminPropiedades />} />
                 </Routes>
             </main>

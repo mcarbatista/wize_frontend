@@ -6,6 +6,12 @@
     padding: 2rem;
 }
 
+.admin-container {
+    background-color: #FBF7EA !important;
+    color: #13272D;
+    padding: 2%;
+}
+
 /* Section Titles */
 .admin-title {
     color: #FBF7EA;
