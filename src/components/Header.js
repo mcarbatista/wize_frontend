@@ -11,13 +11,16 @@ import {
     ListItemText
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/isologotipo.png";
 import "../styles/Header.css";
 
 const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -27,6 +30,14 @@ const Header = () => {
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
+    };
+
+    const handleInicioClick = () => {
+        if (location.pathname === "/") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            navigate("/");
+        }
     };
 
     return (
@@ -42,18 +53,15 @@ const Header = () => {
         >
             <Toolbar
                 sx={{
-                    // Center content up to a max width (optional)
                     width: "100%",
                     maxWidth: "1200px",
                     mx: "auto",
-
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
                     position: "relative"
                 }}
             >
-                {/* HAMBURGER ICON: Hidden above 1000px, shown below 1000px */}
                 <IconButton
                     edge="start"
                     color="inherit"
@@ -71,7 +79,6 @@ const Header = () => {
                     <MenuIcon />
                 </IconButton>
 
-                {/* LOGO: Centered below 1000px by using absolute positioning */}
                 <Box
                     component={Link}
                     to="/"
@@ -79,8 +86,6 @@ const Header = () => {
                         textDecoration: "none",
                         position: "relative",
                         zIndex: 1,
-
-                        // When under 1000px, position absolute in the center
                         "@media (max-width:1000px)": {
                             position: "absolute",
                             left: "50%",
@@ -95,42 +100,45 @@ const Header = () => {
                     />
                 </Box>
 
-                {/* NAV BUTTONS: Shown above 1000px, hidden below */}
                 <Box
                     sx={{
                         display: "flex",
                         flexDirection: "row",
                         gap: 3,
                         justifyContent: "center",
-
                         "@media (max-width:1000px)": {
                             display: "none"
                         }
                     }}
                 >
                     {["INICIO", "DESARROLLOS", "PROPIEDADES", "SERVICIOS", "NOSOTROS"].map(
-                        (item, index) => (
-                            <Button
-                                key={index}
-                                component={Link}
-                                to={`/${item.toLowerCase()}`}
-                                sx={{
-                                    fontFamily: "Avenir Medium, sans-serif",
-                                    fontSize: "15px",
-                                    fontWeight: "bold",
-                                    color: "#C3AF94",
-                                    textTransform: "none",
-                                    "&:hover": { color: "#0F4C54" },
-                                    "&.active": { color: "#0F4C54" }
-                                }}
-                            >
-                                {item}
-                            </Button>
-                        )
+                        (item, index) => {
+                            const path = `/${item.toLowerCase()}`;
+                            return (
+                                <Button
+                                    key={index}
+                                    onClick={
+                                        item === "INICIO"
+                                            ? handleInicioClick
+                                            : () => navigate(path)
+                                    }
+                                    sx={{
+                                        fontFamily: "Avenir Medium, sans-serif",
+                                        fontSize: "15px",
+                                        fontWeight: "bold",
+                                        color: "#C3AF94",
+                                        textTransform: "none",
+                                        "&:hover": { color: "#0F4C54" },
+                                        "&.active": { color: "#0F4C54" }
+                                    }}
+                                >
+                                    {item}
+                                </Button>
+                            );
+                        }
                     )}
                 </Box>
 
-                {/* CONTACTO BUTTON: Shown above 1000px, hidden below */}
                 <Button
                     variant="contained"
                     onClick={() => {
@@ -138,7 +146,6 @@ const Header = () => {
                         if (el) el.scrollIntoView({ behavior: "smooth" });
                     }}
                     sx={{
-                        // Our custom styles
                         background: "#FBF7EA",
                         border: "1px solid #0F4C54",
                         color: "#0F4C54",
@@ -153,8 +160,6 @@ const Header = () => {
                             border: "1px solid #C3AF94",
                             boxShadow: "none"
                         },
-
-                        // Hide below 1000px
                         "@media (max-width:1000px)": {
                             display: "none"
                         }
@@ -163,7 +168,6 @@ const Header = () => {
                     Contacto
                 </Button>
 
-                {/* MOBILE DRAWER: slides in from left when hamburger is clicked */}
                 <Drawer
                     anchor="left"
                     open={mobileOpen}
@@ -184,26 +188,36 @@ const Header = () => {
                             "SERVICIOS",
                             "NOSOTROS",
                             "CONTACTO"
-                        ].map((item, index) => (
-                            <ListItem
-                                button
-                                key={index}
-                                component={Link}
-                                to={`/${item.toLowerCase()}`}
-                                onClick={handleDrawerToggle}
-                            >
-                                <ListItemText
-                                    primary={item}
-                                    sx={{
-                                        textAlign: "center",
-                                        fontSize: "16px",
-                                        color: "#0F4C54",
-                                        fontWeight: "bold",
-                                        fontFamily: "Avenir Medium, sans serif"
-                                    }}
-                                />
-                            </ListItem>
-                        ))}
+                        ].map((item, index) => {
+                            const path = `/${item.toLowerCase()}`;
+                            const handleClick = () => {
+                                handleDrawerToggle();
+                                if (item === "INICIO") {
+                                    handleInicioClick();
+                                } else {
+                                    navigate(path);
+                                }
+                            };
+
+                            return (
+                                <ListItem
+                                    button
+                                    key={index}
+                                    onClick={handleClick}
+                                >
+                                    <ListItemText
+                                        primary={item}
+                                        sx={{
+                                            textAlign: "center",
+                                            fontSize: "16px",
+                                            color: "#0F4C54",
+                                            fontWeight: "bold",
+                                            fontFamily: "Avenir Medium, sans serif"
+                                        }}
+                                    />
+                                </ListItem>
+                            );
+                        })}
                     </List>
                 </Drawer>
             </Toolbar>

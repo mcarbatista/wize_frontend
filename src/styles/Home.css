@@ -322,7 +322,7 @@
 .welcome-section {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 70vh;
     /* Full height */
     background-image: url("../assets/holaHome.jpg");
     /* Background Image */
@@ -625,15 +625,72 @@
 /* TESTIMONIOS SECTION >>>>>>>>>>*/
 
 /* ✅ Full-Width Slider Section */
+.slider-section-home {
+    width: 100%;
+    text-align: center;
+    background-color: #C3AF94;
+    padding-top: 5%;
+    display: flex !important;
+    flex-direction: column !important;
+
+}
+
+/* ✅ Individual Slide */
+.slide-home {
+    max-width: 70%;
+    text-align: center;
+    color: #13272D;
+    margin: auto;
+}
+
+/* ✅ Title */
+.slide-title-home {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding: 5%;
+    font-size: 3rem !important;
+    font-family: "Avenir", sans-serif !important;
+    color: #13272D !important;
+    font-weight: bold !important;
+    letter-spacing: 3px !important;
+}
+
+/* ✅ Text */
+.slide-text-home {
+    font-size: 1.2rem !important;
+    max-width: 700px;
+    font-family: "Avenir Light", sans-serif !important;
+    text-align: center !important;
+    padding: 3%;
+    margin: auto !important;
+}
+
+.slide-who-home {
+    font-size: 1rem !important;
+    font-family: "Avenir Book", sans-serif !important;
+    text-align: center !important;
+    padding: 8% !important;
+    margin: 0, 3px;
+}
+
+/* TESTIMONIOS NOSOTROS SECTION >>>>>>>>>>*/
+
 .slider-section {
     width: 100%;
     text-align: center;
     background-color: #C3AF94;
     padding-top: 5%;
-
     display: flex !important;
     flex-direction: column !important;
 
+}
+
+/* ✅ Individual Slide */
+.slide {
+    max-width: 70%;
+    text-align: center;
+    color: #13272D;
+    margin: auto;
 }
 
 /* ✅ Individual Slide */
@@ -670,8 +727,8 @@
     font-size: 1rem !important;
     font-family: "Avenir Book", sans-serif !important;
     text-align: center !important;
-    padding: 15% !important;
-    margin: 0, 10px;
+    padding: 8% !important;
+    margin: 0, 3px;
 }
 
 /* ✅ Dots Customization */
@@ -701,7 +758,7 @@
 /* ✅ Custom Arrows testimonios*/
 .custom-arrow {
     position: absolute !important;
-    top: 20% !important;
+    top: 10% !important;
     z-index: 1000 !important;
     font-size: 2.5rem;
     color: white !important;
@@ -711,7 +768,6 @@
     font-size: 2.5rem !important;
     margin: 10px !important;
     width: 50px !important;
-    height: 50px !important;
     transition: background 0.3s ease-in-out, transform 0.2s ease-in-out !important;
 }
 

@@ -45,13 +45,13 @@ const Testimonios = () => {
     };
 
     return (
-        <Box className="slider-section">
-            <Typography variant="h3" className="slide-title">Testimonios</Typography>
+        <Box className="slider-section-home">
+            <Typography variant="h3" className="slide-title-home">Testimonios</Typography>
             <Slider {...settings}>
                 {testimonios.map((testimonial, index) => (
-                    <Box key={index} className="slide">
-                        <Typography className="slide-text">"{testimonial.text}"</Typography>
-                        <Typography className="slide-who">{testimonial.name}</Typography>
+                    <Box key={index} className="slide-home">
+                        <Typography className="slide-text-home">"{testimonial.text}"</Typography>
+                        <Typography className="slide-who-home">{testimonial.name}</Typography>
                     </Box>
                 ))}
             </Slider>
