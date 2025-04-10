@@ -129,7 +129,7 @@ const PropertyForm = ({
                 {/* Owner Dropdown */}
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth error={!!errors.Owner}>
-                        <InputLabel>{`Owner${requiredFields.includes("Owner") ? " *" : ""}`}</InputLabel>
+                        <InputLabel>{`Agente${requiredFields.includes("Agente") ? " *" : ""}`}</InputLabel>
                         <Select
                             name="Owner"
                             value={form.Owner || ""}
