@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from "react";
 import {
     Box,
-    TextField,
+    Typography,
+    Grid,
     Button,
+    TextField,
     MenuItem,
     Select,
     InputLabel,
     FormControl,
-    Typography,
-    Grid,
-    FormHelperText
+    FormHelperText,
 } from "@mui/material";
-import GaleriaEditorPropiedad from "./GaleriaEditorPropiedad";
 
-// Define required fields based on AdminPropiedades.js configuration.
-const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
+import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropiedad";
+import "../../styles/Admin.css";
+
+const requiredFields = [
+    "Titulo",
+    "Precio",
+    "Dormitorios",
+    "Banos",
+    "Tamano_m2",
+    "DesarrolloId",
+    "Owner",
+    // "Barrio",
+    // "Ciudad"
+];
 
 const PropertyForm = ({
     form,
     desarrollos,
-    usuarios, // new prop: list of usuarios for the Owner dropdown
+    usuarios,
     editId,
     handleChange,
     handleSubmit,
@@ -27,60 +38,56 @@ const PropertyForm = ({
     errors = {},
     successMessage
 }) => {
+    // We keep a filtered gallery for display and also auto-prefill the property gallery
+    // from the selected development if empty.
     const [filteredGaleria, setFilteredGaleria] = useState([]);
 
     useEffect(() => {
         const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
         if (selected) {
             setFilteredGaleria(selected.Galeria || []);
-
-            // Update several fields from the selected desarrollo
-            [
-                "Resumen",
-                "Descripcion",
-                "Ciudad",
-                "Barrio",
-                "Ubicacion",
-                "Estado"
-            ].forEach((field) => {
-                handleChange({
-                    target: {
-                        name: field,
-                        value: selected[field] || ""
-                    }
-                });
-            });
-
-            // Prefill the Owner field based on desarrollo if not already set.
-            if (!form.Owner && selected.Owner) {
-                handleChange({
-                    target: { name: "Owner", value: selected.Owner }
-                });
-            }
-
-            // Also prefill Galeria (if needed)
-            handleChange({
-                target: { name: "Galeria", value: selected.Galeria || [] }
-            });
         } else {
             setFilteredGaleria([]);
         }
-    }, [form.DesarrolloId, desarrollos, handleChange, form.Owner]);
+    }, [form.DesarrolloId, desarrollos]);
+
+    // Auto-fill property gallery if empty
+    useEffect(() => {
+        const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
+        if (selected && (!form.Galeria || form.Galeria.length === 0)) {
+            handleChange({
+                target: { name: "Galeria", value: selected.Galeria || [] }
+            });
+        }
+    }, [form.DesarrolloId, desarrollos, handleChange]);
 
     // List of fields (excluding Owner, Email and Celular)
     const fields = [
-        "Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "Tipo", "Metraje",
-        "Piso", "Unidad"
+        "Titulo",
+        "Precio",
+        "Dormitorios",
+        "Banos",
+        "Tamano_m2",
+        "Tipo",
+        "Metraje",
+        "Piso",
+        "Unidad"
     ];
 
     // Helper function to format labels (adding an asterisk for required fields)
-    const getLabel = (field) => {
-        const label = field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-        return requiredFields.includes(field) ? `${label} *` : label;
-    };
+    const getLabel = (field) =>
+        field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()) +
+        (requiredFields.includes(field) ? " *" : "");
 
     return (
-        <Box className="admin-main-container" component="form" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        <Box
+            className="admin-main-container"
+            component="form"
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}
+        >
             <Grid container spacing={2}>
                 {/* Desarrollo Dropdown */}
                 <Grid item xs={12}>
@@ -113,7 +120,6 @@ const PropertyForm = ({
                             value={form[field] || ""}
                             onChange={handleChange}
                             fullWidth
-
                             error={!!errors[field]}
                             helperText={errors[field]}
                         />
@@ -132,7 +138,7 @@ const PropertyForm = ({
                         >
                             {usuarios && usuarios.length > 0 ? (
                                 usuarios.map((user) => (
-                                    <MenuItem key={user._id} value={user.nombre}>
+                                    <MenuItem key={user._id} value={user._id}>
                                         {user.nombre}
                                     </MenuItem>
                                 ))
@@ -146,18 +152,18 @@ const PropertyForm = ({
                     </FormControl>
                 </Grid>
 
-                {/* Imágenes de la propiedad */}
+                {/* Imágenes/Videos de la propiedad */}
                 <Grid item xs={12}>
                     <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
-                        Imágenes de la propiedad
+                        Imágenes / Videos de la propiedad
                     </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Galeria || []}
                         onChange={handleImageChange}
-                        imagenPrincipal={form.Imagen}
                         onMainSelect={(url) =>
                             handleChange({ target: { name: "Imagen", value: url } })
                         }
+                        selectedMainImage={form.Imagen}
                     />
                 </Grid>
 
@@ -168,15 +174,16 @@ const PropertyForm = ({
                     </Typography>
                     <GaleriaEditorPropiedad
                         imagenes={form.Plano || []}
-                        onChange={(imgs) => handleChange({ target: { name: "Plano", value: imgs } })}
-                        imagenPrincipal={null}
+                        onChange={(imgs) =>
+                            handleChange({ target: { name: "Plano", value: imgs } })
+                        }
                         onMainSelect={() => { }}
                     />
                 </Grid>
 
                 {/* Submit Button */}
                 <Grid item xs={12}>
-                    <Button className="admin-button" variant="contained" type="submit" sx={{ mt: 3 }}>
+                    <Button variant="contained" type="submit" sx={{ mt: 3 }}>
                         {editId ? "Actualizar Propiedad" : "Crear Propiedad"}
                     </Button>
                     {successMessage && (

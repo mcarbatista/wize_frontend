@@ -4,15 +4,6 @@ import {
     Typography,
     Grid,
     Button,
-    TextField,
-    MenuItem,
-    Select,
-    Card,
-    CardMedia,
-    CardContent,
-    InputLabel,
-    FormControl,
-    FormHelperText,
     Dialog,
     DialogTitle,
     DialogContent,
@@ -20,193 +11,11 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import PropertyCard from "../../components/admin/PropertyCard";
+import PropertyForm from "../../components/admin/PropertyForm";
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
-import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropiedad";
 import "../../styles/Admin.css";
 import BASE_URL from "../../api/config";
-
-const requiredFields = [
-    "Titulo",
-    "Precio",
-    "Dormitorios",
-    "Banos",
-    "Tamano_m2",
-    "DesarrolloId",
-    "Owner"
-];
-
-const PropertyForm = ({
-    form,
-    desarrollos,
-    usuarios,
-    editId,
-    handleChange,
-    handleSubmit,
-    handleImageChange,
-    errors = {},
-    successMessage
-}) => {
-    // We keep a filtered gallery for display and also auto-prefill the property gallery
-    // from the selected development if empty.
-    const [filteredGaleria, setFilteredGaleria] = useState([]);
-
-    useEffect(() => {
-        const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
-        if (selected) {
-            setFilteredGaleria(selected.Galeria || []);
-        } else {
-            setFilteredGaleria([]);
-        }
-    }, [form.DesarrolloId, desarrollos]);
-
-    // Auto-fill property gallery if empty
-    useEffect(() => {
-        const selected = desarrollos.find((d) => d._id === form.DesarrolloId);
-        if (selected && (!form.Galeria || form.Galeria.length === 0)) {
-            handleChange({
-                target: { name: "Galeria", value: selected.Galeria || [] }
-            });
-        }
-    }, [form.DesarrolloId, desarrollos, handleChange]);
-
-    // List of fields (excluding Owner, Email and Celular)
-    const fields = [
-        "Titulo",
-        "Precio",
-        "Dormitorios",
-        "Banos",
-        "Tamano_m2",
-        "Tipo",
-        "Metraje",
-        "Piso",
-        "Unidad"
-    ];
-
-    // Helper function to format labels (adding an asterisk for required fields)
-    const getLabel = (field) =>
-        field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()) +
-        (requiredFields.includes(field) ? " *" : "");
-
-    return (
-        <Box
-            className="admin-main-container"
-            component="form"
-            onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit();
-            }}
-        >
-            <Grid container spacing={2}>
-                {/* Desarrollo Dropdown */}
-                <Grid item xs={12}>
-                    <FormControl fullWidth error={!!errors.DesarrolloId}>
-                        <InputLabel>
-                            {`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
-                        </InputLabel>
-                        <Select
-                            name="DesarrolloId"
-                            value={form.DesarrolloId}
-                            onChange={handleChange}
-                            label={`Seleccionar Desarrollo${requiredFields.includes("DesarrolloId") ? " *" : ""}`}
-                        >
-                            {(desarrollos || []).map((dev) => (
-                                <MenuItem key={dev._id} value={dev._id}>
-                                    {dev.Proyecto_Nombre}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                        {errors.DesarrolloId && <FormHelperText>{errors.DesarrolloId}</FormHelperText>}
-                    </FormControl>
-                </Grid>
-
-                {/* Render other fields */}
-                {fields.map((field) => (
-                    <Grid item xs={12} sm={6} key={field}>
-                        <TextField
-                            label={getLabel(field)}
-                            name={field}
-                            value={form[field] || ""}
-                            onChange={handleChange}
-                            fullWidth
-                            error={!!errors[field]}
-                            helperText={errors[field]}
-                        />
-                    </Grid>
-                ))}
-
-                {/* Owner Dropdown */}
-                <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth error={!!errors.Owner}>
-                        <InputLabel>{`Owner${requiredFields.includes("Owner") ? " *" : ""}`}</InputLabel>
-                        <Select
-                            name="Owner"
-                            value={form.Owner || ""}
-                            onChange={handleChange}
-                            label={`Owner${requiredFields.includes("Owner") ? " *" : ""}`}
-                        >
-                            {usuarios && usuarios.length > 0 ? (
-                                usuarios.map((user) => (
-                                    <MenuItem key={user._id} value={user._id}>
-                                        {user.nombre}
-                                    </MenuItem>
-                                ))
-                            ) : (
-                                <MenuItem value="">
-                                    <em>No hay usuarios disponibles</em>
-                                </MenuItem>
-                            )}
-                        </Select>
-                        {errors.Owner && <FormHelperText>{errors.Owner}</FormHelperText>}
-                    </FormControl>
-                </Grid>
-
-                {/* Imágenes/Videos de la propiedad */}
-                <Grid item xs={12}>
-                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
-                        Imágenes / Videos de la propiedad
-                    </Typography>
-                    <GaleriaEditorPropiedad
-                        imagenes={form.Galeria || []}
-                        onChange={handleImageChange}
-                        onMainSelect={(url) =>
-                            handleChange({ target: { name: "Imagen", value: url } })
-                        }
-                        selectedMainImage={form.Imagen}
-                    />
-                </Grid>
-
-                {/* Planos */}
-                <Grid item xs={12}>
-                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
-                        Planos
-                    </Typography>
-                    <GaleriaEditorPropiedad
-                        imagenes={form.Plano || []}
-                        onChange={(imgs) =>
-                            handleChange({ target: { name: "Plano", value: imgs } })
-                        }
-                        onMainSelect={() => { }}
-                    />
-                </Grid>
-
-                {/* Submit Button */}
-                <Grid item xs={12}>
-                    <Button variant="contained" type="submit" sx={{ mt: 3 }}>
-                        {editId ? "Actualizar Propiedad" : "Crear Propiedad"}
-                    </Button>
-                    {successMessage && (
-                        <Box mt={2} mb={2}>
-                            <Typography color="success.main" variant="subtitle1">
-                                {successMessage}
-                            </Typography>
-                        </Box>
-                    )}
-                </Grid>
-            </Grid>
-        </Box>
-    );
-};
 
 const AdminPropiedades = () => {
     document.title = "Wize | Admin Propiedades";
@@ -282,6 +91,7 @@ const AdminPropiedades = () => {
         const reqFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
         reqFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
+            console.log(`⚠️ Campo requerido faltante: ${field}`);
         });
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -345,9 +155,9 @@ const AdminPropiedades = () => {
     };
 
     const handleSubmit = async () => {
+        console.log("🚀 handleSubmit ejecutado"); // <-- Este debería aparecer sí o sí
         if (!validateForm()) return;
 
-        // Ensure that a main image or video is selected
         if (!form.Galeria.some(img => img.isMain)) {
             alert("Debés seleccionar una imagen o video principal (haz clic en la estrella).");
             return;
@@ -362,7 +172,6 @@ const AdminPropiedades = () => {
 
         setIsSaving(true);
         try {
-            // Upload Galeria images/videos
             const formDataImgs = new FormData();
             const folderGaleria = `wize/propiedades/fotos/${form.Proyecto_Nombre}`;
             formDataImgs.append("folder", folderGaleria);
@@ -385,10 +194,8 @@ const AdminPropiedades = () => {
                 position: index
             }));
 
-            // Determine the main image/video – use form.Imagen if set, else default to the first file
             const mainImage = form.Imagen || imagenesFinal[0]?.url;
 
-            // Upload Plano images
             const planoFinal = [];
             for (let i = 0; i < form.Plano.length; i++) {
                 const img = form.Plano[i];
@@ -455,6 +262,10 @@ const AdminPropiedades = () => {
                 }
             }
 
+            // 🔍 Logging útil para debug
+            console.log("🧾 Payload listo para envío:", payload);
+            console.log("✏️ Editando propiedad ID:", editId);
+
             if (editId) {
                 await axios.put(`${BASE_URL}/api/propiedades/${editId}`, payload, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -477,6 +288,7 @@ const AdminPropiedades = () => {
             setIsSaving(false);
         }
     };
+
 
     const resetForm = () => {
         setForm({
@@ -515,6 +327,7 @@ const AdminPropiedades = () => {
     // Updated deletion functionality with confirmation dialog.
     const handleDelete = async (id) => {
         try {
+            console.log("🧨 Eliminando propiedad con ID:", id);
             await axios.delete(`${BASE_URL}/api/propiedades/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -523,6 +336,17 @@ const AdminPropiedades = () => {
             console.error("Error deleting property:", err);
         }
     };
+
+    const handleRequestDelete = (prop) => {
+        console.log("🔍 Prop a eliminar:", prop);
+        setPropertyToDelete(prop);
+        setOpenConfirm(true);
+    };
+
+    const handleEdit = (id) => {
+        navigate(`/admin/propiedades/edit/${id}`);
+    };
+
 
     return (
         <Box p={4}>
@@ -566,62 +390,7 @@ const AdminPropiedades = () => {
             >
                 {propiedades.map((prop) => (
                     <Grid item xs={12} md={6} key={prop._id}>
-                        <Card className="property-card-edit">
-                            <Link
-                                to={`/propiedades/${prop._id}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ textDecoration: "none", color: "inherit" }}
-                            >
-                                <CardMedia
-                                    component="img"
-                                    image={prop.Imagen}
-                                    alt={prop.Proyecto_Nombre}
-                                    sx={{ height: 200, objectFit: "cover" }}
-                                />
-                                <CardContent>
-                                    <Typography className="property-status">
-                                        {prop.Estado}
-                                    </Typography>
-                                    <Typography className="property-price">
-                                        ${prop.Precio_Con_Formato}
-                                    </Typography>
-                                    <Typography
-                                        className="property-title-desarrollos"
-                                        variant="h6"
-                                        style={{ height: "90px" }}
-                                    >
-                                        {prop.Titulo}
-                                    </Typography>
-                                    <Typography className="property-barrio" variant="h6">
-                                        {prop.Barrio}
-                                    </Typography>
-                                    <Typography className="desarrollo-entrega">
-                                        {prop.Entrega}
-                                    </Typography>
-                                </CardContent>
-                            </Link>
-                            <Box sx={{ display: "flex", justifyContent: "space-around", pb: 2 }}>
-                                <Button
-                                    onClick={() => navigate(`/admin/propiedades/edit/${prop._id}`)}
-                                    size="small"
-                                    className="admin-button-edit"
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        setPropertyToDelete(prop);
-                                        setOpenConfirm(true);
-                                    }}
-                                    size="small"
-                                    color="error"
-                                    className="admin-button-edit"
-                                >
-                                    Eliminar
-                                </Button>
-                            </Box>
-                        </Card>
+                        <PropertyCard prop={prop} onEdit={handleEdit} onDelete={handleRequestDelete} />
                     </Grid>
                 ))}
             </Box>
@@ -639,13 +408,15 @@ const AdminPropiedades = () => {
                     <Button onClick={() => setOpenConfirm(false)}>Cancelar</Button>
                     <Button
                         onClick={() => {
-                            handleDelete(propertyToDelete._id);
+                            if (propertyToDelete?._id) {
+                                handleDelete(propertyToDelete._id);
+                            } else {
+                                console.warn("⚠️ propertyToDelete._id es undefined");
+                            }
                             setOpenConfirm(false);
                         }}
                         color="error"
-                    >
-                        Eliminar
-                    </Button>
+                    ></Button>
                 </DialogActions>
             </Dialog>
         </Box>
@@ -653,3 +424,4 @@ const AdminPropiedades = () => {
 };
 
 export default AdminPropiedades;
+

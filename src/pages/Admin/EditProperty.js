@@ -65,7 +65,7 @@ const EditProperty = () => {
         Email: "",
         Celular: "",
         // New field for synchronizing with InfoCasas
-        syncInfoCasas: false
+        // syncInfoCasas: false
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -109,6 +109,7 @@ const EditProperty = () => {
             })
             .then((res) => {
                 const prop = res.data;
+                console.log("set form:", res.data)
                 setForm({
                     Titulo: prop.Titulo || "",
                     Descripcion: prop.Descripcion || "",
@@ -139,7 +140,7 @@ const EditProperty = () => {
                     Galeria: prop.Galeria || [],
                     Plano: prop.Plano || [],
                     // Default false if not provided
-                    syncInfoCasas: prop.syncInfoCasas || false
+                    // syncInfoCasas: prop.syncInfoCasas || false
                 });
                 setIsLoading(false);
             })
@@ -268,9 +269,9 @@ const EditProperty = () => {
                 Galeria: updatedGaleria,
                 Plano: form.Plano,
                 // Include the new sync flag
-                syncInfoCasas: form.syncInfoCasas
+                // syncInfoCasas: form.syncInfoCasas
             };
-
+            console.log("Payload enviado:", payload);
             await axios.put(`${BASE_URL}/api/propiedades/${id}`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -399,6 +400,7 @@ const EditProperty = () => {
                                 )}
                             </FormControl>
                         </Grid>
+
                         {/* Owner Dropdown */}
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.Owner}>
@@ -422,7 +424,7 @@ const EditProperty = () => {
                         </Grid>
                         {/* Checkbox for synchronizing with InfoCasas */}
                         <Grid item xs={12}>
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 control={
                                     <Checkbox
                                         name="syncInfoCasas"
@@ -431,7 +433,7 @@ const EditProperty = () => {
                                     />
                                 }
                                 label="Sincronizar con InfoCasas"
-                            />
+                            /> */}
                         </Grid>
                         {/* Descripción */}
                         <Grid item xs={12}>
