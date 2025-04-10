@@ -288,25 +288,6 @@
     text-transform: none !important;
     margin: 5% !important;
 
-    sx= {
-            {
-
-            fontFamily: "Avenir Medium, sans-serif",
-            fontSize: "15px",
-            fontWeight: "bold",
-            color: "#C3AF94",
-            textTransform: "none",
-            "&:hover": {
-                color: "#0F4C54"
-            }
-
-            ,
-            "&.active": {
-                color: "#0F4C54"
-            }
-        }
-    }
-
 }
 
 .nuevos-desarrollos-button:hover {
