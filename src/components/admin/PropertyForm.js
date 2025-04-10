@@ -10,8 +10,8 @@ import {
     InputLabel,
     FormControl,
     FormHelperText,
+    Checkbox, FormControlLabel
 } from "@mui/material";
-
 import GaleriaEditorPropiedad from "../../components/admin/GaleriaEditorPropiedad";
 import "../../styles/Admin.css";
 
@@ -178,6 +178,26 @@ const PropertyForm = ({
                             handleChange({ target: { name: "Plano", value: imgs } })
                         }
                         onMainSelect={() => { }}
+                    />
+                </Grid>
+                {/* Checkbox: Sincronizar con InfoCasas */}
+                <Grid item xs={12}>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                name="syncInfoCasas"
+                                checked={form.syncInfoCasas || false}
+                                onChange={(e) =>
+                                    handleChange({
+                                        target: {
+                                            name: "syncInfoCasas",
+                                            value: e.target.checked
+                                        }
+                                    })
+                                }
+                            />
+                        }
+                        label="Sincronizar con InfoCasas"
                     />
                 </Grid>
 

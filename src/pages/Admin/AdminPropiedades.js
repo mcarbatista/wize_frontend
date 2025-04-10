@@ -17,7 +17,6 @@ import LoadingIndicator from "../../components/admin/LoadingIndicator";
 import "../../styles/Admin.css";
 import BASE_URL from "../../api/config";
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 const AdminPropiedades = () => {
     document.title = "Wize | Admin Propiedades";
