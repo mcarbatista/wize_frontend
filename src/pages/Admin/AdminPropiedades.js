@@ -63,6 +63,7 @@ const AdminPropiedades = () => {
     const [propertyToDelete, setPropertyToDelete] = useState(null);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const storedToken = localStorage.getItem("token");
         if (!storedToken) {
             navigate("/login");
@@ -77,7 +78,7 @@ const AdminPropiedades = () => {
                     navigate("/login");
                 });
         }
-    }, [navigate]);
+    }, [[propiedades]]);
 
     useEffect(() => {
         if (token) {
@@ -104,6 +105,7 @@ const AdminPropiedades = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPropiedades(res.data);
+            window.scrollTo({ top: 0, behavior: "smooth" }); // 👈 agregado aquí
         } catch (err) {
             console.error("Error fetching propiedades:", err);
         }

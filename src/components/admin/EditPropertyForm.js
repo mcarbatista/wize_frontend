@@ -12,9 +12,9 @@ import {
     Checkbox,
     FormControlLabel,
 } from "@mui/material";
-import RichTextInput from "./RichTextInput";
 import GaleriaEditorPropiedad from "./GaleriaEditorPropiedad";
 import LoadingIndicator from "./LoadingIndicator";
+import "../../styles/Admin.css";
 
 function EditPropertyForm({
     form,
@@ -28,77 +28,37 @@ function EditPropertyForm({
     onStarImage,
     onSubmit,
 }) {
+    const handleFormSubmit = (e) => {
+        e.preventDefault(); // ✅ Prevenir reload del form
+        onSubmit();
+    };
+
     return (
-        <Box component="form" onSubmit={onSubmit}>
+        <Box className="admin-main-container" component="form" onSubmit={handleFormSubmit}>
             <Grid container spacing={2}>
-                {/* Título */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Título"
-                        name="Titulo"
-                        value={form.Titulo}
-                        onChange={onChange}
-                        fullWidth
-                        error={!!errors.Titulo}
-                        helperText={errors.Titulo}
-                    />
-                </Grid>
-
-                {/* Precio */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Precio"
-                        name="Precio"
-                        type="number"
-                        value={form.Precio}
-                        onChange={onChange}
-                        fullWidth
-                        error={!!errors.Precio}
-                        helperText={errors.Precio}
-                    />
-                </Grid>
-
-                {/* Dormitorios */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Dormitorios"
-                        name="Dormitorios"
-                        type="number"
-                        value={form.Dormitorios}
-                        onChange={onChange}
-                        fullWidth
-                        error={!!errors.Dormitorios}
-                        helperText={errors.Dormitorios}
-                    />
-                </Grid>
-
-                {/* Baños */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Baños"
-                        name="Banos"
-                        type="number"
-                        value={form.Banos}
-                        onChange={onChange}
-                        fullWidth
-                        error={!!errors.Banos}
-                        helperText={errors.Banos}
-                    />
-                </Grid>
-
-                {/* Tamaño m² */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Tamaño m²"
-                        name="Tamano_m2"
-                        type="number"
-                        value={form.Tamano_m2}
-                        onChange={onChange}
-                        fullWidth
-                        error={!!errors.Tamano_m2}
-                        helperText={errors.Tamano_m2}
-                    />
-                </Grid>
+                {[
+                    "Titulo",
+                    "Precio",
+                    "Dormitorios",
+                    "Banos",
+                    "Tamano_m2",
+                    "Tipo",
+                    "Metraje",
+                    "Piso",
+                    "Unidad"
+                ].map((field) => (
+                    <Grid item xs={12} sm={6} key={field}>
+                        <TextField
+                            label={field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                            name={field}
+                            value={form[field] || ""}
+                            onChange={onChange}
+                            fullWidth
+                            error={!!errors[field]}
+                            helperText={errors[field]}
+                        />
+                    </Grid>
+                ))}
 
                 {/* Owner */}
                 <Grid item xs={12} sm={6}>
@@ -120,66 +80,32 @@ function EditPropertyForm({
                     </FormControl>
                 </Grid>
 
-                {/* Email */}
-                {/* <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Email"
-                        name="Email"
-                        type="email"
-                        value={form.Email}
-                        onChange={onChange}
-                        fullWidth
-                    />
-                </Grid> */}
-
-                {/* Celular
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Celular"
-                        name="Celular"
-                        value={form.Celular}
-                        onChange={onChange}
-                        fullWidth
-                    />
-                </Grid> */}
-
-                {/* Descripción */}
-                <Grid item xs={12}>
-                    <RichTextInput
-                        label="Descripción"
-                        name="Descripcion"
-                        value={form.Descripcion}
-                        onChange={onChange}
-                    />
-                </Grid>
-
-                {/* Descripción Expandida */}
-                <Grid item xs={12}>
-                    <RichTextInput
-                        label="Descripción Expandida"
-                        name="Descripcion_Expandir"
-                        value={form.Descripcion_Expandir}
-                        onChange={onChange}
-                    />
-                </Grid>
-
-                {/* Proyecto Nombre */}
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        label="Proyecto Nombre"
-                        name="Proyecto_Nombre"
-                        value={form.Proyecto_Nombre}
-                        onChange={onChange}
-                        fullWidth
-                    />
-                </Grid>
-
                 {/* Galería */}
                 <Grid item xs={12}>
+                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
+                        Galería
+                    </Typography>
                     <GaleriaEditorPropiedad
-                        galeria={form.Galeria}
+                        imagenes={form.Galeria || []}
                         onChange={onImageChange}
-                        onStarImage={onStarImage}
+                        onMainSelect={(url) =>
+                            onChange({ target: { name: "Imagen", value: url } })
+                        }
+                        selectedMainImage={form.Imagen}
+                    />
+                </Grid>
+
+                {/* Planos */}
+                <Grid item xs={12}>
+                    <Typography variant="subtitle1" sx={{ mt: 3, mb: 1 }}>
+                        Planos
+                    </Typography>
+                    <GaleriaEditorPropiedad
+                        imagenes={form.Plano || []}
+                        onChange={(imgs) =>
+                            onChange({ target: { name: "Plano", value: imgs } })
+                        }
+                        onMainSelect={() => { }}
                     />
                 </Grid>
 
@@ -214,7 +140,7 @@ function EditPropertyForm({
                 Actualizar Propiedad
             </Button>
 
-            {isSaving && <LoadingIndicator />}
+            {isSaving}
             {successMessage && (
                 <Box mt={2}>
                     <Typography color="success.main">{successMessage}</Typography>

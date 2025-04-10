@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
-import axios from "axios";
 import EditPropertyForm from "../../components/admin/EditPropertyForm";
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
 import BASE_URL from "../../api/config";
+import axios from "axios";
 
 const EditProperty = () => {
     const { id } = useParams();
@@ -45,35 +45,37 @@ const EditProperty = () => {
 
             console.log("✅ prop desde backend:", prop);
 
-            setForm({
-                Titulo: prop.Titulo || "",
-                // DesarrolloId: "", // desactivado por ahora
-                Owner: "", // user will select manually
-                Descripcion: prop.Descripcion || "",
-                Descripcion_Expandir: prop.Descripcion_Expandir || "",
-                Precio: prop.Precio || "",
-                Estado: prop.Estado || "",
-                Resumen: prop.Resumen || "",
-                Ciudad: prop.Ciudad || "",
-                Barrio: prop.Barrio || "",
-                Ubicacion: prop.Ubicacion || "",
-                Tipo: prop.Tipo || "",
-                Entrega: prop.Entrega || "",
-                Dormitorios: prop.Dormitorios || "",
-                Banos: prop.Banos || "",
-                Tamano_m2: prop.Tamano_m2 || "",
-                Metraje: prop.Metraje || "",
-                Piso: prop.Piso || "",
-                Unidad: prop.Unidad || "",
-                Forma_de_Pago: prop.Forma_de_Pago || "",
-                Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
-                Proyecto_Nombre: prop.Proyecto_Nombre || "",
-                Imagen: prop.Imagen || "",
-                Galeria: prop.Galeria || [],
-                Plano: prop.Plano || [],
-                Email: "",
-                Celular: "",
-                syncInfoCasas: prop.syncInfoCasas || false,
+            setForm((prev) => {
+                if (prev) return prev; // ya hay data, no sobrescribir
+                return {
+                    Titulo: prop.Titulo || "",
+                    Owner: "", // user will select manually
+                    Descripcion: prop.Descripcion || "",
+                    Descripcion_Expandir: prop.Descripcion_Expandir || "",
+                    Precio: prop.Precio || "",
+                    Estado: prop.Estado || "",
+                    Resumen: prop.Resumen || "",
+                    Ciudad: prop.Ciudad || "",
+                    Barrio: prop.Barrio || "",
+                    Ubicacion: prop.Ubicacion || "",
+                    Tipo: prop.Tipo || "",
+                    Entrega: prop.Entrega || "",
+                    Dormitorios: prop.Dormitorios || "",
+                    Banos: prop.Banos || "",
+                    Tamano_m2: prop.Tamano_m2 || "",
+                    Metraje: prop.Metraje || "",
+                    Piso: prop.Piso || "",
+                    Unidad: prop.Unidad || "",
+                    Forma_de_Pago: prop.Forma_de_Pago || "",
+                    Gastos_Ocupacion: prop.Gastos_Ocupacion || "",
+                    Proyecto_Nombre: prop.Proyecto_Nombre || "",
+                    Imagen: prop.Imagen || "",
+                    Galeria: Array.isArray(prop.Galeria) ? prop.Galeria : [], // ✅ aseguramos array válido
+                    Plano: Array.isArray(prop.Plano) ? prop.Plano : [],
+                    Email: "",
+                    Celular: "",
+                    syncInfoCasas: prop.syncInfoCasas || false,
+                };
             });
 
             setDesarrollos(desRes.data);
@@ -104,18 +106,29 @@ const EditProperty = () => {
         setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
-    const handleImageChange = (Galeria) => {
-        setForm((prev) => ({ ...prev, Galeria }));
+    const handleImageChange = (imagenes) => {
+        setForm((prev) => ({ ...prev, Galeria: imagenes }));
     };
 
+    const requiredFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "Owner"];
+
     const handleSubmit = async () => {
-        if (!form.Titulo || !form.Precio || !form.Dormitorios || !form.Banos || !form.Tamano_m2 || !form.Owner) {
-            alert("Por favor completá todos los campos requeridos.");
-            return;
+        const newErrors = {};
+
+        requiredFields.forEach((field) => {
+            if (!form[field]) {
+                newErrors[field] = "* Campo requerido";
+            }
+        });
+
+        const galeriaTienePrincipal = form.Galeria?.some((img) => img.isMain) || form.Imagen;
+        if (!galeriaTienePrincipal) {
+            newErrors.Galeria = "Debés seleccionar una imagen o video principal (haz clic en la estrella)";
         }
 
-        if (!form.Galeria.some((img) => img.isMain)) {
-            alert("Debés seleccionar una imagen o video principal (haz clic en la estrella).");
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            alert("Por favor completá todos los campos requeridos.");
             return;
         }
 
@@ -150,7 +163,7 @@ const EditProperty = () => {
                 position: index
             }));
 
-            const mainImage = form.Imagen || imagenesFinal[0]?.url;
+            const mainImage = form.Imagen || imagenesFinal.find((img) => img.isMain)?.url;
 
             const payload = {
                 ...form,
@@ -167,7 +180,10 @@ const EditProperty = () => {
             });
 
             setSuccessMessage("Propiedad actualizada con éxito.");
-            setTimeout(() => setSuccessMessage(""), 5000);
+            setTimeout(() => {
+                setSuccessMessage("");
+                navigate("/admin/propiedades");
+            }, 5000);
         } catch (err) {
             console.error("❌ Error al editar propiedad:", err);
             alert("Hubo un error. Revisá la consola.");
@@ -175,6 +191,7 @@ const EditProperty = () => {
             setIsSaving(false);
         }
     };
+
 
     if (!form) return <LoadingIndicator />;
 
@@ -196,11 +213,12 @@ const EditProperty = () => {
                 desarrollos={[]}
                 usuarios={usuarios}
                 editId={id}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                handleImageChange={handleImageChange}
+                onChange={handleChange}
+                onSubmit={handleSubmit}
+                onImageChange={handleImageChange}
                 errors={errors}
                 successMessage={successMessage}
+                isSaving={isSaving}
             />
             {isSaving && <LoadingIndicator />}
         </Box>

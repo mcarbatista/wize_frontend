@@ -89,6 +89,7 @@ const AdminDesarrollos = () => {
 
     // Authorization check
     useEffect(() => {
+        window.scrollTo(0, 0);
         document.title = "Wize | Admin Desarrollos";
         const token = localStorage.getItem("token");
         if (!token) {
@@ -119,7 +120,7 @@ const AdminDesarrollos = () => {
             localStorage.removeItem("token");
             navigate("/login");
         }
-    }, [navigate]);
+    }, [desarrollos]);
 
     // Fetch desarrollos
     useEffect(() => {
