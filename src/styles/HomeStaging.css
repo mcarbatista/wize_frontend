@@ -183,6 +183,7 @@
 .stats-title {
     margin-bottom: 2rem !important;
     font-family: "Avenir", sans-serif !important;
+    font-size: 24px !important;
 }
 
 .stats-divider {
@@ -221,13 +222,13 @@
 
 .stat-value {
     margin-bottom: 1rem !important;
-    font-size: 4.5rem !important;
-    font-family: "Avenir Heavy", sans-serif !important;
+    font-size: 5rem !important;
+    font-family: "Avenir Medium", sans-serif !important;
 }
 
 .stat-description {
     font-family: "Avenir Light", sans-serif !important;
-    font-size: 1.5rem !important;
+    font-size: 1.2rem !important;
 }
 
 
