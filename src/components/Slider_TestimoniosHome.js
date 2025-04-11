@@ -1,8 +1,8 @@
 import React from "react";
 import Slider from "react-slick";
 import { Box, Typography } from "@mui/material";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 import "../styles/Home.css";
 
 // ✅ Testimonials Data
@@ -23,10 +23,10 @@ const testimonios = [
 
 // ✅ Custom Arrows
 const NextArrow = ({ onClick }) => (
-    <div className="custom-arrow next" onClick={onClick}>→</div>
+    <div className="custom-arrow next" onClick={onClick} >→</div>
 );
 const PrevArrow = ({ onClick }) => (
-    <div className="custom-arrow prev" onClick={onClick}>←</div>
+    <div className="custom-arrow prev" onClick={onClick} >←</div>
 );
 
 const Testimonios = () => {

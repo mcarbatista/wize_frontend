@@ -124,14 +124,20 @@
 .gallery-section {
     position: relative;
     background-color: #13272D;
-    /* Background color */
-    padding: 1%;
+    padding: 0 05%;
     text-align: center;
+    margin: 0 auto !important
+}
+
+.gallery-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .gallery-title {
     color: #C3AF94 !important;
-    padding: 5%;
+    padding: 5% 0;
     /* text-align: left !important; */
     font-size: 3rem !important;
     font-family: "Avenir", sans-serif !important;
@@ -168,7 +174,6 @@
 .custom-prev,
 .custom-next {
     position: absolute;
-    top: 50%;
     transform: translateY(-50%);
     font-size: 24px;
     color: #C3AF94 !important;
@@ -234,7 +239,6 @@
 
 /* ✅ Ensure Cards Don't Touch Each Other */
 .slick-slider {
-    margin: 0 15px !important;
     max-width: 100% !important;
     /* Adjust horizontal spacing */
     position: relative !important;
@@ -276,8 +280,8 @@
 }
 
 .nuevos-desarrollos-button {
-    background: #FBF7EA !important;
-    border: 2px solid #FBF7EA !important;
+    background: #C3AF94 !important;
+    border: 2px solid #C3AF94 !important;
     color: #13272D !important;
     font-size: 1rem !important;
     font-family: "Avenir Medium", sans-serif !important;
@@ -286,14 +290,19 @@
     cursor: pointer !important;
     transition: all 0.3s ease-in-out !important;
     text-transform: none !important;
-    margin: 5% !important;
+    max-height: 50px !important;
+
+    margin: 5% 0 !important;
+    /* text-align: left !important; */
+
+    margin-bottom: 50px !important;
 
 }
 
 .nuevos-desarrollos-button:hover {
-    border: 2px solid #FBF7EA !important;
+    border: 2px solid #C3AF94 !important;
     background: transparent !important;
-    color: #FBF7EA !important;
+    color: #C3AF94 !important;
 }
 
 
@@ -626,9 +635,8 @@
 
 /* ✅ Title */
 .slide-title-home {
-    margin-top: 15px;
+    margin-top: 15px !important;
     margin-bottom: 5px;
-    padding: 5%;
     font-size: 3rem !important;
     font-family: "Avenir", sans-serif !important;
     color: #13272D !important;
@@ -650,7 +658,7 @@
     font-size: 1rem !important;
     font-family: "Avenir Book", sans-serif !important;
     text-align: center !important;
-    padding: 8% !important;
+    padding: 2% !important;
     margin: 0, 3px;
 }
 
@@ -713,12 +721,31 @@
 }
 
 /* ✅ Dots Customization */
-.slick-dots {
+.slick-dots-home {
     font-size: 14px !important;
-    bottom: 0px !important;
     color: #C3AF94 !important;
     opacity: 0.7 !important;
     margin-top: 40px !important;
+    text-align: center !important;
+}
+
+.slick-dots-home li button:before {
+    font-size: 14px !important;
+    color: white !important;
+    opacity: 0.6;
+}
+
+.slick-dots-home li.slick-active button:before {
+    font-size: 14px !important;
+    color: white !important;
+    opacity: 1 !important;
+}
+
+/* ✅ Dots Customization */
+.slick-dots {
+    font-size: 14px !important;
+    color: #C3AF94 !important;
+    opacity: 0.7 !important;
     margin-top: 40px !important;
     text-align: center !important;
 }
@@ -739,7 +766,7 @@
 /* ✅ Custom Arrows testimonios*/
 .custom-arrow {
     position: absolute !important;
-    top: 10% !important;
+    top: 1% !important;
     z-index: 1000 !important;
     font-size: 2.5rem;
     color: white !important;

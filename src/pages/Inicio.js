@@ -38,12 +38,15 @@ const Home = () => {
 
             {/* Auto-scrolling Gallery Section */}
             <Box className="gallery-section">
-                <Typography variant="h3" className="gallery-title">Nuevos Desarrollos</Typography>
-                {/* Use the refactored GallerySlider here */}
+                <Box className="gallery-top">
+                    <Typography variant="h3" className="gallery-title">Nuevos Desarrollos</Typography>
+                    <Button component="a" href="/Desarrollos" variant="outlined" className="nuevos-desarrollos-button">
+                        Ver todos los desarrollos
+                    </Button>
+                    {/* Use the refactored GallerySlider here */}
+                </Box>
                 <DevelopmentsHomeSlider />
-                <Button component="a" href="/Desarrollos" variant="outlined" className="nuevos-desarrollos-button">
-                    Ver todos los desarrollos
-                </Button>
+
             </Box>
 
             {/* Section with Hola Background Image */}
