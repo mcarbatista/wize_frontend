@@ -88,7 +88,7 @@
 
 /* Adjust text sizes for responsiveness */
 .video-text {
-    animation: fadeInUp 1s ease-in-out forwards;
+    animation: fadeInUp 0.5s ease-in-out forwards;
     font-size: clamp(2rem, 10vw, 5rem) !important;
     max-width: 650px !important;
     margin-left: 0 !important;
@@ -98,7 +98,7 @@
 .video-subtext {
     padding-top: 30px;
     margin-top: 20px;
-    animation: fadeInUp 2s ease-in-out forwards;
+    animation: fadeInUp 1.2s ease-in-out forwards;
     font-size: clamp(1rem, 3vw, 1.5rem) !important;
     max-width: 550px !important;
     font-family: "Avenir Light", sans-serif !important;

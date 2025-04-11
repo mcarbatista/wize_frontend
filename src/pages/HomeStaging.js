@@ -23,6 +23,12 @@ const HomeStaging = () => {
             </Box>
 
             <Box className="homestaging-section">
+                {/* BACK BUTTON */}
+                <Box sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start", padding: "2%" }}>
+                    <Button className="back-button-hs" onClick={() => navigate(-1)}>
+                        ← Atrás
+                    </Button>
+                </Box>
                 <Box item xs={12}>
                     <Container sx={{ py: 8 }} data-aos="fade-left">
                         <Typography variant="body1" className="homestaging-description">

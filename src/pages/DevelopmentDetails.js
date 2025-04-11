@@ -92,7 +92,7 @@ const DevelopmentDetails = () => {
                         item
                         xs={12}
                         lg={3}
-                        textAlign={{ xs: "left", lg: "right" }}
+                        textAlign="right"
                         sx={{
                             borderLeft: { lg: "1px solid #13272D" },
                             pl: { lg: 2 },

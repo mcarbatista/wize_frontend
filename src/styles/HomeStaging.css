@@ -231,6 +231,16 @@
     font-size: 1.2rem !important;
 }
 
+.back-button-hs {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff !important;
+    font-family: "Avenir Light", sans-serif !important;
+    text-transform: lowercase;
+
+}
 
 /* 🔹 Divisor vertical solo en desktop */
 @media (min-width: 1025px) {
