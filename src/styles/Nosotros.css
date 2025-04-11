@@ -40,7 +40,7 @@
 .nosotros-title-section {
     background-color: #FBF7EA;
     width: 100%;
-    height: 40vh;
+    height: 40dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,7 +137,7 @@
     }
 
     .nosotros-title-section {
-        height: 25vh;
+        height: 25dvh;
     }
 
     .nosotros-title-text {

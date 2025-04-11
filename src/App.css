@@ -2,6 +2,64 @@ html {
     scroll-behavior: smooth;
 }
 
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-Book.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-Heavy.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Opcional: estilos oblicuos si los necesitás */
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-LightOblique.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-BookOblique.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Avenir';
+    src: url('/fonts/AvenirLTStd-HeavyOblique.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+
 body {
     margin: 0;
     font-family: 'Avenir', sans-serif;

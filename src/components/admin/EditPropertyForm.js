@@ -25,7 +25,6 @@ function EditPropertyForm({
     successMessage,
     onChange,
     onImageChange,
-    onStarImage,
     onSubmit,
 }) {
     const handleFormSubmit = (e) => {

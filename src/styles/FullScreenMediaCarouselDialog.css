@@ -17,7 +17,7 @@
 /* On medium devices, reduce the height a bit */
 @media (max-width: 1024px) {
     .fullscreen-slider-wrapper {
-        height: calc(100vh - 12%) !important;
+        height: calc(100dvh - 12%) !important;
     }
 }
 

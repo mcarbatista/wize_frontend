@@ -12,7 +12,7 @@
 .video-section {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -307,7 +307,7 @@
 .welcome-section {
     position: relative;
     width: 100%;
-    height: 70vh;
+    height: 70dvh;
     /* Full height */
     background-image: url("../assets/holaHome.jpg");
     /* Background Image */

@@ -118,7 +118,7 @@ const CreateUserPage = () => {
             <Box
 
                 sx={{
-                    minHeight: '100vh',
+                    minHeight: '100dvh',
                     backgroundColor: '#f9f6ef',
                     display: 'flex',
                     alignItems: 'center',

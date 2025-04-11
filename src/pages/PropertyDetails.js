@@ -326,7 +326,7 @@ const PropertyDetails = () => {
                         alt="Plano Full"
                         style={{
                             maxWidth: "100%",
-                            maxHeight: "100vh",
+                            maxHeight: "100dvh",
                             backgroundSize: "cover",
                             backgroundPosition: "center"
                         }}

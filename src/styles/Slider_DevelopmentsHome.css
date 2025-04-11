@@ -1,7 +1,7 @@
 /* Custom Arrow Container */
 .custom-arrow {
     position: absolute;
-    top: 50% !important;
+    top: 45% !important;
     transform: translateY(-50%) !important;
     width: 50px;
     height: 50px;
@@ -34,7 +34,7 @@
 
 /* Arrow Icon Style */
 .arrow-icon {
-    font-size: 5rem;
+    font-size: 3rem;
     /* Large arrow */
     color: #fff;
     /* White arrow normally */

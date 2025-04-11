@@ -43,7 +43,7 @@ const LoginPage = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         backgroundColor: "#f9f6ef", // Cream-like background
         display: "flex",
         alignItems: "center",

@@ -7,12 +7,18 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions
+    DialogActions,
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormControl,
+    FormLabel
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PropertyCard from "../../components/admin/PropertyCard";
 import PropertyForm from "../../components/admin/PropertyForm";
+import PropertyNoDevForm from "../../components/admin/PropertyNoDevForm";
 import LoadingIndicator from "../../components/admin/LoadingIndicator";
 import "../../styles/Admin.css";
 import BASE_URL from "../../api/config";
@@ -26,6 +32,7 @@ const AdminPropiedades = () => {
     const [desarrollos, setDesarrollos] = useState([]);
     const [form, setForm] = useState({
         Titulo: "",
+        Resumen: "",
         Descripcion: "",
         Descripcion_Expandir: "",
         Precio: "",
@@ -58,12 +65,12 @@ const AdminPropiedades = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
-    // State for deletion confirmation
     const [openConfirm, setOpenConfirm] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState(null);
+    const [isFromDevelopment, setIsFromDevelopment] = useState(true);
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+
         const storedToken = localStorage.getItem("token");
         if (!storedToken) {
             navigate("/login");
@@ -90,7 +97,9 @@ const AdminPropiedades = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        const reqFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "DesarrolloId", "Owner"];
+        const reqFields = ["Titulo", "Precio", "Dormitorios", "Banos", "Tamano_m2", "Owner",
+            ...(isFromDevelopment ? ["DesarrolloId"] : []),
+        ];
         reqFields.forEach((field) => {
             if (!form[field]) newErrors[field] = "Este campo es requerido";
             console.log(`⚠️ Campo requerido faltante: ${field}`);
@@ -105,7 +114,7 @@ const AdminPropiedades = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPropiedades(res.data);
-            window.scrollTo({ top: 0, behavior: "smooth" }); // 👈 agregado aquí
+            window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (err) {
             console.error("Error fetching propiedades:", err);
         }
@@ -158,10 +167,11 @@ const AdminPropiedades = () => {
     };
 
     const handleSubmit = async () => {
-        console.log("🚀 handleSubmit ejecutado"); // <-- Este debería aparecer sí o sí
+        console.log("🚀 handleSubmit ejecutado");
+
         if (!validateForm()) return;
 
-        if (!form.Galeria.some(img => img.isMain)) {
+        if (!form.Galeria.some((img) => img.isMain)) {
             alert("Debés seleccionar una imagen o video principal (haz clic en la estrella).");
             return;
         }
@@ -174,10 +184,13 @@ const AdminPropiedades = () => {
         }
 
         setIsSaving(true);
+
         try {
+            // 🔽 Subir imágenes nuevas a Cloudinary
             const formDataImgs = new FormData();
-            const folderGaleria = `wize/propiedades/fotos/${form.Proyecto_Nombre}`;
+            const folderGaleria = `wize/propiedades/fotos/${form.Proyecto_Nombre || "sin-proyecto"}`;
             formDataImgs.append("folder", folderGaleria);
+
             form.Galeria.forEach((img) => {
                 if (img.file) formDataImgs.append("imagenes", img.file);
             });
@@ -185,98 +198,75 @@ const AdminPropiedades = () => {
             const galeriaRes = await axios.post(`${BASE_URL}/api/upload`, formDataImgs, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             const imagenesFinal = [
                 ...form.Galeria.filter((img) => !img.file),
-                ...(galeriaRes.data.galeria || [])
+                ...(galeriaRes.data.galeria || []),
             ].map((img, index) => ({
                 ...img,
-                position: index
+                position: index,
             }));
 
-            const mainImage = form.Imagen || imagenesFinal[0]?.url;
+            // 🔽 Seleccionar imagen principal (solo URL)
+            const mainImage = imagenesFinal.find((img) => img.isMain)?.url || "";
 
+            // 🔽 Subir planos
             const planoFinal = [];
             for (let i = 0; i < form.Plano.length; i++) {
                 const img = form.Plano[i];
                 if (img.file) {
                     const fd = new FormData();
-                    fd.append("folder", `wize/propiedades/planos/${form.Titulo}`);
+                    fd.append("folder", `wize/propiedades/planos/${form.Titulo || "plano"}`);
                     fd.append("imagenes", img.file);
 
                     const planoRes = await axios.post(`${BASE_URL}/api/upload`, fd, {
                         headers: {
                             "Content-Type": "multipart/form-data",
-                            Authorization: `Bearer ${token}`
-                        }
+                            Authorization: `Bearer ${token}`,
+                        },
                     });
 
                     const uploaded = planoRes.data.galeria?.[0];
                     if (uploaded) {
-                        planoFinal.push({
-                            ...uploaded,
-                            position: i
-                        });
+                        planoFinal.push({ ...uploaded, position: i });
                     }
                 } else {
-                    planoFinal.push({
-                        ...img,
-                        position: i
-                    });
+                    planoFinal.push({ ...img, position: i });
                 }
             }
 
+            // 🔽 Obtener Email y Celular desde el usuario (según nombre del Owner)
+            const selectedOwner = usuarios.find((u) => u.nombre === form.Owner);
+            const email = selectedOwner?.email || "";
+            const celular = selectedOwner?.celular || "";
+
+            // 🔽 Armar payload final
             const payload = {
-                Titulo: form.Titulo,
-                Descripcion: form.Descripcion,
-                Descripcion_Expandir: form.Descripcion_Expandir,
+                ...form,
                 Precio: precio,
-                Estado: form.Estado,
-                Dormitorios: form.Dormitorios,
-                Banos: form.Banos,
                 Tamano_m2: tamano,
-                Tipo: form.Tipo,
-                Entrega: form.Entrega,
-                Metraje: form.Metraje,
-                Piso: form.Piso,
-                Unidad: form.Unidad,
-                Forma_de_Pago: form.Forma_de_Pago,
-                Gastos_Ocupacion: form.Gastos_Ocupacion,
-                Owner: form.Owner,
-                Email: form.Email,
-                Celular: form.Celular,
-                Proyecto_Nombre: form.Proyecto_Nombre,
                 Imagen: mainImage,
-                DesarrolloId: form.DesarrolloId,
+                Email: email,
+                Celular: celular,
+                DesarrolloId: isFromDevelopment ? form.DesarrolloId : null,
                 Galeria: imagenesFinal,
-                Plano: planoFinal
+                Plano: planoFinal,
             };
 
-            if (form.Owner) {
-                if (!payload.Email || !payload.Celular) {
-                    const selectedOwner = usuarios.find((user) => user.nombre === form.Owner);
-                    if (selectedOwner) {
-                        payload.Email = selectedOwner.email;
-                        payload.Celular = selectedOwner.celular;
-                    }
-                }
-            }
-
-            // 🔍 Logging útil para debug
             console.log("🧾 Payload listo para envío:", payload);
-            console.log("✏️ Editando propiedad ID:", editId);
 
+            // 🔽 Guardar en backend
             if (editId) {
                 await axios.put(`${BASE_URL}/api/propiedades/${editId}`, payload, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 setSuccessMessage("Propiedad actualizada con éxito.");
             } else {
                 await axios.post(`${BASE_URL}/api/propiedades`, payload, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` },
                 });
                 setSuccessMessage("Propiedad creada con éxito.");
             }
@@ -296,6 +286,7 @@ const AdminPropiedades = () => {
     const resetForm = () => {
         setForm({
             Titulo: "",
+            Resumen: "",
             Descripcion: "",
             Descripcion_Expandir: "",
             Precio: "",
@@ -327,10 +318,17 @@ const AdminPropiedades = () => {
         setEditId(null);
     };
 
-    // Updated deletion functionality with confirmation dialog.
+    const handleEdit = (id) => {
+        navigate(`/admin/propiedades/edit/${id}`);
+    };
+
+    const handleRequestDelete = (prop) => {
+        setPropertyToDelete(prop);
+        setOpenConfirm(true);
+    };
+
     const handleDelete = async (id) => {
         try {
-            console.log("🧨 Eliminando propiedad con ID:", id);
             await axios.delete(`${BASE_URL}/api/propiedades/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -339,17 +337,6 @@ const AdminPropiedades = () => {
             console.error("Error deleting property:", err);
         }
     };
-
-    const handleRequestDelete = (prop) => {
-        console.log("🔍 Prop a eliminar:", prop);
-        setPropertyToDelete(prop);
-        setOpenConfirm(true);
-    };
-
-    const handleEdit = (id) => {
-        navigate(`/admin/propiedades/edit/${id}`);
-    };
-
 
     return (
         <Box p={4}>
@@ -364,18 +351,46 @@ const AdminPropiedades = () => {
             >
                 ← Volver al Panel de Administración
             </Button>
+            <Box className="admin-container">
+                <FormControl component="fieldset" style={{ marginBottom: 20 }}>
+                    <FormLabel component="legend" className="admin-subtitle">¿Pertenece a un desarrollo?</FormLabel>
+                    <RadioGroup
+                        row
+                        value={isFromDevelopment ? "yes" : "no"}
+                        onChange={(e) => setIsFromDevelopment(e.target.value === "yes")}
+                    >
+                        <FormControlLabel value="yes" control={<Radio />} label="Sí" />
+                        <FormControlLabel value="no" control={<Radio />} label="No" />
+                    </RadioGroup>
+                </FormControl>
+            </Box >
+            {
+                isFromDevelopment ? (
+                    <PropertyForm
+                        form={form}
+                        desarrollos={desarrollos}
+                        usuarios={usuarios}
+                        editId={editId}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        handleImageChange={handleImageChange}
+                        errors={errors}
+                        successMessage={successMessage}
+                    />
+                ) : (
+                    <PropertyNoDevForm
+                        form={form}
+                        usuarios={usuarios}
+                        editId={editId}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                        handleImageChange={handleImageChange}
+                        errors={errors}
+                        successMessage={successMessage}
+                        isSaving={isSaving}
+                    />
+                )}
 
-            <PropertyForm
-                form={form}
-                desarrollos={desarrollos}
-                usuarios={usuarios}
-                editId={editId}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                handleImageChange={handleImageChange}
-                errors={errors}
-                successMessage={successMessage}
-            />
             {isSaving && <LoadingIndicator />}
 
             <Typography variant="h5" mt={5} mb={2}>
@@ -393,18 +408,37 @@ const AdminPropiedades = () => {
             >
                 {propiedades.map((prop) => (
                     <Grid item xs={12} md={6} key={prop._id}>
-                        <PropertyCard prop={prop} onEdit={handleEdit} onDelete={handleRequestDelete} />
+                        <PropertyCard
+                            prop={prop}
+                            onEdit={(prop) => {
+                                console.log("🧪 Prop editada:", prop);
+                                console.log("🧪 Prop editada:", prop);
+                                console.log("🧱 DesarrolloId:", prop.DesarrolloId);
+                                console.log("📦 Tipo:", typeof prop.DesarrolloId);
+
+                                const tieneDesarrollo =
+                                    typeof prop.DesarrolloId === "string" && prop.DesarrolloId.trim() !== "";
+
+                                if (tieneDesarrollo) {
+                                    navigate(`/admin/propiedades/edit/${prop}`);
+                                } else {
+                                    navigate(`/admin/propiedades/edit-no-dev/${prop}`);
+                                }
+                            }}
+
+                            onDelete={handleRequestDelete}
+                        />
+
+
                     </Grid>
                 ))}
             </Box>
 
-            {/* Confirmation Dialog */}
             <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
                 <DialogTitle>Confirmar Eliminación</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        ¿Está seguro de que desea eliminar la propiedad{" "}
-                        {propertyToDelete ? `"${propertyToDelete.Titulo}"` : ""}?
+                        ¿Está seguro de que desea eliminar la propiedad {propertyToDelete ? `"${propertyToDelete.Titulo}"` : ""}?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -423,12 +457,12 @@ const AdminPropiedades = () => {
                         startIcon={<DeleteIcon />}
                         autoFocus
                     >
-                        Eliminar</Button>
+                        Eliminar
+                    </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </Box >
     );
 };
 
 export default AdminPropiedades;
-
