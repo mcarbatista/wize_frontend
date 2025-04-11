@@ -6,7 +6,7 @@
 /* Center the dots absolutely within the slider-section */
 .slick-dots {
     position: absolute;
-    bottom: 10px !important;
+    bottom: 0px !important;
     /* Adjust vertical positioning as needed */
     left: 50%;
     transform: translateX(-50%);

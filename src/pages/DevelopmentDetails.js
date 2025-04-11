@@ -119,8 +119,8 @@ const DevelopmentDetails = () => {
                         variant="contained"
                         className="contact-button"
                         onClick={() => {
-                            // Future popup logic can go here
-                            alert("Open Contact Popup (to be developed)");
+                            const el = document.getElementById("footer");
+                            if (el) el.scrollIntoView({ behavior: "smooth" });
                         }}
                     >
                         Contacto

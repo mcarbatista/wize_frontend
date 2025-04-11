@@ -2,12 +2,22 @@
     width: 100%;
     margin: 0 auto;
     text-align: center;
+    padding-bottom: 20px !important;
+    /* o 0px */
 }
 
 .main-media-wrapper {
     position: relative;
     display: inline-block;
     width: 100%;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.thumbnail-slider {
+    margin-top: -80px !important;
+    /* 🔒 Asegura que no haya espacio arriba */
+    padding-top: 0px !important;
 }
 
 /* Main image styling */
@@ -20,29 +30,10 @@
     cursor: pointer;
 }
 
-/* Responsive adjustments for the main image */
-@media (max-width: 768px) {
-    .main-image {
-        max-height: 400px;
-    }
-
-    .gallery-container {
-        width: 100%;
-    }
-
-    /* Removed arrow positioning overrides for small screens */
-}
-
-@media (max-width: 480px) {
-    .main-image {
-        max-height: 300px;
-    }
-}
-
 /* Common arrow button styling */
 .arrow-button {
     position: absolute;
-    top: 50%;
+    top: 40% !important;
     transform: translateY(-50%);
     color: #fff;
     background: none;
@@ -53,6 +44,15 @@
 .thumbnail-slider {
     margin-top: 20px;
     overflow: hidden;
+}
+
+.thumbnail-slider .thumbnail-image {
+    width: 100%;
+    /* para que se adapte al slide */
+    object-fit: cover;
+    height: 90px;
+    border-radius: 4px;
+    transition: transform 0.3s;
 }
 
 .slick-slider {
@@ -70,9 +70,9 @@
 
 .slick-track {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .slick-slide {
@@ -89,35 +89,63 @@
     padding: 0;
 }
 
-.thumbnail-image {
-    width: 150px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 4px;
-    transition: transform 0.3s;
-}
-
 .thumbnail-image:hover {
     transform: scale(1.05);
 }
 
-/* Responsive adjustments for thumbnails */
-@media (max-width: 768px) {
-    .thumbnail-image {
-        width: 120px;
-        height: 72px;
-    }
-}
-
-@media (max-width: 480px) {
-    .thumbnail-image {
-        width: 100px;
-        height: 60px;
-    }
-}
 
 /* Remove any default arrow styles from slick slider */
 .slick-prev,
 .slick-next {
     display: none;
+}
+
+/* Responsive adjustment */
+
+@media (max-width: 1024px) {
+    .thumbnail-slider .slick-slide {
+        width: 150px !important;
+    }
+
+    .thumbnail-slider .slick-track {
+        gap: 8px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .gallery-container {
+        width: 100% !important;
+    }
+
+    .arrow-button {
+        top: 48% !important;
+    }
+
+    .thumbnail-slider .slick-slide {
+        width: 120px !important;
+    }
+
+    .thumbnail-slider .slick-track {
+        gap: 6px;
+    }
+
+    .thumbnail-slider .thumbnail-image {
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-image {
+        /* max-height: 300px; */
+    }
+
+    .thumbnail-image {
+        width: 100px;
+        height: 60px;
+    }
+
+    .thumbnail-slider .slick-slide {
+        width: 50% !important;
+    }
 }

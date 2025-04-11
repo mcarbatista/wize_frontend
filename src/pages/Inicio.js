@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Typography, Button, Grid, Container } from "@mui/material";
 import "../styles/Home.css";
+import "../styles/Slider_DevelopmentsHome.css"
 import videoSrc from "../assets/videoHome.mp4";
 import iconInverti from "../assets/icono_inverti.svg";
 import iconVende from "../assets/icono_vende.svg";

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Slider from "react-slick";
 import { useTheme, useMediaQuery } from "@mui/material";
 import "../styles/ImageGallery.css";
-import FullScreenMediaCarouselDialog from "./FullScreenMediaCarouselDialog";
+// import FullScreenMediaCarouselDialog from "./FullScreenMediaCarouselDialog";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -137,8 +137,8 @@ const ImageGallery = ({ mediaItems = [] }) => {
                                         className="main-image"
                                         style={{
                                             width: "100%",
-                                            maxHeight: "600px",
-                                            minHeight: "300px",
+                                            height: "650px",
+                                            objectFit: "cover"
                                         }}
                                     >
                                         <source src={item.url} type={getVideoMimeType(item.url)} />
@@ -149,6 +149,11 @@ const ImageGallery = ({ mediaItems = [] }) => {
                                         src={item.url}
                                         alt={item.alt || "Principal"}
                                         className="main-image"
+                                        style={{
+                                            width: "100%",
+                                            height: "650px",
+                                            objectFit: "cover"
+                                        }}
                                     />
                                 )}
                             </div>
@@ -203,13 +208,13 @@ const ImageGallery = ({ mediaItems = [] }) => {
                 ))}
             </Slider>
 
-            <FullScreenMediaCarouselDialog
+            {/* <FullScreenMediaCarouselDialog
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
                 mediaItems={mediaItems}
                 initialIndex={currentIndex}
                 setCurrentIndex={setCurrentIndex}
-            />
+            /> */}
         </div>
     );
 };

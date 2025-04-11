@@ -1,8 +1,8 @@
 import React from "react";
 import Slider from "react-slick";
-import { Box, Typography } from "@mui/material";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
+import { Box, Typography, Divider } from "@mui/material";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../styles/Home.css";
 
 // ✅ Testimonials Data
@@ -23,10 +23,10 @@ const testimonios = [
 
 // ✅ Custom Arrows
 const NextArrow = ({ onClick }) => (
-    <div className="custom-arrow next" onClick={onClick} >→</div>
+    <div className="custom-arrow-testimonios next" onClick={onClick} >→</div>
 );
 const PrevArrow = ({ onClick }) => (
-    <div className="custom-arrow prev" onClick={onClick} >←</div>
+    <div className="custom-arrow-testimonios prev" onClick={onClick} >←</div>
 );
 
 const Testimonios = () => {
@@ -47,10 +47,18 @@ const Testimonios = () => {
     return (
         <Box className="slider-section-home">
             <Typography variant="h3" className="slide-title-home">Testimonios</Typography>
-            <Slider {...settings}>
+            <Slider {...settings} >
                 {testimonios.map((testimonial, index) => (
                     <Box key={index} className="slide-home">
                         <Typography className="slide-text-home">"{testimonial.text}"</Typography>
+                        <Divider
+                            sx={{
+                                width: "40px",
+                                height: "1px",
+                                backgroundColor: "white",
+                                margin: "10px auto", // top & bottom spacing, centered
+                            }}
+                        />
                         <Typography className="slide-who-home">{testimonial.name}</Typography>
                     </Box>
                 ))}

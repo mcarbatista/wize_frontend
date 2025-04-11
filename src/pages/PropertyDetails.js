@@ -108,7 +108,8 @@ const PropertyDetails = () => {
                         variant="contained"
                         className="contact-button"
                         onClick={() => {
-                            alert("Open Contact Popup (to be developed)");
+                            const el = document.getElementById("footer");
+                            if (el) el.scrollIntoView({ behavior: "smooth" });
                         }}
                     >
                         Contacto
