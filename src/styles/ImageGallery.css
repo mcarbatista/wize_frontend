@@ -135,9 +135,6 @@
 }
 
 @media (max-width: 480px) {
-    .main-image {
-        /* max-height: 300px; */
-    }
 
     .thumbnail-image {
         width: 100px;
